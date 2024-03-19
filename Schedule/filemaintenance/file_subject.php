@@ -691,89 +691,52 @@ if ($row['is_Lock_Account'] == 1) {
         });
     </script>
  
+<!-- lock btn -->
 <!-- Lock Btn -->
-    <script>
-        $(document).ready(function() {
-            // Disable the Save button initially
-            $('#saveBtn').prop('disabled', true);
+<script>
+    $(document).ready(function() {
+        // Disable the Save button initially
+        $('#saveBtn').prop('disabled', true);
 
-            // Function to check if all required fields have data
-            function checkFields() {
-                var allFilled = true;
-                $('input[name=^Classification], input[name=^SubjectName], input[name=^MinutesPerWeek]').each(function () {
-                    if (/^\s/.test($(this).val())) {
+        // Function to check if all required fields have data
+        function checkFields() {
+            var allFilled = true;
+            $('input[name^="Classification"], input[name^="SubjectName"], input[name^="MinutesPerWeek"]').each(function () {
+                if (/^\s/.test($(this).val()) || $(this).val() === '') {
                     allFilled = false;
                     $(this).addClass('is-invalid'); // Add is-invalid class to the empty field
-                    return false; // Break the loop if any field is empty
-                    }else if($(this).val() === '') {
-                        allFilled = false;
-                        return false;
-                    }
-                    else {
-                        $(this).removeClass('is-invalid'); // Remove is-invalid class if field is filled
-                    }
-                });
-
-
-                if (allFilled) {
-                    $('#saveBtn').prop('disabled', false); // Enable the button
                 } else {
-                    $('#saveBtn').prop('disabled', true); // Disable the button
+                    $(this).removeClass('is-invalid'); // Remove is-invalid class if field is filled
                 }
+            });
 
+            // Enable or disable the save button based on allFilled status
+            $('#saveBtn').prop('disabled', !allFilled);
+        }
 
-
-
-                var department = $('#department').val();
-                
-                var subjectDesc = $('#subDesc').val();
-                var classSub = $('#classSub').val();
-                var subType = $('#subType').val();
-
-                var units = $('#units').val();
-                
-                // Enable the button if all required fields are filled
-                if (
-                    department !== '' &&
-                    subjectDesc !== '' &&
-                    classSub !== '' &&
-                    subType !== '' &&
-                    units !== ''
-                ) {
-                    $('#saveBtn').prop('disabled', false);
-                } else {
-                    $('#saveBtn').prop('disabled', true);
-                }
-
-                //Lock all fields
-                 
+        // Event listener for Subject Description input field
+        $('#subDesc').on('input', function() {
+            var subjectDesc = $(this).val();
+            if (subjectDesc !== '') {
+                // Set the MinutesPerWeek field value to 30 if Subject Description has data
+                $('#units').val(30);
+            } else {
+                // Clear the MinutesPerWeek field value if Subject Description is empty
+                $('#units').val('');
             }
+            checkFields(); // Check all fields after updating MinutesPerWeek value
+        });
 
-            // Event listener for Subject Code input field
-            $('#subDesc').on('input', function() {
-                var subjectDesc = $(this).val();
-                if (subjectDesc !== '') {
-                    // Set the MinutesPerWeek field value to 1 if Subject Code has data
-                    $('#units').val(30);
-                } else {
-                    // Clear the MinutesPerWeek field value if Subject Code is empty
-                    $('#units').val('');
-                }
-                checkFields(); // Check all fields after updating MinutesPerWeek value
-            });
-
-            // Call the function on input change for other required fields
-            $('#department, #subDesc, #classSub, #subType,#units').on('input', function() {
-                checkFields();
-            });
-
-            // Call the function on document ready to check initially
+        // Call the function on input change for other required fields
+        $('#department, #subDesc, #classSub, #subType, #units').on('input', function() {
             checkFields();
         });
 
-       
+        // Call the function on document ready to check initially
+        checkFields();
+    });
+</script>
 
-    </script>
 
      <!-- Insert Data -->
 

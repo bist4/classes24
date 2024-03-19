@@ -461,90 +461,90 @@ include('session_out.php');
  
 
     <script>
-         var changesMade = false;
-    var updateSuccess = false;
-    $(document).ready(function () {
-        function setChangesMade() {
-            changesMade = true;
-        }
-
-        // Bind change event to form elements
-        $(".form-control").change(setChangesMade);
-
-        // Bind beforeunload event to show confirmation message
-        window.addEventListener('beforeunload', function(e) {
-            if (changesMade && !updateSuccess) {
-                var confirmationMessage = "Changes you made may not be saved. Are you sure you want to leave?";
-                (e || window.event).returnValue = confirmationMessage;
-                return confirmationMessage;
+        var changesMade = false;
+        var updateSuccess = false;
+        $(document).ready(function () {
+            function setChangesMade() {
+                changesMade = true;
             }
-        });
 
+            // Bind change event to form elements
+            $(".form-control").change(setChangesMade);
 
-        $('#updateBtn').on('click', function () {
-            var fields = document.querySelectorAll("input");
-            var error = false;
-            fields.forEach(function(field) {
-                var trimmedValue = field.value.trim();
-                if(trimmedValue === ""){
-                    error = true;
-                    field.classList.add("is-invalid");
-                }else if (/^\s/.test(field.value)) {
-                    error = true;
-                    field.classList.add("is-invalid");
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Spaces before letters are not allowed.',
-                    });
-                }else {
-                    field.classList.remove("is-invalid");
+            // Bind beforeunload event to show confirmation message
+            window.addEventListener('beforeunload', function(e) {
+                if (changesMade && !updateSuccess) {
+                    var confirmationMessage = "Changes you made may not be saved. Are you sure you want to leave?";
+                    (e || window.event).returnValue = confirmationMessage;
+                    return confirmationMessage;
                 }
             });
 
-            if (error) {
-                return false;
-            }
 
-            changesMade = false;
-
-            var formData = $('#updateForm').serialize(); // Serialize the form data
-
-            $.ajax({
-                type: 'POST',
-                url: '../DataUpdate/update_strand.php',
-                data: formData,
-                success: function (response) {
-                    response = JSON.parse(response);
-                    if (response.success) {
+            $('#updateBtn').on('click', function () {
+                var fields = document.querySelectorAll("input");
+                var error = false;
+                fields.forEach(function(field) {
+                    var trimmedValue = field.value.trim();
+                    if(trimmedValue === ""){
+                        error = true;
+                        field.classList.add("is-invalid");
+                    }else if (/^\s/.test(field.value)) {
+                        error = true;
+                        field.classList.add("is-invalid");
                         Swal.fire({
-                            title: "Success!",
-                            text: response.success,
-                            icon: "success",
-                        }).then(function () {
-                            window.location.href = '../view_strand.php';
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Spaces before letters are not allowed.',
                         });
-                    } else if (response.error) {
-                        Swal.fire({
-                            title: "Warning!",
-                            text: response.error,
-                            icon: "warning",
-                        });
+                    }else {
+                        field.classList.remove("is-invalid");
                     }
-                },
-                error: function (xhr, status, error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Failed to update strands information!',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                    console.error(xhr.responseText);
+                });
+
+                if (error) {
+                    return false;
                 }
+
+                changesMade = false;
+
+                var formData = $('#updateForm').serialize(); // Serialize the form data
+
+                $.ajax({
+                    type: 'POST',
+                    url: '../DataUpdate/update_strand.php',
+                    data: formData,
+                    success: function (response) {
+                        response = JSON.parse(response);
+                        if (response.success) {
+                            Swal.fire({
+                                title: "Success!",
+                                text: response.success,
+                                icon: "success",
+                            }).then(function () {
+                                window.location.href = '../view_strand.php';
+                            });
+                        } else if (response.error) {
+                            Swal.fire({
+                                title: "Warning!",
+                                text: response.error,
+                                icon: "warning",
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to update strands information!',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                        console.error(xhr.responseText);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
  
 
     

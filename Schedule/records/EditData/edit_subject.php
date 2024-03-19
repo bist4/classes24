@@ -484,105 +484,109 @@ include('session_out.php');
    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
  
-
     <script>
         var changesMade = false;
-    var updateSuccess = false;
-    $(document).ready(function () {
-        function setChangesMade() {
-            changesMade = true;
-        }
-
-        // Bind change event to form elements
-        $(".form-control").change(setChangesMade);
-
-        // Bind beforeunload event to show confirmation message
-        window.addEventListener('beforeunload', function(e) {
-            if (changesMade && !updateSuccess) {
-                var confirmationMessage = "Changes you made may not be saved. Are you sure you want to leave?";
-                (e || window.event).returnValue = confirmationMessage;
-                return confirmationMessage;
-            }
-        });
-        $('#updateBtn').on('click', function () {
-           
-
-           
-            var unitsValue = parseInt($('#MinutesPerWeek_<?php echo $secdata['SubjectID']; ?>').val(), 10);
-
-            // Check if the value is within the range (1 to 3)
-            if (unitsValue < 30 || unitsValue > 500 || unitsValue === "0") {
-                Swal.fire({
-                    title: "Invalid Minutes",
-                    text: "Minutes Per Week should be between 30 and 500 and cannot be 0.",
-                    icon: "warning",
-                });
-                return; // Stop further execution if validation fails
+        var updateSuccess = false;
+        $(document).ready(function () {
+            function setChangesMade() {
+                changesMade = true;
             }
 
-            var fields = document.querySelectorAll("input");
-            var error = false;
-            fields.forEach(function(field) {
-                var trimmedValue = field.value.trim();
-                if(trimmedValue === ""){
-                    error = true;
-                    field.classList.add("is-invalid");
-                }else if (/^\s/.test(field.value)) {
-                    error = true;
-                    field.classList.add("is-invalid");
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Spaces before letters are not allowed.',
-                    });
-                }else {
-                    field.classList.remove("is-invalid");
+            // Bind change event to form elements
+            $(".form-control").change(setChangesMade);
+
+            // Bind beforeunload event to show confirmation message
+            window.addEventListener('beforeunload', function(e) {
+                if (changesMade && !updateSuccess) {
+                    var confirmationMessage = "Changes you made may not be saved. Are you sure you want to leave?";
+                    (e || window.event).returnValue = confirmationMessage;
+                    return confirmationMessage;
                 }
             });
 
-            if (error) {
-                return false;
-            }
 
-            changesMade = false;
-            var formData = $('#updateForm').serialize(); // Serialize the form data
-
-            $.ajax({
-                type: 'POST',
-                url: '../DataUpdate/update_subject.php',
-                data: formData,
-                success: function (response) {
-                    response = JSON.parse(response);
-                    if (response.success) {
+            $('#updateBtn').on('click', function () {
+                var fields = document.querySelectorAll("input");
+                var error = false;
+                fields.forEach(function(field) {
+                    var trimmedValue = field.value.trim();
+                    if(trimmedValue === ""){
+                        error = true;
+                        field.classList.add("is-invalid");
+                    }else if (/^\s/.test(field.value)) {
+                        error = true;
+                        field.classList.add("is-invalid");
                         Swal.fire({
-                            title: "Success!",
-                            text: response.success,
-                            icon: "success",
-                        }).then(function () {
-                            window.location.href = '../view_subject.php';
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Spaces before letters are not allowed.',
                         });
-                    } else if (response.error) {
-                        Swal.fire({
-                            title: "Warning!",
-                            text: response.error,
-                            icon: "warning",
-                        });
+                    }else {
+                        field.classList.remove("is-invalid");
                     }
-                },
-                error: function (xhr, status, error) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Failed to update subjects information!',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                    console.error(xhr.responseText);
+                });
+
+                if (error) {
+                    return false;
                 }
+
+                var unitsValue = parseInt($('#MinutesPerWeek_<?php echo $secdata['SubjectID']; ?>').val(), 10);
+
+                // Check if the value is within the range (1 to 3)
+                if (unitsValue < 30 || unitsValue > 500 || unitsValue === "0") {
+                    Swal.fire({
+                        title: "Invalid Minutes",
+                        text: "Minutes Per Week should be between 30 and 500 and cannot be 0.",
+                        icon: "warning",
+                    });
+                    return true; // Stop further execution if validation fails
+                }
+
+                changesMade = false;
+
+                var formData = $('#updateForm').serialize(); // Serialize the form data
+
+                $.ajax({
+                    type: 'POST',
+                    url: '../DataUpdate/update_subject.php',
+                    data: formData,
+                    success: function (response) {
+                        response = JSON.parse(response);
+                        if (response.success) {
+                            Swal.fire({
+                                title: "Success!",
+                                text: response.success,
+                                icon: "success",
+                            }).then(function () {
+                                window.location.href = '../view_subject.php';
+                            });
+                        } else if (response.error) {
+                            Swal.fire({
+                                title: "Warning!",
+                                text: response.error,
+                                icon: "warning",
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to update subject information!',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                        console.error(xhr.responseText);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
  
+
+
+
+
+
 <script>
     function goBack() {
     // Navigate back in history

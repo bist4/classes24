@@ -292,7 +292,7 @@ include('session_out.php');
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="../Profile/profile.php">
+                                <a class="dropdown-item" href="../../Profile/profile.php">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -328,9 +328,9 @@ include('session_out.php');
                                     <input type="hidden" name="InstructorID[]" value="<?php echo $secdata['InstructorID']; ?>">
                                     <input type="hidden" name="InstructorSpecializationsID[]" value="<?php echo $secdata['InstructorSpecializationsID']; ?>">
                             
-                                    <div class="form-group d-flex">
+                                    <div class="form-group d-flex align-items-center">
                                         <input type="text" class="form-control" id="Specialization<?php echo $secdata['InstructorSpecializationsID'];?> " name="specializations[]" value="<?php echo $secdata['SpecializationName'];?>" required> 
-                                        <div class="align-items-center">
+                                        <div>
                                             <a href="#"><i class="fas fa-trash"></i></a> 
                                         </div>
                                     </div>

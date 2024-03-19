@@ -479,7 +479,33 @@ include('session_out.php');
                 return confirmationMessage;
             }
         });
+
+
         $('#updateBtn').on('click', function () {
+            var fields = document.querySelectorAll("input");
+            var error = false;
+            fields.forEach(function(field) {
+                var trimmedValue = field.value.trim();
+                if(trimmedValue === ""){
+                    error = true;
+                    field.classList.add("is-invalid");
+                }else if (/^\s/.test(field.value)) {
+                    error = true;
+                    field.classList.add("is-invalid");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Spaces before letters are not allowed.',
+                    });
+                }else {
+                    field.classList.remove("is-invalid");
+                }
+            });
+
+            if (error) {
+                return false;
+            }
+
             changesMade = false;
 
             var formData = $('#updateForm').serialize(); // Serialize the form data

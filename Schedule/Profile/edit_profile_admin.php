@@ -317,6 +317,9 @@ include('session_out.php');
                         <div class="col-md-6">
                             <label class="small mb-1" for="inputFirstName">First name</label>
                             <input class="form-control" id="Fname" name="fname" type="text" placeholder="Enter your first name" value="<?php echo $row['Fname']?>">
+                            <div class="invalid-feedback" style="display: none;">
+                                Spaces are not allowed in the field
+                            </div>
                         </div>
                         <!-- Form Group (Middle name)-->
                         <div class="col-md-6">
@@ -525,26 +528,30 @@ include('session_out.php');
                 // Validate form fields
                 var fields = document.querySelectorAll("input");
                 var error = false;
-                fields.forEach(function(field) {
+                fields.forEach(function (field) {
                     var trimmedValue = field.value.trim(); // Trim the value to remove leading and trailing spaces
                     if (field.id !== "Mname" && trimmedValue === "") { // Exclude middle name field from validation
                         error = true;
                         field.classList.add("is-invalid");
-                        field.nextElementSibling.innerText = "This field is required.";
                     } else if (field.id !== "Mname" && /^\s/.test(field.value)) { // Exclude middle name field from validation
                         error = true;
                         field.classList.add("is-invalid");
+                        field.nextElementSibling.style.display = "block"; // Display error message
                         field.nextElementSibling.innerText = "Spaces before letters are not allowed.";
                     } else {
                         field.classList.remove("is-invalid");
-                        field.nextElementSibling.innerText = ""; // Clear any existing error message
+                        field.nextElementSibling.style.display = "none"; // Hide error message
                     }
 
                     // Validate contact number
                     if (field.id === "ContactNumber" && !/^\d+$/.test(field.value)) {
                         error = true;
                         field.classList.add("is-invalid");
-                        field.nextElementSibling.innerText = "Contact number must contain only numbers.";
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Contact number must contain only numbers.',
+                        });
                     }
                 });
 

@@ -466,7 +466,7 @@ include('session_out.php');
  
 
     <script>
-         var changesMade = false;
+    var changesMade = false;
     var updateSuccess = false;
     $(document).ready(function () {
         function setChangesMade() {
@@ -475,6 +475,7 @@ include('session_out.php');
 
         // Bind change event to form elements
         $(".form-control").change(setChangesMade);
+        $("textarea").change(setChangesMade); // Listen for changes in textareas as well
 
         // Bind beforeunload event to show confirmation message
         window.addEventListener('beforeunload', function(e) {
@@ -485,15 +486,17 @@ include('session_out.php');
             }
         });
 
-        $('#updateBtn').on('click', function () {
+        $('#updateBtn').on('click', function (e) {
+            e.preventDefault(); // Prevent form submission by default
 
             changesMade = false;
             var formData = $('#updateForm').serialize(); // Serialize the form data
+            var error = false; // Declare error variable
 
-            var fields = form.querySelectorAll("input");
+            var fields = document.querySelectorAll("#updateForm input, #updateForm textarea");
             fields.forEach(function(field) {
                 var trimmedValue = field.value.trim();
-                if(trimmedValue === ""){
+                if (trimmedValue === "") {
                     error = true;
                     field.classList.add("is-invalid");
                 } else if (/^\s/.test(field.value)) {
@@ -510,7 +513,7 @@ include('session_out.php');
             });
 
             if (error) {
-                return false;
+                return false; // Prevent form submission if there are errors
             }
             
             $.ajax({
@@ -525,6 +528,7 @@ include('session_out.php');
                             text: response.success,
                             icon: "success",
                         }).then(function () {
+                            updateSuccess = true; // Set updateSuccess to true upon successful update
                             window.location.href = '../view_section.php';
                         });
                     } else if (response.error) {
@@ -548,6 +552,7 @@ include('session_out.php');
         });
     });
 </script>
+
  
 <script>
     function goBack() {

@@ -527,13 +527,14 @@ if ($row['is_Lock_Account'] == 1) {
         function checkFields() {
             var allFilled = true;
             $('input[name^="StrandCode"], input[name^="StrandName"], input[name^="TrackTypeName"], input[name^="Specialization"]').each(function () {
-                if ($(this).val() === '') {
+                if ($(this).val() === '' || /^\s/.test($(this).val())) {
                     allFilled = false;
                     $(this).addClass('is-invalid'); // Add is-invalid class to the empty field
                     return false; // Break the loop if any field is empty
                 } else {
                     $(this).removeClass('is-invalid'); // Remove is-invalid class if field is filled
                 }
+
             });
 
             if (allFilled) {

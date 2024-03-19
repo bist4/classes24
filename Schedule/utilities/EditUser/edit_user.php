@@ -581,73 +581,72 @@ include('../session_out.php');
     </script>
 
     <!-- Update Data -->
-    <script>
-        $(document).ready(function(){
-            $('#updateBtn').click(function(){
+<!-- Update Data -->
+<script>
+    $(document).ready(function(){
+        $('#updateBtn').click(function(){
 
-                if($('.needs-validation')[0].checkValidity()){
-                    var loading = Swal.fire({
-                        title: 'Please wait',
-                        html: 'Updating your data...',
-                        allowOutsideClick: false,
-                        onBeforeOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
+            if($('.needs-validation')[0].checkValidity()){
+                var loading = Swal.fire({
+                    title: 'Please wait',
+                    html: 'Updating your data...',
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
 
-                    $.ajax({
-                        type: 'POST',
-                        url: '../UpdateUser/update_user.php', 
-                        data: $('.needs-validation').serialize(),
-                        success: function(response){
-                            loading.close();
-                            if(response.success){
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success!',
-                                    text: response.success,
-                                    onClose: () => {
-                                        // Reload the page
-                                        window.location.reload();
-                                    }
-                                }).then(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '../UpdateUser/update_user.php', 
+                    data: $('.needs-validation').serialize(),
+                    dataType: 'json', // Specify data type as JSON
+                    success: function(response){
+                        loading.close();
+                        if(response.success){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: response.success,
+                                onClose: () => {
+                                    // Reload the page
+                                    window.location.reload();
+                                }
+                            }).then(function() {
                                 var subid = "<?php echo $_GET['subid']; ?>";
                                 window.location.href = 'edit_user.php?subid=' + subid;
                             });
-                            }else if(response.error){
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Warning',
-                                    text: response.error,
-                                });
-                            }
-                   
-                            
-                        },
-                        error: function(xhr, status, error){
-                            // Close loading animation
-                            loading.close();
-
-                            // Show error message
+                        } else if(response.error){
                             Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: 'An error occurred while submitting your data. Please try again later.'
+                                icon: 'warning',
+                                title: 'Warning',
+                                text: response.error,
                             });
                         }
-                    });
-                } else {
-                    // If the form is invalid, show a sweet alert message
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Warning',
-                        text: 'Please fill in all required fields.'
-                    });
-                }
-            });
-        });
-    </script>
+                    },
+                    error: function(xhr, status, error){
+                        // Close loading animation
+                        loading.close();
 
+                        // Show error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'An error occurred while submitting your data. Please try again later.'
+                        });
+                    }
+                });
+            } else {
+                // If the form is invalid, show a sweet alert message
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Please fill in all required fields.'
+                });
+            }
+        });
+    });
+</script>
 
 
 

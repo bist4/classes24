@@ -249,7 +249,7 @@ include('session_out.php');
                                 </div> -->
                             <!-- </div>
                         </div> -->
-                        <div class="col-xl-8">
+                        <div class="col-xl-12">
                             <!-- Account details card-->
                             
                             <div class="card mb-4">

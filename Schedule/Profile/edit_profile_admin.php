@@ -317,9 +317,6 @@ include('session_out.php');
                         <div class="col-md-6">
                             <label class="small mb-1" for="inputFirstName">First name</label>
                             <input class="form-control" id="Fname" name="fname" type="text" placeholder="Enter your first name" value="<?php echo $row['Fname']?>">
-                            <div class="invalid-feedback" style="display: none;">
-                                Spaces are not allowed in the field
-                            </div>
                         </div>
                         <!-- Form Group (Middle name)-->
                         <div class="col-md-6">
@@ -521,114 +518,115 @@ include('session_out.php');
         });
     </script> -->
 
-    <!-- Update Data -->
     <script>
-        $(document).ready(function () {
-            $("#update_btn").click(function () {
-                // Validate form fields
-                var fields = document.querySelectorAll("input");
-                var error = false;
-                fields.forEach(function (field) {
-                    var trimmedValue = field.value.trim(); // Trim the value to remove leading and trailing spaces
-                    if (field.id !== "Mname" && trimmedValue === "") { // Exclude middle name field from validation
-                        error = true;
-                        field.classList.add("is-invalid");
-                    } else if (field.id !== "Mname" && /^\s/.test(field.value)) { // Exclude middle name field from validation
-                        error = true;
-                        field.classList.add("is-invalid");
-                        field.nextElementSibling.style.display = "block"; // Display error message
-                        field.nextElementSibling.innerText = "Spaces before letters are not allowed.";
-                    } else {
-                        field.classList.remove("is-invalid");
-                        field.nextElementSibling.style.display = "none"; // Hide error message
-                    }
-
-                    // Validate contact number
-                    if (field.id === "ContactNumber" && !/^\d+$/.test(field.value)) {
-                        error = true;
-                        field.classList.add("is-invalid");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Contact number must contain only numbers.',
-                        });
-                    }
-                });
-
-                if (error) {
-                    return false;
+    $(document).ready(function () {
+        $("#update_btn").click(function () {
+            // Validate form fields
+            var fields = document.querySelectorAll("input");
+            var error = false;
+            fields.forEach(function(field) {
+                var trimmedValue = field.value.trim(); // Trim the value to remove leading and trailing spaces
+                if (field.id !== "Mname" && trimmedValue === "") { // Exclude middle name field from validation
+                    error = true;
+                    field.classList.add("is-invalid");
+                } else if (field.id !== "Mname" && /^\s/.test(field.value)) { // Exclude middle name field from validation
+                    error = true;
+                    field.classList.add("is-invalid");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Spaces before letters are not allowed.',
+                    });
+                } else {
+                    field.classList.remove("is-invalid");
                 }
 
-                // Display a SweetAlert confirmation message
-                Swal.fire({
-                    title: 'Warning',
-                    text: 'Do you want to update your profile?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Proceed with the profile update
-                        updateProfile();
-                    }
-                });
+                // Validate contact number
+                if (field.id === "ContactNumber" && !/^\d+$/.test(field.value)) {
+                    error = true;
+                    field.classList.add("is-invalid");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Contact number must contain only numbers.',
+                    });
+                }
             });
 
-            // Function to handle profile update
-            function updateProfile() {
-                // Gather data from form fields
-                var username = "<?php echo $loggedInUsername; ?>"; // Get the logged-in username from PHP
-                var fname = $("#Fname").val();
-                var mname = $("#Mname").val();
-                var lname = $("#Lname").val();
-                var bday = $("#Bday").val();
-                var address = $("#Address").val();
-                var contactNumber = $("#ContactNumber").val();
-
-                // Create data object to send to the server
-                var data = {
-                    username: username,
-                    fname: fname,
-                    mname: mname,
-                    lname: lname,
-                    bday: bday,
-                    address: address,
-                    contactNumber: contactNumber
-                };
-
-                // Send AJAX request
-                $.ajax({
-                    type: "POST",
-                    url: "DataUpdate/update_profile.php", // Replace with the actual file handling the update on the server
-                    data: data,
-                    success: function (response) {
-                        // Handle the server response here with SweetAlert
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: 'Profile updated successfully!',
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        // Reload the page with a delay of 2 seconds (2000 milliseconds)
-                        setTimeout(function () {
-                            location.reload();
-                        }, 2000);
-                    },
-                    error: function () {
-                        // Handle errors here with SweetAlert
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Error updating profile. Please try again.',
-                        });
-                    }
-                });
+            if (error) {
+                return false;
             }
+
+            // Display a SweetAlert confirmation message
+            Swal.fire({
+                title: 'Warning',
+                text: 'Do you want to update your profile?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Proceed with the profile update
+                    updateProfile();
+                }
+            });
         });
-    </script>
+
+        // Function to handle profile update
+        function updateProfile() {
+            // Gather data from form fields
+            var username = "<?php echo $loggedInUsername; ?>"; // Get the logged-in username from PHP
+            var fname = $("#Fname").val();
+            var mname = $("#Mname").val();
+            var lname = $("#Lname").val();
+            var bday = $("#Bday").val();
+            var address = $("#Address").val();
+            var contactNumber = $("#ContactNumber").val();
+
+            // Create data object to send to the server
+            var data = {
+                username: username,
+                fname: fname,
+                mname: mname,
+                lname: lname,
+                bday: bday,
+                address: address,
+                contactNumber: contactNumber
+            };
+
+            // Send AJAX request
+            $.ajax({
+                type: "POST",
+                url: "DataUpdate/update_profile.php", // Replace with the actual file handling the update on the server
+                data: data,
+                success: function (response) {
+                    // Handle the server response here with SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Profile updated successfully!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    // Reload the page with a delay of 2 seconds (2000 milliseconds)
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                },
+                error: function () {
+                    // Handle errors here with SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error updating profile. Please try again.',
+                    });
+                }
+            });
+        }
+    });
+</script>
 
 
 <script>

@@ -702,10 +702,14 @@ if ($row['is_Lock_Account'] == 1) {
         function checkFields() {
             var allFilled = true;
             $('input[name^="Classification"], input[name^="SubjectName"], input[name^="MinutesPerWeek"]').each(function () {
-                if (/^\s/.test($(this).val()) || $(this).val() === '') {
+                if (/^\s/.test($(this).val())) {
                     allFilled = false;
                     $(this).addClass('is-invalid'); // Add is-invalid class to the empty field
-                } else {
+                } else if($(this).val() === '') {
+                    allFilled = false;
+                    return false;
+                }
+                else {
                     $(this).removeClass('is-invalid'); // Remove is-invalid class if field is filled
                 }
             });

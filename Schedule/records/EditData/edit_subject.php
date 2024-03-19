@@ -505,6 +505,21 @@ include('session_out.php');
             }
         });
         $('#updateBtn').on('click', function () {
+           
+
+            changesMade = false;
+            var unitsValue = parseInt($('#MinutesPerWeek_<?php echo $secdata['SubjectID']; ?>').val(), 10);
+
+            // Check if the value is within the range (1 to 3)
+            if (unitsValue < 30 || unitsValue > 500 || unitsValue === "0") {
+                Swal.fire({
+                    title: "Invalid Minutes",
+                    text: "Minutes Per Week should be between 30 and 500 and cannot be 0.",
+                    icon: "warning",
+                });
+                return; // Stop further execution if validation fails
+            }
+
             var fields = document.querySelectorAll("input");
             var error = false;
             fields.forEach(function(field) {
@@ -527,19 +542,6 @@ include('session_out.php');
 
             if (error) {
                 return false;
-            }
-            
-            changesMade = false;
-            var unitsValue = parseInt($('#MinutesPerWeek_<?php echo $secdata['SubjectID']; ?>').val(), 10);
-
-            // Check if the value is within the range (1 to 3)
-            if (unitsValue < 30 || unitsValue > 500 || unitsValue === "0") {
-                Swal.fire({
-                    title: "Invalid Minutes",
-                    text: "Minutes Per Week should be between 30 and 500 and cannot be 0.",
-                    icon: "warning",
-                });
-                return; // Stop further execution if validation fails
             }
             var formData = $('#updateForm').serialize(); // Serialize the form data
 

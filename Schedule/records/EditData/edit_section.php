@@ -353,7 +353,7 @@ include('session_out.php');
                                         <?php foreach ($allSectionData as $secdata) { ?>
                                             <tr>
                                                 <td class="col-md-2">
-                                                    <input type="number" class="form-control" id="SectionNo_<?php echo $secdata['SectionID']; ?>" value="<?php echo $secdata['SectionNo']; ?>" name="SectionNo[]" placeholder="Enter Section Number" title="Input Section Number">
+                                                    <input type="number" class="form-control" id="SectionNo_<?php echo $secdata['SectionID']; ?>" value="<?php echo $secdata['SectionNo']; ?>" name="SectionNo[]" placeholder="Enter Section Number" title="Input Section Number" oninput="this.value.replace(/[^0-9]/g, '').slice(0, 2)">
                                                 </td>
                                                 <td class="col-md-4">
                                                     <input type="text" class="form-control" id="SectionName_<?php echo $secdata['SectionID']; ?>" value="<?php echo $secdata['SectionName']; ?>" name="SectionName[]" placeholder="Enter Section Name" title="Input Section Name">

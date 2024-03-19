@@ -451,7 +451,7 @@ include('session_out.php');
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
   
-    <script>
+    <!-- <script>
 $(document).ready(function () {
     $("#update_btn").click(function () {
         // Gather data from form fields
@@ -498,6 +498,245 @@ $(document).ready(function () {
         });
     });
 });
+</script> -->
+
+<script>
+$(document).ready(function () {
+    $("#current_password").on("input", function () {
+        var enteredPassword = $(this).val().trim();
+        if (enteredPassword !== "") {
+            $(this).css("border-color", "red");
+            checkPassword(); // Check the password immediately upon input
+        } else {
+            $(this).css("border-color", "transparent"); // Set border color to transparent when input is not empty
+        }
+    });
+
+    $("#current_password").on("keypress", function (event) {
+        // Check if Enter key is pressed
+        if (event.keyCode === 13) {
+            checkPassword();
+        }
+    });
+
+    function checkPassword() {
+        var currentPassword = $("#current_password").val().trim();
+        
+        $.ajax({
+            type: "POST",
+            url: "changePassword/check_password.php",
+            data: {
+                current_password: currentPassword
+            },
+            success: function (response) {
+                console.log("Response received:", response);
+                if (response === "success") {
+                    $("#current_password").css("border-color", "lightgreen");
+                } else {
+                    $("#current_password").css("border-color", "red");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error occurred:", error);
+            }
+        });
+    }
+});
+</script>
+
+<script>
+$(document).ready(function () {
+    $("#confirm_password").on("input", function () {
+        var newPassword = $("#new_password").val().trim();
+        var confirmPassword = $("#confirm_password").val().trim();
+        if (confirmPassword !== newPassword) {
+            $("#new_password, #confirm_password").css("border-color", "red");
+        } else {
+            $("#new_password, #confirm_password").css("border-color", "lightgreen");
+        }
+    });
+    
+
+});
+
+<script>
+$(document).ready(function () {
+    // Remove error messages and reset border color when user starts typing in the input fields
+    $("#current_password").on('input', function() {
+        $("#current_password").css("border-color", ""); // Reset border color
+        $("#current_password_error").remove(); // Remove error message
+    });
+    $("#new_password").on('input', function() {
+        $("#new_password").css("border-color", ""); // Reset border color
+        $("#new_password_error").remove(); // Remove error message
+        var newPassword = $(this).val();
+        if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(newPassword)) {
+            $("#new_password").css("border-color", "red");
+            $("#new_password").after("<div id='new_password_error' style='color:red'>New password must contain at least one digit, one lowercase letter, one uppercase letter, and be at least 8 characters long.</div>");
+        }
+        else {
+            $("#new_password").css("border-color", ""); // Reset border color
+        }
+        checkPasswordMatch(); // Check if passwords match after every input
+    });
+    $("#confirm_password").on('input', function() {
+        $("#confirm_password").css("border-color", ""); // Reset border color
+        $("#confirm_password_error").remove(); // Remove error message
+        checkPasswordMatch(); // Check if passwords match after every input
+    });
+
+    function checkPasswordMatch() {
+        var newPassword = $("#new_password").val();
+        var confirmPassword = $("#confirm_password").val();
+
+        if (newPassword === confirmPassword) {
+            // If passwords match and are not empty, set border color to green
+            $("#new_password").css("border-color", "green");
+            $("#confirm_password").css("border-color", "green");
+        } 
+    }
+
+    $("#update_btn").click(function (event) {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        // Remove previous error messages
+        $("#new_password_error").remove();
+        $("#confirm_password_error").remove();
+        $("#current_password_error").remove();
+
+        // Check if all fields are filled
+        var username = "<?php echo $loggedInUsername; ?>"; // Get the logged-in username from PHP
+        var currentPassword = $("#current_password").val(); // Get the current password
+        var newPassword = $("#new_password").val();
+        var confirmPassword = $("#confirm_password").val();
+
+        // Check if any of the fields are empty
+        if (currentPassword === "" || newPassword === "" || confirmPassword === "") {
+            // Set border color of empty fields to red
+            if (currentPassword === "") {
+                $("#current_password").css("border-color", "red");
+                $("#current_password").after("<div id='current_password_error' style='color:red'>Current password cannot be empty.</div>");
+            } else {
+                $("#current_password").css("border-color", ""); // Reset border color
+            }
+            if (newPassword === "") {
+                $("#new_password").css("border-color", "red");
+                $("#new_password").after("<div id='new_password_error' style='color:red'>New password cannot be empty.</div>");
+            } else {
+                $("#new_password").css("border-color", ""); // Reset border color
+            }
+            if (confirmPassword === "") {
+                $("#confirm_password").css("border-color", "red");
+                $("#confirm_password").after("<div id='confirm_password_error' style='color:red'>Confirm password cannot be empty.</div>");
+            } else {
+                $("#confirm_password").css("border-color", ""); // Reset border color
+            }
+            
+            return; // Stop further execution
+        }
+
+        // Check if new password matches confirm password
+        if (newPassword !== confirmPassword) {
+            Swal.fire({
+                title: 'Error',
+                text: 'New password and confirm password do not match.',
+                icon: 'error'
+            });
+            return; // Stop further execution
+        }
+
+        // Check if the new password meets the required pattern
+        if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(newPassword)) {
+            $("#new_password").css("border-color", "red");
+            $("#new_password").after("<div id='new_password_error' style='color:red'>New password must contain at least one digit, one lowercase letter, one uppercase letter, and be at least 8 characters long.</div>");
+            return; // Stop further execution
+        }
+
+        // If all validation passes, proceed with the confirmation dialog
+        Swal.fire({
+            title: 'Confirmation',
+            text: 'Are you sure you want to update your password?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Proceed with AJAX request
+                // Prepare form data
+                var formData = {
+                    username: username,
+                    current_password: currentPassword, // Include the current password
+                    new_password: newPassword
+                };
+
+                // Perform AJAX request
+                $.ajax({
+                    type: "POST",
+                    url: "changePassword/change_password_connection.php",
+                    data: formData,
+                    dataType: "json", // Expect JSON response
+                    success: function (response) {
+                        // Handle success response
+                        if (response.status === "success") {
+                            Swal.fire({
+                                title: 'Success',
+                                text: response.message,
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Reload the page
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Warning',
+                                text: response.message,
+                                icon: 'warning'
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        console.error("Error occurred:", error);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred while updating the password.',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
+
+
+<script>
+$(document).ready(function () {
+    $("#cancel_btn").click(function () {
+        // Perform the Ajax request to redirect to 'assistant_profile.php'
+        $.ajax({
+            url: 'profile.php',
+            type: 'GET',
+            success: function(data) {
+                // Redirect to assistant_profile.php
+                window.location.href = 'profile.php';
+            },
+            error: function() {
+                console.error('Error occurred during the Ajax request');
+            }
+        });
+    });
+});
+
+</script>
+
+
 </script>
 
 

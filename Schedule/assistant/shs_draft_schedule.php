@@ -654,7 +654,7 @@ if (isset($_SESSION['Username'])) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     // User clicked "Yes," proceed with the update
-                    var gradeLevel = $("#strand option:selected").text();
+                    var gradeLevel = $("#yearLevel option:selected").text();
 		            var sectionName = $("#section option:selected").text();
                     // Get selected values from dropdowns
                     var yearLevel = $("#strand").val();

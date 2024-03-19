@@ -561,22 +561,22 @@ B    <div id="wrapper">
 
             // Function to check if all required fields have data
             function checkFields() {
-                var department = $('#department').val();
-                var sectionNo = $('#sectionNo').val();
-                var subjectDesc = $('#sectionName').val();
-                
-                
-                // Enable the button if all required fields are filled
-                if (
-                    department !== '' && department !== null &&
-                    sectionNo !== '' && sectionNo !== null &&
-                    subjectDesc !== '' && subjectDesc !== null
-                     
-                ) {
-                    $('#saveBtn').prop('disabled', false);
-                } else {
-                    $('#saveBtn').prop('disabled', true);
-                }
+                var allFilled = true;
+                $('input[name^="SectionNo"], input[name^="SectionName"], select[name^="Department"]').each(function () {
+                    if (/^\s/.test($(this).val())) {
+                        allFilled = false;
+                        $(this).addClass('is-invalid'); // Add is-invalid class to the empty field
+                    } else if($(this).val() === '') {
+                        allFilled = false;
+                        return false;
+                    }
+                    else {
+                        $(this).removeClass('is-invalid'); // Remove is-invalid class if field is filled
+                    }
+                });
+
+                // Enable or disable the save button based on allFilled status
+                $('#saveBtn').prop('disabled', !allFilled);
             }
 
             // Call the function on input change for other required fields

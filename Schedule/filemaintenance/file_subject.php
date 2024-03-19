@@ -691,7 +691,7 @@ if ($row['is_Lock_Account'] == 1) {
         });
     </script>
  
-
+<!-- Lock Btn -->
     <script>
         $(document).ready(function() {
             // Disable the Save button initially
@@ -699,6 +699,31 @@ if ($row['is_Lock_Account'] == 1) {
 
             // Function to check if all required fields have data
             function checkFields() {
+                var allFilled = true;
+                $('input[name=^Classification], input[name=^SubjectName], input[name=^MinutesPerWeek]').each(function () {
+                    if (/^\s/.test($(this).val())) {
+                    allFilled = false;
+                    $(this).addClass('is-invalid'); // Add is-invalid class to the empty field
+                    return false; // Break the loop if any field is empty
+                    }else if($(this).val() === '') {
+                        allFilled = false;
+                        return false;
+                    }
+                    else {
+                        $(this).removeClass('is-invalid'); // Remove is-invalid class if field is filled
+                    }
+                });
+
+
+                if (allFilled) {
+                    $('#saveBtn').prop('disabled', false); // Enable the button
+                } else {
+                    $('#saveBtn').prop('disabled', true); // Disable the button
+                }
+
+
+
+
                 var department = $('#department').val();
                 
                 var subjectDesc = $('#subDesc').val();

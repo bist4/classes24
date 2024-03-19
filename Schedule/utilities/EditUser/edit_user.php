@@ -595,28 +595,28 @@ include('../session_out.php');
                         }
                     });
 
-                    var fields = document.querySelectorAll("#updateForm input, #updateForm textarea");
-                    fields.forEach(function(field) {
-                        var trimmedValue = field.value.trim();
-                        if (trimmedValue === "") {
-                            error = true;
-                            field.classList.add("is-invalid");
-                        } else if (/^\s/.test(field.value)) {
-                            error = true;
-                            field.classList.add("is-invalid");
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Spaces before letters are not allowed.',
-                            });
-                        } else {
-                            field.classList.remove("is-invalid");
-                        }
-                    });
+                    // var fields = document.querySelectorAll("#updateForm input, #updateForm textarea");
+                    // fields.forEach(function(field) {
+                    //     var trimmedValue = field.value.trim();
+                    //     if (trimmedValue === "") {
+                    //         error = true;
+                    //         field.classList.add("is-invalid");
+                    //     } else if (/^\s/.test(field.value)) {
+                    //         error = true;
+                    //         field.classList.add("is-invalid");
+                    //         Swal.fire({
+                    //             icon: 'error',
+                    //             title: 'Error',
+                    //             text: 'Spaces before letters are not allowed.',
+                    //         });
+                    //     } else {
+                    //         field.classList.remove("is-invalid");
+                    //     }
+                    // });
 
-                    if (error) {
-                        return false; // Prevent form submission if there are errors
-                    }
+                    // if (error) {
+                    //     return false; // Prevent form submission if there are errors
+                    // }
 
                     $.ajax({
                         type: 'POST',

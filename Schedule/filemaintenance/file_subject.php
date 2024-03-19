@@ -701,7 +701,7 @@ if ($row['is_Lock_Account'] == 1) {
         // Function to check if all required fields have data
         function checkFields() {
             var allFilled = true;
-            $('input[name^="Classification"], input[name^="SubjectName"], input[name^="MinutesPerWeek"]').each(function () {
+            $('input[name^="Classification"], input[name^="SubjectName"], input[name^="MinutesPerWeek"], select[name=^"Department"], select[name=^"Type"]').each(function () {
                 if (/^\s/.test($(this).val())) {
                     allFilled = false;
                     $(this).addClass('is-invalid'); // Add is-invalid class to the empty field

@@ -353,7 +353,7 @@ include('session_out.php');
                                         <?php foreach ($allSectionData as $secdata) { ?>
                                             <tr>
                                                 <td class="col-md-2">
-                                                    <input type="text" class="form-control" id="SectionNo_<?php echo $secdata['SectionID']; ?>" value="<?php echo $secdata['SectionNo']; ?>" name="SectionNo[]" placeholder="Enter Section Number" title="Input Section Number">
+                                                    <input type="number" class="form-control" id="SectionNo_<?php echo $secdata['SectionID']; ?>" value="<?php echo $secdata['SectionNo']; ?>" name="SectionNo[]" placeholder="Enter Section Number" title="Input Section Number">
                                                 </td>
                                                 <td class="col-md-4">
                                                     <input type="text" class="form-control" id="SectionName_<?php echo $secdata['SectionID']; ?>" value="<?php echo $secdata['SectionName']; ?>" name="SectionName[]" placeholder="Enter Section Name" title="Input Section Name">
@@ -490,6 +490,29 @@ include('session_out.php');
             changesMade = false;
             var formData = $('#updateForm').serialize(); // Serialize the form data
 
+            var fields = form.querySelectorAll("input");
+            fields.forEach(function(field) {
+                var trimmedValue = field.value.trim();
+                if(trimmedValue === ""){
+                    error = true;
+                    field.classList.add("is-invalid");
+                } else if (/^\s/.test(field.value)) {
+                    error = true;
+                    field.classList.add("is-invalid");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Spaces before letters are not allowed.',
+                    });
+                } else {
+                    field.classList.remove("is-invalid");
+                }
+            });
+
+            if (error) {
+                return false;
+            }
+            
             $.ajax({
                 type: 'POST',
                 url: '../DataUpdate/update_section.php',

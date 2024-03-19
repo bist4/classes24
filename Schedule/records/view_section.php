@@ -272,7 +272,7 @@ if ($row['is_Lock_Account'] == 1) {
                                                             FROM departments d
                                                             LEFT JOIN strands s ON d.StrandID = s.StrandID
                                                             LEFT JOIN departmenttypes dt ON d.DepartmentTypeNameID = dt.DepartmentTypeID 
-                                                            WHERE d.Active = 1 
+                                                            WHERE s.Active = 1 
                                                             ORDER BY FIELD(dt.DepartmentName, 'Primary', 'Junior High School', 'Senior High School') ASC, 
                                                                 d.GradeLevel ASC, 
                                                                 dt.DepartmentName DESC";

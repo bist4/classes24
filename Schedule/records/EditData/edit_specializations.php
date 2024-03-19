@@ -457,7 +457,7 @@ include('session_out.php');
                 return confirmationMessage;
             }
         });
-        
+
         $('#updateButton').click(function(e){
             e.preventDefault();
             var form = $('.needs-validation')[0];

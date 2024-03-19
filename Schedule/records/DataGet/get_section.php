@@ -12,7 +12,7 @@ require "../../config/db_connection.php";
 if (isset($_POST['departmentID'])) {
     $departmentID = $_POST['departmentID'];
 
-    $sql = "SELECT SectionID, SectionNo, SectionName,  DepartmentID FROM classsections WHERE DepartmentID = ? AND Active = 1";
+    $sql = "SELECT SectionID, SectionNo, SectionName, DepartmentID FROM classsections WHERE DepartmentID = ? AND Active = 1";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $departmentID);
     $stmt->execute();

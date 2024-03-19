@@ -492,7 +492,7 @@ if ($row['is_Lock_Account'] == 1) {
     </script>
 
 
-    <!-- Lock btn -->
+    <!-- Lock btn
     <script>
         $(document).ready(function () {
             function checkFields() {
@@ -520,7 +520,40 @@ if ($row['is_Lock_Account'] == 1) {
             checkFields();
         });
 
-    </script>
+    </script> -->
+
+    <script>
+    $(document).ready(function () {
+        function checkFields() {
+            var allFilled = true;
+            $('input[name^="StrandCode"], input[name^="StrandName"], input[name^="TrackTypeName"], input[name^="Specialization"]').each(function () {
+                if ($(this).val() === '') {
+                    allFilled = false;
+                    $(this).addClass('is-invalid'); // Add is-invalid class to the empty field
+                    return false; // Break the loop if any field is empty
+                } else {
+                    $(this).removeClass('is-invalid'); // Remove is-invalid class if field is filled
+                }
+            });
+
+            if (allFilled) {
+                $('#saveBtn').prop('disabled', false); // Enable the button
+            } else {
+                $('#saveBtn').prop('disabled', true); // Disable the button
+            }
+        }
+
+        // Check fields when any input changes
+        $('input[name^="StrandCode"], input[name^="StrandName"], input[name^="TrackTypeName"], input[name^="Specialization"]').on('input', function () {
+            checkFields();
+        });
+
+        // Check fields on initial page load
+        checkFields();
+    });
+
+</script>
+
  
 
     <!-- Insert Data -->

@@ -239,17 +239,15 @@ include('session_out.php');
                     <div class="row">
                         <div class="col-xl-4">
                             <!-- Profile picture card-->
-                            <!-- <div class="card mb-4 mb-xl-0">
+                            <div class="card mb-4 mb-xl-0">
                                 <div class="card-header">Profile Picture</div>
-                                <div class="card-body text-center">
-                                    <!-- Profile picture image-->
+                                <!-- <div class="card-body text-center">
+                                     
                                     <img class="img-account-profile rounded-circle mb-2"  src="../img/undraw_profile.svg" alt="profile">
-                                    <!-- Profile picture help block-->
-                                    <!-- <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div> -->
-                                    <!-- Profile picture upload button-->
+                                    
                                     <button style="display: none;" class="btn btn-primary" type="button">Upload new image</button>
-                                </div>
-                            </div> -->
+                                </div> -->
+                            </div>
                         </div>
                         <div class="col-xl-8">
                             <!-- Account details card-->

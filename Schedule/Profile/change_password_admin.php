@@ -284,11 +284,11 @@ include('session_out.php');
                                     }
                                     ?>
 
-                                    <form method="POST">
+<form method="POST">
                                         <div class="row gx-3 mb-3">
                                             <div class="col-md-12">
                                             <label class="small mb-1">Username</label>
-                                                <input class="form-control" id="username" name="username" type="text" placeholder="Enter your first name" value="<?php echo $row['Username']?>">
+                                                <input disabled class="form-control" id="username" name="username" type="text" placeholder="Enter your first name" value="<?php echo $row['Username']?>">
                                             </div>
                                         </div>
                                         
@@ -323,9 +323,8 @@ include('session_out.php');
                                         
                                         <div class="row gx-3 mb-3">
                                             <div class="col-md-12 d-flex justify-content-end">
-                                                <a href="profile.php">
-                                                    <button class="btn btn-outline-secondary mr-2" type="button" name="cancel_btn">Cancel</button>
-                                                </a>
+                                                <button class="btn btn-outline-secondary mr-2" type="submit" id="cancel_btn">Cancel</button>
+
                                                 <button class="btn btn-primary" type="submit" id="update_btn">Save Changes</button>
                                             </div>
                                         </div>
@@ -500,6 +499,7 @@ $(document).ready(function () {
 });
 </script> -->
 
+
 <script>
 $(document).ready(function () {
     $("#current_password").on("input", function () {
@@ -558,6 +558,9 @@ $(document).ready(function () {
     
 
 });
+
+
+</script>
 
 <script>
 $(document).ready(function () {
@@ -716,16 +719,19 @@ $(document).ready(function () {
 </script>
 
 
+
+
+
 <script>
 $(document).ready(function () {
     $("#cancel_btn").click(function () {
         // Perform the Ajax request to redirect to 'assistant_profile.php'
         $.ajax({
-            url: 'profile.php',
+            url: 'assistant_profile.php',
             type: 'GET',
             success: function(data) {
                 // Redirect to assistant_profile.php
-                window.location.href = 'profile.php';
+                window.location.href = 'assistant_profile.php';
             },
             error: function() {
                 console.error('Error occurred during the Ajax request');
@@ -737,7 +743,8 @@ $(document).ready(function () {
 </script>
 
 
-</script>
+   
+  
 
 
 
@@ -747,4 +754,3 @@ $(document).ready(function () {
 </body>
 
 </html>
-    

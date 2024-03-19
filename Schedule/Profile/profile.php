@@ -282,10 +282,10 @@ include('session_out.php');
                                         <p><a href="mailto:<?php echo $row['Email']?>" style="color: #007bff;"><?php echo $row['Email']?></a></p>
                                     </div>
                                     <!-- Form Group (username)-->
-                                    <div class="mb-3">
+                                    <!-- <div class="mb-3">
                                         <label for="roles" style="color: black;">Roles: </label>
                                         <p style="color: black;"><?php echo $row['UserTypeName']?></p>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>

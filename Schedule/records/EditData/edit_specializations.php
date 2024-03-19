@@ -328,8 +328,10 @@ include('session_out.php');
                                     <input type="hidden" name="InstructorID[]" value="<?php echo $secdata['InstructorID']; ?>">
                                     <input type="hidden" name="InstructorSpecializationsID[]" value="<?php echo $secdata['InstructorSpecializationsID']; ?>">
                             
-                                    <input type="text" class="form-control" id="Specialization<?php echo $secdata['InstructorSpecializationsID'];?> " name="specializations[]" value="<?php echo $secdata['SpecializationName'];?>" required> 
-                                    <i class="fas fa-trash"></i>
+                                    <div class="form-group d-flex">
+                                        <input type="text" class="form-control" id="Specialization<?php echo $secdata['InstructorSpecializationsID'];?> " name="specializations[]" value="<?php echo $secdata['SpecializationName'];?>" required> 
+                                        <i class="fas fa-trash"></i>
+                                    </div>
                                     </div>
                                 </div>
                             <?php } ?>

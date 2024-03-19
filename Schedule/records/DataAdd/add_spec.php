@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Prepare and bind statement
     $stmt = $conn->prepare("INSERT INTO instructorspecializations (InstructorID, SpecializationName) VALUES (?, ?)");
-    $stmt->bind_param("ss", $instructorID, $specialization);
+    $stmt->bind_param("is", $instructorID, $specialization);
 
     // Insert new records
     $response = array();

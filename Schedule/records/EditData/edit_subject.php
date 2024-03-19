@@ -507,7 +507,7 @@ include('session_out.php');
         $('#updateBtn').on('click', function () {
            
 
-            changesMade = false;
+           
             var unitsValue = parseInt($('#MinutesPerWeek_<?php echo $secdata['SubjectID']; ?>').val(), 10);
 
             // Check if the value is within the range (1 to 3)
@@ -543,6 +543,8 @@ include('session_out.php');
             if (error) {
                 return false;
             }
+
+            changesMade = false;
             var formData = $('#updateForm').serialize(); // Serialize the form data
 
             $.ajax({

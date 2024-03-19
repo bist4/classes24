@@ -725,13 +725,13 @@ $(document).ready(function () {
 <script>
 $(document).ready(function () {
     $("#cancel_btn").click(function () {
-        // Perform the Ajax request to redirect to 'assistant_profile.php'
+        // Perform the Ajax request to redirect to 'profile.php'
         $.ajax({
-            url: 'assistant_profile.php',
+            url: 'profile.php',
             type: 'GET',
             success: function(data) {
-                // Redirect to assistant_profile.php
-                window.location.href = 'assistant_profile.php';
+                // Redirect to profile.php
+                window.location.href = 'profile.php';
             },
             error: function() {
                 console.error('Error occurred during the Ajax request');

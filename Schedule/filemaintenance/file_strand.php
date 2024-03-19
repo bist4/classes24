@@ -525,28 +525,6 @@ if ($row['is_Lock_Account'] == 1) {
 
     <!-- Insert Data -->
     <script>
-        var fields = document.querySelectorAll("input");
-        var error = false;
-        fields.forEach(function(field) {
-            var trimmedValue = field.value.trim(); // Trim the value to remove leading and trailing spaces
-            if (field.id !== "Mname" && trimmedValue === "") { // Exclude middle name field from validation
-                error = true;
-                field.classList.add("is-invalid");
-            } else if (field.id !== "Mname" && /^\s/.test(field.value)) { // Exclude middle name field from validation
-                error = true;
-                field.classList.add("is-invalid");
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Spaces before letters are not allowed.',
-                });
-            } else {
-                field.classList.remove("is-invalid");
-            }
-
-            
-        });
-
         var changesMade = false;
         var updateSuccess = false;
             $(document).ready(function () {

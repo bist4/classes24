@@ -97,7 +97,7 @@ if (isset($_SESSION['Username'])) {
             <!-- Close button (X) -->
             <span class="close-button" onclick="closeContent()">&#10006;</span>
             <header>Login</header>
-            <h3>HEllo you hack!</h3>
+            
             <form action="login_connection.php" method="post" onsubmit="showLoader()">
                 <?php if (isset($_GET['error'])) { ?>
                 <p class="error"><?php echo $_GET['error']; ?></p>

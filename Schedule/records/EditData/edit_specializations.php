@@ -330,7 +330,9 @@ include('session_out.php');
                             
                                     <div class="form-group d-flex">
                                         <input type="text" class="form-control" id="Specialization<?php echo $secdata['InstructorSpecializationsID'];?> " name="specializations[]" value="<?php echo $secdata['SpecializationName'];?>" required> 
-                                        <i class="fas fa-trash"></i>
+                                        <div class="align-items-center">
+                                            <a href="#"><i class="fas fa-trash"></i></a> 
+                                        </div>
                                     </div>
                                     </div>
                                 </div>

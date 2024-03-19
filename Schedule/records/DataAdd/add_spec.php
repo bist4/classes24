@@ -32,6 +32,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $instructorID = htmlspecialchars($instructorID);
         $specialization = htmlspecialchars($specializations[$index]);
 
+        // Check if InstructorID exists
+        $check_stmt = $conn->prepare("SELECT * FROM instructors WHERE InstructorID = ?");
+        $check_stmt->bind_param("i", $instructorID);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+        if ($check_result->num_rows == 0) {
+            $response['error'] = "Instructor with ID $instructorID does not exist";
+            echo json_encode($response);
+            $stmt->close();
+            $conn->close();
+            exit;
+        }
+        $check_stmt->close();
+
         // Execute the statement
         if ($stmt->execute()) {
             $response['success'] = "Records inserted successfully";

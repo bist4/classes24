@@ -79,7 +79,7 @@ if ($row['is_Lock_Account'] == 1) {
 <body id="page-top">
 
     <!-- Page Wrapper -->
-B    <div id="wrapper">
+    <div id="wrapper">
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -257,38 +257,30 @@ B    <div id="wrapper">
                                         <option value="" disabled selected>Select Year Level</option>
                                         <!-- Your PHP code to generate department options -->
                                         <?php
-                                                    require "../config/db_connection.php";
+                                            require "../config/db_connection.php";
 
-                                                    $sqlDepartment = "SELECT d.DepartmentID, d.GradeLevel, d.Semester, s.StrandID, s.StrandCode, dt.DepartmentName
-                                                                    FROM departments d
-                                                                    LEFT JOIN strands s ON d.StrandID = s.StrandID
-                                                                    LEFT JOIN departmenttypes dt ON d.DepartmentTypeNameID = dt.DepartmentTypeID 
-                                                                    
-                                                                    ORDER BY FIELD(dt.DepartmentName, 'Primary', 'Junior High School', 'Senior High School') ASC, 
-                                                                        d.GradeLevel ASC, 
-                                                                        dt.DepartmentName DESC";
+                                            $sqlDepartment = "SELECT d.DepartmentID, d.GradeLevel, s.StrandID, s.StrandCode, dt.DepartmentName
+                                                                FROM departments d
+                                                                LEFT JOIN strands s ON d.StrandID = s.StrandID
+                                                                LEFT JOIN departmenttypes dt ON d.DepartmentTypeNameID = dt.DepartmentTypeID 
+                                                                WHERE dt.DepartmentName IN ('Primary', 'Junior High School', 'Senior High School')
+                                                                ORDER BY FIELD(dt.DepartmentName, 'Primary', 'Junior High School', 'Senior High School') ASC, 
+                                                                    d.GradeLevel ASC,
+                                                                    s.StrandCode ASC";
 
-                                                    $resultDepartmentTypeName = $conn->query($sqlDepartment);
+                                            $resultDepartmentTypeName = $conn->query($sqlDepartment);
 
-                                                    if ($resultDepartmentTypeName->num_rows > 0) {
-                                                        $primaryOptions = [];
-                                                        $juniorHighOptions = [];
-                                                        $grade11Semester1Options = [];
-                                                        $grade11Semester2Options = [];
-                                                        $grade12Semester1Options = [];
-                                                        $grade12Semester2Options = [];
+                                            if ($resultDepartmentTypeName->num_rows > 0) {
+                                                $primaryOptions = [];
+                                                $juniorHighOptions = [];
+                                                $seniorHighOptions = [];
 
                                                 while ($row = $resultDepartmentTypeName->fetch_assoc()) {
                                                     $option = '<option value="' . $row["DepartmentID"] . '">'. "Grade " . $row["GradeLevel"];
 
                                                     if (!is_null($row["StrandID"])) {
-                                                        $option .= "-" . $row["StrandCode"];
+                                                        $option .= " - " . $row["StrandCode"];
                                                     }
-
-                                                    // if (!is_null($row["Semester"])) {
-                                                    //     $semesterSuffix = $row["Semester"] == 1 ? "st" : "nd";
-                                                    //     $option .= " " . $row["Semester"] . $semesterSuffix . " Semester";
-                                                    // }
 
                                                     $option .= "</option>";
 
@@ -301,20 +293,8 @@ B    <div id="wrapper">
                                                             $juniorHighOptions[] = $option;
                                                             break;
                                                         case "Senior High School":
-                                                            // Group Senior High School options by grade and semester
-                                                            if ($row["GradeLevel"] == 11) {
-                                                                if ($row["Semester"] == 1) {
-                                                                    $grade11Semester1Options[] = $option;
-                                                                } elseif ($row["Semester"] == 2) {
-                                                                    $grade11Semester2Options[] = $option;
-                                                                }
-                                                            } elseif ($row["GradeLevel"] == 12) {
-                                                                if ($row["Semester"] == 1) {
-                                                                    $grade12Semester1Options[] = $option;
-                                                                } elseif ($row["Semester"] == 2) {
-                                                                    $grade12Semester2Options[] = $option;
-                                                                }
-                                                            }
+                                                            // Group Senior High School options by StrandCode
+                                                            $seniorHighOptions[$row["StrandCode"]][] = $option;
                                                             break;
                                                     }
                                                 }
@@ -322,12 +302,13 @@ B    <div id="wrapper">
                                                 // Output grouped options
                                                 echo '<optgroup label="Primary">' . implode("", $primaryOptions) . '</optgroup>';
                                                 echo '<optgroup label="Junior High School">' . implode("", $juniorHighOptions) . '</optgroup>';
-                                                echo '<optgroup label="1st Semester">' . implode("", $grade11Semester1Options) . '</optgroup>';
-                                                echo '<optgroup label="2nd Semester">' . implode("", $grade11Semester2Options) . '</optgroup>';
-                                                echo '<optgroup label="1st Semester">' . implode("", $grade12Semester1Options) . '</optgroup>';
-                                                echo '<optgroup label="2nd Semester">' . implode("", $grade12Semester2Options) . '</optgroup>';
+                                                echo '<optgroup label="Senior High School">';
+                                                foreach ($seniorHighOptions as $strandCode => $options) {
+                                                    echo '<optgroup label="' . $strandCode . '">' . implode("", $options) . '</optgroup>';
+                                                }
+                                                echo '</optgroup>';
                                             }
-                                        ?>
+                                            ?>
 
                                     </select>
                                 </div>  

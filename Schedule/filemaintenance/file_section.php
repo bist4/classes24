@@ -257,62 +257,77 @@ B    <div id="wrapper">
                                         <option value="" disabled selected>Select Year Level</option>
                                         <!-- Your PHP code to generate department options -->
                                         <?php
-                                            require "../config/db_connection.php";
+                                                    require "../config/db_connection.php";
 
-                                            $sqlDepartment = "SELECT d.DepartmentID, d.GradeLevel, d.Semester, s.StrandID, s.StrandCode, s.StrandName, dt.DepartmentName
-                                                                FROM departments d
-                                                                LEFT JOIN strands s ON d.StrandID = s.StrandID
-                                                                LEFT JOIN departmenttypes dt ON d.DepartmentTypeNameID = dt.DepartmentTypeID 
-                                                                
-                                                                ORDER BY s.StrandName ASC, d.GradeLevel ASC";
+                                                    $sqlDepartment = "SELECT d.DepartmentID, d.GradeLevel, d.Semester, s.StrandID, s.StrandCode, dt.DepartmentName
+                                                                    FROM departments d
+                                                                    LEFT JOIN strands s ON d.StrandID = s.StrandID
+                                                                    LEFT JOIN departmenttypes dt ON d.DepartmentTypeNameID = dt.DepartmentTypeID 
+                                                                    
+                                                                    ORDER BY FIELD(dt.DepartmentName, 'Primary', 'Junior High School', 'Senior High School') ASC, 
+                                                                        d.GradeLevel ASC, 
+                                                                        dt.DepartmentName DESC";
 
-                                            $resultDepartmentTypeName = $conn->query($sqlDepartment);
+                                                    $resultDepartmentTypeName = $conn->query($sqlDepartment);
 
-                                            if ($resultDepartmentTypeName->num_rows > 0) {
-                                                $grade11Options = [];
-                                                $grade12Options = [];
-                                                $previousStrand = null;
+                                                    if ($resultDepartmentTypeName->num_rows > 0) {
+                                                        $primaryOptions = [];
+                                                        $juniorHighOptions = [];
+                                                        $grade11Semester1Options = [];
+                                                        $grade11Semester2Options = [];
+                                                        $grade12Semester1Options = [];
+                                                        $grade12Semester2Options = [];
 
                                                 while ($row = $resultDepartmentTypeName->fetch_assoc()) {
-                                                    if ($previousStrand !== $row["StrandName"]) {
-                                                        // Output Grade 11 options for the previous strand
-                                                        if (!empty($grade11Options)) {
-                                                            echo '<optgroup label="' . $previousStrand . ' Grade 11">' . implode("", $grade11Options) . '</optgroup>';
-                                                            $grade11Options = [];
-                                                        }
-                                                        // Output Grade 12 options for the previous strand
-                                                        if (!empty($grade12Options)) {
-                                                            echo '<optgroup label="' . $previousStrand . ' Grade 12">' . implode("", $grade12Options) . '</optgroup>';
-                                                            $grade12Options = [];
-                                                        }
-                                                        $previousStrand = $row["StrandName"];
-                                                    }
-
                                                     $option = '<option value="' . $row["DepartmentID"] . '">'. "Grade " . $row["GradeLevel"];
 
                                                     if (!is_null($row["StrandID"])) {
-                                                        $option .= " - " . $row["StrandCode"];
+                                                        $option .= "-" . $row["StrandCode"];
                                                     }
+
+                                                    // if (!is_null($row["Semester"])) {
+                                                    //     $semesterSuffix = $row["Semester"] == 1 ? "st" : "nd";
+                                                    //     $option .= " " . $row["Semester"] . $semesterSuffix . " Semester";
+                                                    // }
 
                                                     $option .= "</option>";
 
-                                                    // Group options by Grade Level
-                                                    if ($row["GradeLevel"] == 11) {
-                                                        $grade11Options[] = $option;
-                                                    } elseif ($row["GradeLevel"] == 12) {
-                                                        $grade12Options[] = $option;
+                                                    // Group options by DepartmentName
+                                                    switch ($row["DepartmentName"]) {
+                                                        case "Primary":
+                                                            $primaryOptions[] = $option;
+                                                            break;
+                                                        case "Junior High School":
+                                                            $juniorHighOptions[] = $option;
+                                                            break;
+                                                        case "Senior High School":
+                                                            // Group Senior High School options by grade and semester
+                                                            if ($row["GradeLevel"] == 11) {
+                                                                if ($row["Semester"] == 1) {
+                                                                    $grade11Semester1Options[] = $option;
+                                                                } elseif ($row["Semester"] == 2) {
+                                                                    $grade11Semester2Options[] = $option;
+                                                                }
+                                                            } elseif ($row["GradeLevel"] == 12) {
+                                                                if ($row["Semester"] == 1) {
+                                                                    $grade12Semester1Options[] = $option;
+                                                                } elseif ($row["Semester"] == 2) {
+                                                                    $grade12Semester2Options[] = $option;
+                                                                }
+                                                            }
+                                                            break;
                                                     }
                                                 }
 
-                                                // Output last strand's Grade 11 and Grade 12 options
-                                                if (!empty($grade11Options)) {
-                                                    echo '<optgroup label="' . $previousStrand . ' Grade 11">' . implode("", $grade11Options) . '</optgroup>';
-                                                }
-                                                if (!empty($grade12Options)) {
-                                                    echo '<optgroup label="' . $previousStrand . ' Grade 12">' . implode("", $grade12Options) . '</optgroup>';
-                                                }
+                                                // Output grouped options
+                                                echo '<optgroup label="Primary">' . implode("", $primaryOptions) . '</optgroup>';
+                                                echo '<optgroup label="Junior High School">' . implode("", $juniorHighOptions) . '</optgroup>';
+                                                echo '<optgroup label="1st Semester">' . implode("", $grade11Semester1Options) . '</optgroup>';
+                                                echo '<optgroup label="2nd Semester">' . implode("", $grade11Semester2Options) . '</optgroup>';
+                                                echo '<optgroup label="1st Semester">' . implode("", $grade12Semester1Options) . '</optgroup>';
+                                                echo '<optgroup label="2nd Semester">' . implode("", $grade12Semester2Options) . '</optgroup>';
                                             }
-                                            ?>
+                                        ?>
 
                                     </select>
                                 </div>  

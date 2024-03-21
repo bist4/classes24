@@ -13,6 +13,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Cnumber = mysqli_real_escape_string($conn, $_POST['Cnumber']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
 
+    // New code
+    // $UserInfoID = $_POST['UserInfoID'];
+    // $Fname = $_POST['Fname'];
+    // $Lname = $_POST['Lname'];
+    // $Mname =  $_POST['Bday'];
+    // $gender = $_POST['gender'];
+    // $Cnumber = $_POST['Cnumber'];
+    // $address = $_POST['address'];
+
+
+
     // Calculate age based on the provided birthday
     $dob = new DateTime($Bday);
     $now = new DateTime();

@@ -333,7 +333,7 @@ if ($row['is_Lock_Account'] == 1) {
                                             </th>
                                         <tr>
                                         <td class="col-md-6">
-                                            <input type="text" pattern="\d{2}" title="Please enter exactly 2 digits" class="form-control" id="sectionNo" name="SectionNo[]" placeholder="Enter Section No" maxlength="2" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 2)">
+                                            <input type="text" pattern="\d{2}" title="Please enter exactly 2 digits" class="form-control" id="sectionNo" name="SectionNo[]" placeholder="Enter Section Number" maxlength="2" required oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 2)">
                                         </td>
 
                                         <td class="col-md-6">

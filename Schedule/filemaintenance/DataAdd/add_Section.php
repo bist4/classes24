@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $duplicateError = "";
     
         if ($resultCheckSectionNo->num_rows > 0) {
-            $duplicateError .= "Section No already exists in same Department. ";
+            $duplicateError .= "Section Number already exists in same Department. ";
         }
 
         

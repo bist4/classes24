@@ -297,7 +297,7 @@ if ($row['is_Lock_Account'] == 1) {
                                             FROM userinfo usi 
                                             INNER JOIN usertypes ust ON usi.UserTypeID = ust.UserTypeID
                                             WHERE 
-                                                Active = 1");
+                                                Active = 1  AND usi.UserTypeID IN (2, 3);");
 
                                         $count = 0;
                                         // Initialize arrays outside of the loop

@@ -29,7 +29,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Your account is locked. Please contact Administrator..</h5>
                         
-                        <a href="login_form.php" class="btn btn-primary">Go back to the login page</a>
+                       
                     </div>
                 </div>
             </div>

@@ -294,6 +294,9 @@ if ($row['is_Lock_Account'] == 1) {
                                                             break;
                                                         case "Senior High School":
                                                             // Group Senior High School options by StrandCode
+                                                            if (!isset($seniorHighOptions[$row["StrandCode"]])) {
+                                                                $seniorHighOptions[$row["StrandCode"]] = [];
+                                                            }
                                                             $seniorHighOptions[$row["StrandCode"]][] = $option;
                                                             break;
                                                     }
@@ -309,6 +312,7 @@ if ($row['is_Lock_Account'] == 1) {
                                                 echo '</optgroup>';
                                             }
                                             ?>
+
 
                                     </select>
                                 </div>  

@@ -96,6 +96,7 @@ if (isset($_SESSION['Username'])) {
     <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css" integrity="sha512-0nkKORjFgcyxv3HbE4rzFUlENUMNqic/EzDIeYCgsKa/nwqr2B91Vu/tNAu4Q0cBuG4Xe/D1f/freEci/7GDRA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <link href="chosen.css" rel="stylesheet">
+    <script src="../../assets/js/alert.js"></script>
 
     <title>Edit User</title>
 
@@ -358,7 +359,7 @@ include('../session_out.php');
                                         </div>
                                         <div class="form-group">
                                             <label for="middleName">Middle Name<span class="small">(optional)</span></label>
-                                            <input type="text" class="form-control" id="Mname_<?php echo $secdata['UserInfoID']; ?>" name="Mname" value="<?php echo $secdata['Mname']; ?>" placeholder="Enter your Middle Name" autofocus>
+                                            <input type="text" class="form-control" id="Mname" name="Mname" value="<?php echo $secdata['Mname']; ?>" placeholder="Enter your Middle Name" autofocus>
                                         </div>
                                         <div class="form-group">
                                             <label for="lastName">Last Name</label>
@@ -395,6 +396,9 @@ include('../session_out.php');
                                         <div class="form-group">
                                             <label for="mobileNumber">Mobile Number</label>
                                             <input type="tel" class="form-control" id="mobile_<?php echo $secdata['UserInfoID']; ?>" value="<?php echo $secdata['ContactNumber']; ?>" name="Cnumber" pattern="[0-9]{11}" placeholder="Enter a valid 11-digit mobile number" required autofocus>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid 11-digit contact number <br> Example: 09123456789
+                                            </div> 
                                         </div>
                                         <div class="form-group">
                                             <label for="address">Address</label>
@@ -580,11 +584,49 @@ include('../session_out.php');
         })(); 
     </script>
 
-    <!-- Update Data -->
-<!-- Update Data -->
+
 <script>
     $(document).ready(function(){
         $('#updateBtn').click(function(){
+
+            var fields = document.querySelectorAll("input");
+            var error = false;
+            
+        
+
+            fields.forEach(function(field) {
+                var trimmedValue = field.value.trim();
+                if (field.id !== "Mname" && trimmedValue === ""){
+                    error = true;
+                    field.classList.add("is-invalid");
+                }else if (field.id !== "Mname" && /^\s/.test(field.value)){
+                    error = true;
+                    field.classList.add("is-invalid");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Space before letters are not allowed',
+                    });
+                }
+                else {
+                    field.classList.remove("is-invalid");
+                }
+
+                // Validate contact number
+                if (field.id === "ContactNumber" && !/^\d+$/.test(field.value)) {
+                    error = true;
+                    field.classList.add("is-invalid");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Contact number must contain only numbers.',
+                    });
+                }
+            });
+
+            if (error) {
+                return false;
+            }
 
             if($('.needs-validation')[0].checkValidity()){
                 var loading = Swal.fire({
@@ -595,6 +637,8 @@ include('../session_out.php');
                         Swal.showLoading();
                     }
                 });
+
+                
 
                 $.ajax({
                     type: 'POST',
@@ -647,6 +691,8 @@ include('../session_out.php');
         });
     });
 </script>
+
+
 
 
 

@@ -298,26 +298,26 @@ if ($row['is_Lock_Account'] == 1) {
                                                 <option value="" disabled selected>Select Department</option>
                                                 
                                                 <?php
-                                            require "../config/db_connection.php";
+                                                    require "../config/db_connection.php";
 
-                                            $sqlDepartment = "SELECT d.DepartmentID, d.GradeLevel, d.Semester, s.StrandID, s.StrandCode, dt.DepartmentName
-                                                            FROM departments d
-                                                            LEFT JOIN strands s ON d.StrandID = s.StrandID
-                                                            LEFT JOIN departmenttypes dt ON d.DepartmentTypeNameID = dt.DepartmentTypeID 
-                                                             
-                                                            ORDER BY FIELD(dt.DepartmentName, 'Primary', 'Junior High School', 'Senior High School') ASC, 
-                                                                d.GradeLevel ASC, 
-                                                                dt.DepartmentName DESC";
+                                                    $sqlDepartment = "SELECT d.DepartmentID, d.GradeLevel, d.Semester, s.StrandID, s.StrandCode, dt.DepartmentName
+                                                                    FROM departments d
+                                                                    LEFT JOIN strands s ON d.StrandID = s.StrandID
+                                                                    LEFT JOIN departmenttypes dt ON d.DepartmentTypeNameID = dt.DepartmentTypeID 
+                                                                    
+                                                                    ORDER BY FIELD(dt.DepartmentName, 'Primary', 'Junior High School', 'Senior High School') ASC, 
+                                                                        d.GradeLevel ASC, 
+                                                                        dt.DepartmentName DESC";
 
-                                            $resultDepartmentTypeName = $conn->query($sqlDepartment);
+                                                    $resultDepartmentTypeName = $conn->query($sqlDepartment);
 
-                                            if ($resultDepartmentTypeName->num_rows > 0) {
-                                                $primaryOptions = [];
-                                                $juniorHighOptions = [];
-                                                $grade11Semester1Options = [];
-                                                $grade11Semester2Options = [];
-                                                $grade12Semester1Options = [];
-                                                $grade12Semester2Options = [];
+                                                    if ($resultDepartmentTypeName->num_rows > 0) {
+                                                        $primaryOptions = [];
+                                                        $juniorHighOptions = [];
+                                                        $grade11Semester1Options = [];
+                                                        $grade11Semester2Options = [];
+                                                        $grade12Semester1Options = [];
+                                                        $grade12Semester2Options = [];
 
                                                 while ($row = $resultDepartmentTypeName->fetch_assoc()) {
                                                     $option = '<option value="' . $row["DepartmentID"] . '">'. "Grade " . $row["GradeLevel"];

@@ -13,17 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Cnumber = mysqli_real_escape_string($conn, $_POST['Cnumber']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
 
-    // New code
-    // $UserInfoID = $_POST['UserInfoID'];
-    // $Fname = $_POST['Fname'];
-    // $Lname = $_POST['Lname'];
-    // $Mname =  $_POST['Bday'];
-    // $gender = $_POST['gender'];
-    // $Cnumber = $_POST['Cnumber'];
-    // $address = $_POST['address'];
-
-
-
     // Calculate age based on the provided birthday
     $dob = new DateTime($Bday);
     $now = new DateTime();
@@ -34,10 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         echo json_encode(array("success" => true, "message" => "Account Updated Successfully"));
-        exit;
     } else {
         echo json_encode(array("error" => true, "message" => "Error updating record: " . $conn->error));
-        exit;
     }
 }
 

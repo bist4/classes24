@@ -150,7 +150,7 @@ if ($row['is_Lock_Account'] == 1) {
                             
                             <a class="collapse-item" href="accounts.php">Account Management</a>
                             <a class="collapse-item" href="archive.php">Archive</a>
-                            <a class="collapse-item" href="backup.php">Backup</a>
+                            <!-- <a class="collapse-item" href="backup.php">Backup</a> -->
                             <a class="collapse-item active" href="logs.php">Activity History</a>
                             <a class="collapse-item" href="trash.php">Trash</a>
 

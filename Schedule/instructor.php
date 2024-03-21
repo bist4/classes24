@@ -32,6 +32,11 @@ if (isset($_SESSION['Username'])) {
     // Close the database connection
     $conn->close();
 }
+if ($row['is_Lock_Account'] == 1) {
+    // User account is locked
+    header("Location: session_ended.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

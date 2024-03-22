@@ -541,7 +541,7 @@ if (isset($_SESSION['Username'])) {
             // Display SweetAlert confirmation
             Swal.fire({
                 title: 'Confirmation',
-                text: 'Do you want approve this schedule?',
+                text: 'Do you want to approve this schedule?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -595,7 +595,7 @@ if (isset($_SESSION['Username'])) {
             // Display initial confirmation message
             Swal.fire({
                 title: 'Confirmation',
-                text: 'Do want reject this schedule?',
+                text: 'Do you want to reject this schedule?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

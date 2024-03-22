@@ -11,6 +11,8 @@ if ($conn->connect_error) {
 // Handle the POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get data from the POST request
+    $gradeLevel = $_POST["gradeLevel"];
+    $sectionName = $_POST["sectionName"];
     $yearLevel = mysqli_real_escape_string($conn, $_POST["yearLevel"]);
     $section = mysqli_real_escape_string($conn, $_POST["section"]);
 
@@ -24,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Use NOW() to get the current timestamp
         $insertMessageSql = "INSERT INTO message (CreatedAt, UserFrom, UserTo, YearLevel, Section, Action) 
-                             VALUES (NOW(), $fromUser, $toUser, '$yearLevel', '$section', 1)";
+                             VALUES (NOW(), $fromUser, $toUser, '$gradeLevel', '$sectionName', 1)";
 
         if ($conn->query($insertMessageSql) === TRUE) {
             // If the message insertion is successful, send a success response

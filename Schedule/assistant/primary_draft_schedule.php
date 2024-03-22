@@ -603,8 +603,8 @@ if (isset($_SESSION['Username'])) {
 
                     // Create a data object to send in the AJAX request
                     var data = {
-			gradeLevel: gradeLevel,
-			sectionName: sectionName,
+			            gradeLevel: gradeLevel,
+			            sectionName: sectionName,
                         yearLevel: yearLevel,
                         section: section
                     };

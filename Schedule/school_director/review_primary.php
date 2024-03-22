@@ -552,11 +552,15 @@ if (isset($_SESSION['Username'])) {
                     // User clicked "Yes," proceed with the update
 
                     // Get selected values from dropdowns
+                    var gradeLevel = $("#yearLevel option:selected").text();
+		            var sectionName = $("#section option:selected").text();
                     var yearLevel = $("#yearLevel").val();
                     var section = $("#section").val();
 
                     // Create a data object to send in the AJAX request
                     var data = {
+                        gradeLevel: gradeLevel,
+			            sectionName: sectionName,
                         yearLevel: yearLevel,
                         section: section
                     };

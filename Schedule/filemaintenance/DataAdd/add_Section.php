@@ -74,39 +74,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(["success" => "Section(s) added successfully"]);
 
         // Insert log entry if the UserID exists in the 'users' table
-        
-
-
-
         if (isset($_SESSION['Username'])) {
-            $loggedInUsername = $_SESSION['Username'];
-        
+            $loggedInUserID = $_SESSION['Username'];
+
             $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
             $stmtUserCheck = $conn->prepare($sqlUserCheck);
             $stmtUserCheck->bind_param("s", $loggedInUsername);
             $stmtUserCheck->execute();
             $resultUserCheck = $stmtUserCheck->get_result();
-        
+
+
             if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
                 $row = $resultUserCheck->fetch_assoc();
                 $userInfoID = $row['UserInfoID'];
-        
-                foreach ($Subjects as $subject) {
-                    $subjectCode = $subject['SubjectCode'];
-                    $subjectDescription = $subject['SubjectName'];
-                    $units = $subject['MinutesPerWeek'];
-        
-                    $activity = 'Add Subject: ' . $subjectCode . ' (' . $subjectDescription . ', MinutesPerWeek: ' . $units . ')';
+
+                foreach ($Sections as $section) {
+                    $SectionNo = $section['SectionNo'];
+                    $SectionName = $section['SectionName'];
+                    
+
+                    $activity = 'Add Section ' . $SectionNo . ' ' . $SectionName;
                     $currentDateTime = date('Y-m-d H:i:s');
                     $active = 1;
-        
+
                     $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
                     $stmtLog = $conn->prepare($sqlLog);
                     $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
-                    $resultLog = $stmtLog->execute(
+                    $resultLog = $stmtLog->execute();
                 }
             }
         }
+
+
+       
     }
 }
 ?>

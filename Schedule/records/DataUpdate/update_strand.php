@@ -63,12 +63,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($originalStrandData['Specialization'] !== $specialization) {
                         $activity .= 'Specialization: ' . $originalStrandData['Specialization'] . ' -> ' . $specialization . ', ';
                     }
-
-                   
-
-                    // Log the activity (assuming you have a 'logs' table)
-                    // session_start();
-                     
+                    
+                    // Log the activity
+                    if (isset($_SESSION['Username'])) {
+                        $loggedInUsername = $_SESSION['Username'];
+                    
+                        $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                        $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                        $stmtUserCheck->bind_param("s", $loggedInUsername);
+                        $stmtUserCheck->execute();
+                        $resultUserCheck = $stmtUserCheck->get_result();
+                    
+                        if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                            $row = $resultUserCheck->fetch_assoc();
+                            $userInfoID = $row['UserInfoID'];
+                    
+                            $currentDateTime = date('Y-m-d H:i:s');
+                            $active = 1;
+                    
+                            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                            $stmtLog = $conn->prepare($sqlLog);
+                            $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+                            $resultLog = $stmtLog->execute();
+                        }
+                    }
 
                     // Update the strand
                     $stmt = $conn->prepare("UPDATE strands SET StrandCode=?, StrandName=?, TrackTypeName=?, Specialization=? WHERE StrandID=?");

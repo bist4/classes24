@@ -598,7 +598,7 @@ $(document).ready(function () {
 });
 
 </script>
-<script>
+<!-- <script>
     $(document).ready(function () {
         $("#update_btn").click(function () {
             // Validate form fields
@@ -706,9 +706,147 @@ $(document).ready(function () {
             });
         }
     });
+</script> -->
+<!-- Add newcode March 25 -->
+<script>
+    $(document).ready(function () {
+        // Function to create and show validation message
+        function showValidationMessage(inputField, message) {
+            // Check if validation message element exists, if not, create it
+            var validationMessageId = inputField.id + "_validation_message";
+            var validationMessageElement = document.getElementById(validationMessageId);
+            if (!validationMessageElement) {
+                validationMessageElement = document.createElement("div");
+                validationMessageElement.id = validationMessageId;
+                validationMessageElement.classList.add("invalid-feedback");
+                inputField.parentNode.appendChild(validationMessageElement);
+            }
+            // Update validation message text and display it
+            validationMessageElement.innerText = message;
+            inputField.classList.add("is-invalid");
+        }
+
+        // Function to hide validation message
+        function hideValidationMessage(inputField) {
+            var validationMessageId = inputField.id + "_validation_message";
+            var validationMessageElement = document.getElementById(validationMessageId);
+            if (validationMessageElement) {
+                validationMessageElement.innerText = "";
+                inputField.classList.remove("is-invalid");
+            }
+        }
+
+        // Function to validate form fields
+        function validateFormFields() {
+            var fields = document.querySelectorAll("input");
+            fields.forEach(function(field) {
+                var trimmedValue = field.value.trim();
+                if ((field.id === "Fname" || field.id === "Lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                    showValidationMessage(field, 'Only letters are allowed.');
+                } else if ((field.id === "Fname" || field.id === "Lname") && !trimmedValue) {
+                    showValidationMessage(field, 'This field cannot be empty.');
+                } else if (field.id === "Mname") {
+                    if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                        showValidationMessage(field, 'Only letters are allowed.');
+                    } else if (/^\s/.test(field.value)) {
+                        showValidationMessage(field, 'Spaces before letters are not allowed.');
+                    } else {
+                        hideValidationMessage(field);
+                    }
+                } else if (field.id !== "Mname" && /^\s/.test(field.value)) {
+                    showValidationMessage(field, 'Spaces before letters are not allowed.');
+                } else if (field.id === "ContactNumber" && !/^\d*$/.test(field.value)) {
+                    showValidationMessage(field, 'Contact number must contain only numbers.');
+                } else {
+                    hideValidationMessage(field);
+                }
+            });
+        }
+
+
+        // Event listener for input fields to validate while typing
+        $("input").on("input", function() {
+            validateFormFields();
+        });
+
+        // Event listener for update button to trigger validation
+        $("#update_btn").click(function () {
+            validateFormFields();
+            var invalidFields = document.querySelectorAll(".is-invalid");
+            if (invalidFields.length > 0) {
+                return false; // Prevent form submission if there are validation errors
+            }
+
+            // Display a SweetAlert confirmation message
+            Swal.fire({
+                title: 'Confirmation',
+                text: 'Do you want to update your profile?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Proceed with the profile update
+                    updateProfile();
+                }
+            });
+        });
+
+        // Function to handle profile update
+        function updateProfile() {
+            // Gather data from form fields
+            var username = "<?php echo $loggedInUsername; ?>"; // Get the logged-in username from PHP
+            var fname = $("#Fname").val();
+            var mname = $("#Mname").val();
+            var lname = $("#Lname").val();
+            var bday = $("#Bday").val();
+            var address = $("#Address").val();
+            var contactNumber = $("#ContactNumber").val();
+
+            // Create data object to send to the server
+            var data = {
+                username: username,
+                fname: fname,
+                mname: mname,
+                lname: lname,
+                bday: bday,
+                address: address,
+                contactNumber: contactNumber
+            };
+
+            // Send AJAX request
+            $.ajax({
+                type: "POST",
+                url: "DataUpdate/update_profile.php", // Replace with the actual file handling the update on the server
+                data: data,
+                success: function (response) {
+                    // Handle the server response here with SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Profile updated successfully!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    // Reload the page with a delay of 2 seconds (2000 milliseconds)
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                },
+                error: function () {
+                    // Handle errors here with SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error updating profile. Please try again.',
+                    });
+                }
+            });
+        }
+    });
 </script>
-
-
 
 
 </body>

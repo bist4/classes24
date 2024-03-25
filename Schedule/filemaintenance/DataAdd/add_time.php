@@ -103,31 +103,33 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         $userInfoID = $row['UserInfoID'];
                         foreach ($TimeAvail as $time) {
                             $days = explode(",", $time['Day']); // Split days if provided as a comma-separated string
-
+                    
                             $timeStart = date("H:i:s", strtotime($time['TimeStart']));
                             $timeEnd = date("H:i:s", strtotime($time['TimeEnd']));
-
+                    
                             // Fetch Fname and Mname based on InstructorID from the Instructors table
-                            $sqlInstructor = "SELECT usi.Fname, usi.Mname, usi.is_Instructor FROM userinfo usi WHERE is_Instructor = 1";
+                            $sqlInstructor = "SELECT Fname, Mname FROM userinfo WHERE UserInfoID = ?";
                             $stmtInstructor = $conn->prepare($sqlInstructor);
-                            $stmtInstructor->bind_param("i", $InstructorID); // Assuming $InstructorID is available in your code
+                            $stmtInstructor->bind_param("i", $InstructorID);
                             $stmtInstructor->execute();
                             $resultInstructor = $stmtInstructor->get_result();
                             $instructorData = $resultInstructor->fetch_assoc();
-
+                    
                             $Fname = $instructorData['Fname'];
                             $Mname = $instructorData['Mname'];
-
+                    
+                            // Proceed with logging
                             $activity = 'Add Instructor Availability: ' . '<br>Instructor: ' . $Fname . ' ' . $Mname . ' <br>Day: (' . implode(", ", $days) . ')<br>Time Start: ' . $timeStart . ', Time End: ' . $timeEnd;
                             $currentDateTime = date('Y-m-d H:i:s');
                             $active = 1;
-
+                    
                             $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
                             $stmtLog = $conn->prepare($sqlLog);
                             $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
                             $resultLog = $stmtLog->execute();
                         }
                     }
+                    
                 }
 
                  

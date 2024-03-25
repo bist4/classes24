@@ -67,35 +67,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($success) {
         if (isset($_SESSION['Username'])) {
-           
             $loggedInUserID = $_SESSION['Username'];
-
-            $sql = "SELECT * FROM userinfo WHERE Username='$username'";
+        
+            $sql = "SELECT * FROM userinfo WHERE Username='$loggedInUserID'";
             $result = mysqli_query($conn, $sql);
-
+        
             if ($result && mysqli_num_rows($result) > 0) {
                 $row = mysqli_fetch_assoc($result);
                 $userInfoID = $row['UserInfoID'];
-                
-                foreach ($Strands as $strand){
+        
+                foreach ($Strands as $strand) {
                     $StrandCode = $strand['StrandCode'];
                     $StrandName = $strand['StrandName'];
                     $TrackTypeName = $strand['TrackTypeName'];
-                    $Specialization = $strand['Specialization'];         
+                    $Specialization = $strand['Specialization'];
         
-
-                    $activity = 'Add Strand: ' . $StrandCode . ' (' . $StrandName . ', Track Type: ' . $TrackTypeName . '<br>Specialization:  ' .$Specialization.')';
+                    $activity = 'Add Strand: ' . $StrandCode . ' (' . $StrandName . ', Track Type: ' . $TrackTypeName . ', Specialization:  ' . $Specialization . ')';
                     $currentDateTime = date('Y-m-d H:i:s');
-                    $active = 1;
-
+        
                     $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID) 
-                    VALUES (NOW(), '" . $row['Fname'] . " " . $row['Lname'] . " " . $activity. $row['UserInfoID'] . ")";
+                            VALUES (?, ?, ?)";
                     $stmtLog = $conn->prepare($sqlLog);
-                    $stmtLog->bind_param("ssii", $currentDateTime, $activity, $loggedInUserID, $active);
+                    $stmtLog->bind_param("ssi", $currentDateTime, $activity, $userInfoID);
                     $resultLog = $stmtLog->execute();
                 }
             }
         }
+        
         
 
         echo json_encode(["success" => "Strand(s) Added successfully"]);

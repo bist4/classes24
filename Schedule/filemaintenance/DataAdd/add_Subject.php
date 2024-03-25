@@ -73,8 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit(); // Exit the script after sending the error response
     }
 
-    if (isset($_SESSION['UserID'])) {
-        $loggedInUserID = $_SESSION['UserID'];
+    if (isset($_SESSION['Username'])) {
+        $loggedInUserID = $_SESSION['Username'];
 
         $sqlUserCheck = "SELECT UserInfoID FROM userinfo WHERE UserInfoID = ?";
         $stmtUserCheck = $conn->prepare($sqlUserCheck);
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $currentDateTime = date('Y-m-d H:i:s');
                 $active = 1;
 
-                $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
                 $stmtLog = $conn->prepare($sqlLog);
                 $stmtLog->bind_param("ssii", $currentDateTime, $activity, $loggedInUserID, $active);
                 $resultLog = $stmtLog->execute();

@@ -48,7 +48,7 @@ if (isset($_SESSION['Username'])) {
             rel="stylesheet">
         <link href="../css/sb-admin-2.min.css" rel="stylesheet">
         <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-        <title>Archive Schedule</title>
+        <title>History Schedule</title>
 
     </head>
 
@@ -167,7 +167,7 @@ if (isset($_SESSION['Username'])) {
                 <li class="nav-item active">
                     <a class="nav-link" href="#">
                         <i class="fas fa-fw fa-archive"></i>
-                        <span>Archive Schedule</span>
+                        <span>History Schedule</span>
                     </a>
                 </li>
 
@@ -251,7 +251,7 @@ if (isset($_SESSION['Username'])) {
                         <div class="container mt-4">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <h1 style="font-size: 25px;">Archive Schedule</h1> 
+                                    <h1 style="font-size: 25px;">History Schedule</h1> 
                                 </div>
                             </div>
                             <div class="row">

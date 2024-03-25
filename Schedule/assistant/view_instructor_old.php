@@ -166,7 +166,7 @@ include('session_out.php');
             <li class="nav-item">
                 <a class="nav-link" href="archive_schedule.php">
                     <i class="fas fa-fw fa-archive"></i>
-                    <span>Archive Schedule</span>
+                    <span>History Schedule</span>
                 </a>
             </li>
 

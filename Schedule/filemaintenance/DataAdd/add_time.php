@@ -88,39 +88,52 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo json_encode(["success" => "Instructor Availability added successfully"]);
 
                 // Logging
-                if (isset($_SESSION['UserID'])) {
-                    $loggedInUserID = $_SESSION['UserID'];
+                if (isset($_SESSION['Username'])) {
+                    $loggedInUsername = $_SESSION['Username'];
 
-                    foreach ($TimeAvail as $time) {
-                        $days = explode(",", $time['Day']); // Split days if provided as a comma-separated string
+                    $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                    $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                    $stmtUserCheck->bind_param("s", $loggedInUsername);
+                    $stmtUserCheck->execute();
+                    $resultUserCheck = $stmtUserCheck->get_result();
+        
 
-                        $timeStart = date("H:i:s", strtotime($time['TimeStart']));
-                        $timeEnd = date("H:i:s", strtotime($time['TimeEnd']));
+                    if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                        $row = $resultUserCheck->fetch_assoc();
+                        $userInfoID = $row['UserInfoID'];
+                        foreach ($TimeAvail as $time) {
+                            $days = explode(",", $time['Day']); // Split days if provided as a comma-separated string
 
-                        // Fetch Fname and Mname based on InstructorID from the Instructors table
-                        $sqlInstructor = "SELECT usi.Fname, usi.Mname FROM instructor i 
-                                          INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
-                                          WHERE i.InstructorID = ?";
-                        $stmtInstructor = $conn->prepare($sqlInstructor);
-                        $stmtInstructor->bind_param("i", $InstructorID); // Assuming $InstructorID is available in your code
-                        $stmtInstructor->execute();
-                        $resultInstructor = $stmtInstructor->get_result();
-                        $instructorData = $resultInstructor->fetch_assoc();
+                            $timeStart = date("H:i:s", strtotime($time['TimeStart']));
+                            $timeEnd = date("H:i:s", strtotime($time['TimeEnd']));
 
-                        $Fname = $instructorData['Fname'];
-                        $Mname = $instructorData['Mname'];
+                            // Fetch Fname and Mname based on InstructorID from the Instructors table
+                            $sqlInstructor = "SELECT usi.Fname, usi.Mname FROM instructor i 
+                                            INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
+                                            WHERE i.InstructorID = ?";
+                            $stmtInstructor = $conn->prepare($sqlInstructor);
+                            $stmtInstructor->bind_param("i", $InstructorID); // Assuming $InstructorID is available in your code
+                            $stmtInstructor->execute();
+                            $resultInstructor = $stmtInstructor->get_result();
+                            $instructorData = $resultInstructor->fetch_assoc();
 
-                        $activity = 'Add Instructor Availability: ' . '<br>Instructor: ' . $Fname . ' ' . $Mname . ' <br>Day: (' . implode(", ", $days) . ')<br>Time Start: ' . $timeStart . ', Time End: ' . $timeEnd;
-                        $currentDateTime = date('Y-m-d H:i:s');
-                        $active = 1;
+                            $Fname = $instructorData['Fname'];
+                            $Mname = $instructorData['Mname'];
 
-                        $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
-                        $stmtLog = $conn->prepare($sqlLog);
-                        // Assuming $loggedInUserID is defined elsewhere in your code
-                        $stmtLog->bind_param("ssii", $currentDateTime, $activity, $loggedInUserID, $active);
-                        $resultLog = $stmtLog->execute();
+                            $activity = 'Add Instructor Availability: ' . '<br>Instructor: ' . $Fname . ' ' . $Mname . ' <br>Day: (' . implode(", ", $days) . ')<br>Time Start: ' . $timeStart . ', Time End: ' . $timeEnd;
+                            $currentDateTime = date('Y-m-d H:i:s');
+                            $active = 1;
+
+                            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                            $stmtLog = $conn->prepare($sqlLog);
+                            // Assuming $loggedInUserID is defined elsewhere in your code
+                            $stmtLog->bind_param("ssii", $currentDateTime, $activity, $loggedInUserID, $active);
+                            $resultLog = $stmtLog->execute();
+                        }
                     }
                 }
+
+                 
             }
         }
     } else {

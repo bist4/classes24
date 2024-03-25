@@ -299,8 +299,8 @@ if ($row['is_Lock_Account'] == 1) {
                                             WHERE 
                                                 Active = 1 AND usi.UserTypeID NOT IN (2, 3)
                                             ORDER BY 
-                                                CASE WHEN is_Lock_Account = 0 THEN 0 ELSE 1 END;
-                                            " );
+                                                is_Lock_Account ASC;
+                                        ");
 
                                         $count = 0;
                                         // Initialize arrays outside of the loop

@@ -442,12 +442,120 @@ include('session_out.php');
  
 
      <!-- Update Data -->
-<script>
+    <!-- <script>
+        var changesMade = false;
+        var updateSuccess = false;
+        $(document).ready(function(){
+            function setChangesMade() {
+                    changesMade = true;
+            }
+
+            // Bind change event to form elements
+            $(".form-control").change(setChangesMade);
+
+            // Bind beforeunload event to show confirmation message
+            window.addEventListener('beforeunload', function(e) {
+                if (changesMade && !updateSuccess) {
+                    var confirmationMessage = "Changes you made may not be saved. Are you sure you want to leave?";
+                    (e || window.event).returnValue = confirmationMessage;
+                    return confirmationMessage;
+                }
+            });
+
+            $('#updateButton').click(function(e){
+                e.preventDefault();
+                var form = $('.needs-validation')[0];
+                var error = false;
+
+                // Validate input fields for empty values and spaces at the beginning
+                var fields = form.querySelectorAll("input");
+                fields.forEach(function(field) {
+                    var trimmedValue = field.value.trim();
+                    if(trimmedValue === ""){
+                        error = true;
+                        field.classList.add("is-invalid");
+                    } else if (/^\s/.test(field.value)) {
+                        error = true;
+                        field.classList.add("is-invalid");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Spaces before letters are not allowed.',
+                        });
+                    } else {
+                        field.classList.remove("is-invalid");
+                    }
+                });
+
+                if (error) {
+                    return false;
+                }
+
+                if (form.checkValidity()) {
+                    var formData = new FormData(form);
+                    var loading = Swal.fire({
+                        title: 'Please wait',
+                        html: 'Updating your data...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false, 
+                        onBeforeOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '../DataUpdate/update_specializations.php',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response){
+                            response = JSON.parse(response);
+                            loading.close(); // Close loading animation
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: response.success,
+                                }).then(function() {
+                                    var subid = "<?php echo $_GET['subid']; ?>";
+                                    window.location.href = 'edit_specializations.php?subid=' + subid;
+                                });
+                            } else if (response.error) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Warning',
+                                    text: response.error,
+                                });
+                            }
+                        },
+                        error: function() {
+                            loading.close(); // Close loading animation
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while submitting data.',
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please fill in all required fields.'
+                    });
+                }
+                form.classList.add('was-validated');
+            });
+        });
+    </script> -->
+
+    <script>
     var changesMade = false;
     var updateSuccess = false;
     $(document).ready(function(){
         function setChangesMade() {
-                changesMade = true;
+            changesMade = true;
         }
 
         // Bind change event to form elements
@@ -513,6 +621,8 @@ include('session_out.php');
                         response = JSON.parse(response);
                         loading.close(); // Close loading animation
                         if (response.success) {
+                            changesMade = false; // Reset changesMade flag
+                            updateSuccess = true; // Set updateSuccess flag to true
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
@@ -549,6 +659,7 @@ include('session_out.php');
         });
     });
 </script>
+
 
 
     

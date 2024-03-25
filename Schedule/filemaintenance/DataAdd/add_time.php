@@ -108,7 +108,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             $timeEnd = date("H:i:s", strtotime($time['TimeEnd']));
                     
                             // Fetch Fname and Mname based on InstructorID from the Instructors table
-                            $sqlInstructor = "SELECT Fname, Mname FROM userinfo WHERE UserInfoID = ? AND is_InstructorID = 1";
+                            $sqlInstructor = "SELECT ist.InstructorID, usi.Fname, usi.Mname FROM instructortimeavailabilities ist
+                            INNER JOIN instructors i ON ist.InstructorID = i.InstructorID
+                            LEFT JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
+
+                            WHERE ist.InstructorID = ?";
                             $stmtInstructor = $conn->prepare($sqlInstructor);
                             $stmtInstructor->bind_param("i", $InstructorID);
                             $stmtInstructor->execute();

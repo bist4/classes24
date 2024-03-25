@@ -66,17 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($success) {
-        if (isset($_SESSION['UserID'])) {
+        if (isset($_SESSION['Username'])) {
            
-            $loggedInUserID = $_SESSION['UserID'];
+            $loggedInUserID = $_SESSION['Username'];
 
-            $sqlUserCheck = "SELECT UserInfoID FROM userinfo WHERE UserInfoID = ?";
-            $stmtUserCheck = $conn->prepare($sqlUserCheck);
-            $stmtUserCheck->bind_param("i", $loggedInUserID);
-            $stmtUserCheck->execute();
-            $resultUserCheck = $stmtUserCheck->get_result();
+            $sql = "SELECT * FROM userinfo WHERE Username='$username'";
+            $result = mysqli_query($conn, $sql);
 
-            if ($resultUserCheck->num_rows > 0) {
+            if ($result && mysqli_num_rows($result) > 0) {
                 foreach ($Strands as $strand){
                     $StrandCode = $strand['StrandCode'];
                     $StrandName = $strand['StrandName'];
@@ -95,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
+        
 
         echo json_encode(["success" => "Strand(s) Added successfully"]);
     } else {

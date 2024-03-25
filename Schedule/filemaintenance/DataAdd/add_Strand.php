@@ -74,6 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = mysqli_query($conn, $sql);
 
             if ($result && mysqli_num_rows($result) > 0) {
+                $row = mysqli_fetch_assoc($result);
+                $userInfoID = $row['UserInfoID'];
+                
                 foreach ($Strands as $strand){
                     $StrandCode = $strand['StrandCode'];
                     $StrandName = $strand['StrandName'];
@@ -85,7 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $currentDateTime = date('Y-m-d H:i:s');
                     $active = 1;
 
-                    $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                    $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID) 
+                    VALUES (NOW(), '" . $row['Fname'] . " " . $row['Lname'] . " " . $activity. $row['UserInfoID'] . ")";
                     $stmtLog = $conn->prepare($sqlLog);
                     $stmtLog->bind_param("ssii", $currentDateTime, $activity, $loggedInUserID, $active);
                     $resultLog = $stmtLog->execute();

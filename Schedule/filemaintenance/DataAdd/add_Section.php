@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Insert log entry if the UserID exists in the 'users' table
         if (isset($_SESSION['Username'])) {
-            $loggedInUserID = $_SESSION['Username'];
+            $loggedInUsername = $_SESSION['Username'];
 
             $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
             $stmtUserCheck = $conn->prepare($sqlUserCheck);

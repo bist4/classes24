@@ -17,8 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // $specializationsArray = isset($_POST['specializations']) ? $_POST['specializations'] : [];
     $instructorIDs = $_POST['InstructorID'];
 
-   
-
     // Update instructors table
     foreach ($instructorIDs as $index => $instructorID) {
         $instructorID = $conn->real_escape_string($instructorID); // Escape special characters
@@ -30,54 +28,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
     }
- 
-    // foreach($instructorSpecializationsIDs as $index => $instructorSpecializationsID){
-    //     foreach($specializationsArray as $index => $specialization){
-    //     $specialization = $conn->real_escape_string($specialization); // Escape special characters
-    //     // $instructorSpecializationsID = $index; // Assuming the index matches the ID in the database
-        
-    //         $specializations_sql = "UPDATE instructorspecializations SET SpecializationName = '$specialization' WHERE InstructorSpecializationsID = $instructorSpecializationsID";
-        
-    //         // Debugging
-    //         echo "SQL Query: $specializations_sql <br>";
-            
-    //         if ($conn->query($specializations_sql) === TRUE) {
-    //             $response['success'] = "New instructor specialization(s) record updated successfully";
-    //         } else {
-    //             $response['error'] = "Error: " . $specializations_sql . "<br>" . $conn->error;
-    //         }
-    //     }
-        
-    // }
-
-
-
-
-
-
-
-
-    // foreach ($specializations as $id => $values) {
-    //     // Sanitize the ID to prevent SQL injection
-    //     $id = mysqli_real_escape_string($conn, $id);
-        
-    //     // Extract the fields from the $values array
-    //     $specializationName = mysqli_real_escape_string($conn, $values['SpecializationName']);
-    //     // Add other fields as needed
-        
-    //     // Construct and execute the SQL query to update the specialization fields
-    //     $sql = "UPDATE instructorspecializations SET SpecializationName = '$specializationName' WHERE InstructorSpecializationsID = $id";
-    //     // Add other fields to the SET clause as needed
-        
-    //     $result = mysqli_query($conn, $sql);
-        
-    //     // Check if the query was successful
-    //     if ($result) {
-    //         echo "Specialization with ID $id updated successfully.<br>";
-    //     } else {
-    //         echo "Error updating specialization with ID $id: " . mysqli_error($conn) . "<br>";
-    //     }
-    // }
+    
+    // Log the activity
+    if (isset($_SESSION['Username'])) {
+        $loggedInUsername = $_SESSION['Username'];
+    
+        $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+        $stmtUserCheck = $conn->prepare($sqlUserCheck);
+        $stmtUserCheck->bind_param("s", $loggedInUsername);
+        $stmtUserCheck->execute();
+        $resultUserCheck = $stmtUserCheck->get_result();
+    
+        if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+            $row = $resultUserCheck->fetch_assoc();
+            $userInfoID = $row['UserInfoID'];
+    
+            $currentDateTime = date('Y-m-d H:i:s');
+            $activity = "Updated instructor records";
+            $active = 1;
+    
+            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+            $stmtLog = $conn->prepare($sqlLog);
+            $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+            $resultLog = $stmtLog->execute();
+        }
+    }
 
     // Return success response
     $response['success'] = "Records updated successfully";
@@ -87,6 +62,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->close();
 }
 ?>
-
-
-

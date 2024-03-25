@@ -297,7 +297,10 @@ if ($row['is_Lock_Account'] == 1) {
                                             FROM userinfo usi 
                                             INNER JOIN usertypes ust ON usi.UserTypeID = ust.UserTypeID
                                             WHERE 
-                                                Active = 1  AND usi.UserTypeID NOT IN (2, 3);");
+                                                Active = 1 AND usi.UserTypeID NOT IN (2, 3)
+                                            ORDER BY 
+                                                CASE WHEN is_Lock_Account = 0 THEN 0 ELSE 1 END;
+                                            " );
 
                                         $count = 0;
                                         // Initialize arrays outside of the loop

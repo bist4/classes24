@@ -74,31 +74,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (isset($_SESSION['Username'])) {
-        $loggedInUserID = $_SESSION['Username'];
-
-        $sqlUserCheck = "SELECT UserInfoID FROM userinfo WHERE UserInfoID = ?";
+        $loggedInUsername = $_SESSION['Username'];
+    
+        $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
         $stmtUserCheck = $conn->prepare($sqlUserCheck);
-        $stmtUserCheck->bind_param("i", $loggedInUserID);
+        $stmtUserCheck->bind_param("s", $loggedInUsername);
         $stmtUserCheck->execute();
         $resultUserCheck = $stmtUserCheck->get_result();
-
-        if ($resultUserCheck->num_rows > 0) {
+    
+        if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+            $row = $resultUserCheck->fetch_assoc();
+            $userInfoID = $row['UserInfoID'];
+    
             foreach ($Subjects as $subject) {
                 $subjectCode = $subject['SubjectCode'];
                 $subjectDescription = $subject['SubjectName'];
                 $units = $subject['MinutesPerWeek'];
-
+    
                 $activity = 'Add Subject: ' . $subjectCode . ' (' . $subjectDescription . ', MinutesPerWeek: ' . $units . ')';
                 $currentDateTime = date('Y-m-d H:i:s');
                 $active = 1;
-
+    
                 $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
                 $stmtLog = $conn->prepare($sqlLog);
-                $stmtLog->bind_param("ssii", $currentDateTime, $activity, $loggedInUserID, $active);
+                $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
                 $resultLog = $stmtLog->execute();
             }
         }
     }
+    
 
     // Insertion was successful for all rows
     echo json_encode(["success" => "Subject(s) Added successfully"]);

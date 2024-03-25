@@ -440,7 +440,7 @@ if ($row['is_Lock_Account'] == 1) {
 
         timeEndInput.addEventListener('change', function () {
             const endTime = this.value;
-            if (endTime > '17:00' || endTime === '12:00' || endTime === '00:00' || endTime === '01:00' || endTime === '02:00' || endTime === '03:00' || endTime === '04:00' || endTime === '05:00' || endTime === '06:00' || endTime === '07:00' || endTime === '08:00') {
+            if (endTime > '17:00' || endTime === '00:00' || endTime === '01:00' || endTime === '02:00' || endTime === '03:00' || endTime === '04:00' || endTime === '05:00' || endTime === '06:00' || endTime === '07:00' || endTime === '08:00') {
                 this.value = '';
                 document.querySelector('.warning-end').style.display = 'block';
             } else {

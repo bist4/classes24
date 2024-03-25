@@ -66,7 +66,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($success) {
-         
+        if (isset($_SESSION['UserID'])) {
+           
+            $loggedInUserID = $_SESSION['UserID'];
+
+            $sqlUserCheck = "SELECT UserInfoID FROM userinfo WHERE UserInfoID = ?";
+            $stmtUserCheck = $conn->prepare($sqlUserCheck);
+            $stmtUserCheck->bind_param("i", $loggedInUserID);
+            $stmtUserCheck->execute();
+            $resultUserCheck = $stmtUserCheck->get_result();
+
+            if ($resultUserCheck->num_rows > 0) {
+                foreach ($Strands as $strand){
+                    $StrandCode = $strand['StrandCode'];
+                    $StrandName = $strand['StrandName'];
+                    $TrackTypeName = $strand['TrackTypeName'];
+                    $Specialization = $strand['Specialization'];         
+        
+
+                    $activity = 'Add Strand: ' . $StrandCode . ' (' . $StrandName . ', Track Type: ' . $TrackTypeName . '<br>Specialization:  ' .$Specialization.')';
+                    $currentDateTime = date('Y-m-d H:i:s');
+                    $active = 1;
+
+                    $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                    $stmtLog = $conn->prepare($sqlLog);
+                    $stmtLog->bind_param("ssii", $currentDateTime, $activity, $loggedInUserID, $active);
+                    $resultLog = $stmtLog->execute();
+                }
+            }
+        }
 
         echo json_encode(["success" => "Strand(s) Added successfully"]);
     } else {

@@ -88,48 +88,47 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo json_encode(["success" => "Instructor Availability added successfully"]);
 
                 // Logging
-                // if (isset($_SESSION['Username'])) {
-                //     $loggedInUsername = $_SESSION['Username'];
+                if (isset($_SESSION['Username'])) {
+                    $loggedInUsername = $_SESSION['Username'];
 
-                //     $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
-                //     $stmtUserCheck = $conn->prepare($sqlUserCheck);
-                //     $stmtUserCheck->bind_param("s", $loggedInUsername);
-                //     $stmtUserCheck->execute();
-                //     $resultUserCheck = $stmtUserCheck->get_result();
+                    $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                    $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                    $stmtUserCheck->bind_param("s", $loggedInUsername);
+                    $stmtUserCheck->execute();
+                    $resultUserCheck = $stmtUserCheck->get_result();
         
 
-                //     if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
-                //         $row = $resultUserCheck->fetch_assoc();
-                //         $userInfoID = $row['UserInfoID'];
-                //         foreach ($TimeAvail as $time) {
-                //             $days = explode(",", $time['Day']); // Split days if provided as a comma-separated string
+                    if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                        $row = $resultUserCheck->fetch_assoc();
+                        $userInfoID = $row['UserInfoID'];
+                        foreach ($TimeAvail as $time) {
+                            $days = explode(",", $time['Day']); // Split days if provided as a comma-separated string
 
-                //             $timeStart = date("H:i:s", strtotime($time['TimeStart']));
-                //             $timeEnd = date("H:i:s", strtotime($time['TimeEnd']));
+                            $timeStart = date("H:i:s", strtotime($time['TimeStart']));
+                            $timeEnd = date("H:i:s", strtotime($time['TimeEnd']));
 
-                //             // Fetch Fname and Mname based on InstructorID from the Instructors table
-                //             $sqlInstructor = "SELECT usi.Fname, usi.Mname, usi.is_Instructor FROM userinfo usi WHERE is_Instructor = 1";
-                //             $stmtInstructor = $conn->prepare($sqlInstructor);
-                //             $stmtInstructor->bind_param("i", $InstructorID); // Assuming $InstructorID is available in your code
-                //             $stmtInstructor->execute();
-                //             $resultInstructor = $stmtInstructor->get_result();
-                //             $instructorData = $resultInstructor->fetch_assoc();
+                            // Fetch Fname and Mname based on InstructorID from the Instructors table
+                            $sqlInstructor = "SELECT usi.Fname, usi.Mname, usi.is_Instructor FROM userinfo usi WHERE is_Instructor = 1";
+                            $stmtInstructor = $conn->prepare($sqlInstructor);
+                            $stmtInstructor->bind_param("i", $InstructorID); // Assuming $InstructorID is available in your code
+                            $stmtInstructor->execute();
+                            $resultInstructor = $stmtInstructor->get_result();
+                            $instructorData = $resultInstructor->fetch_assoc();
 
-                //             $Fname = $instructorData['Fname'];
-                //             $Mname = $instructorData['Mname'];
+                            $Fname = $instructorData['Fname'];
+                            $Mname = $instructorData['Mname'];
 
-                //             $activity = 'Add Instructor Availability: ' . '<br>Instructor: ' . $Fname . ' ' . $Mname . ' <br>Day: (' . implode(", ", $days) . ')<br>Time Start: ' . $timeStart . ', Time End: ' . $timeEnd;
-                //             $currentDateTime = date('Y-m-d H:i:s');
-                //             $active = 1;
+                            $activity = 'Add Instructor Availability: ' . '<br>Instructor: ' . $Fname . ' ' . $Mname . ' <br>Day: (' . implode(", ", $days) . ')<br>Time Start: ' . $timeStart . ', Time End: ' . $timeEnd;
+                            $currentDateTime = date('Y-m-d H:i:s');
+                            $active = 1;
 
-                //             $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
-                //             $stmtLog = $conn->prepare($sqlLog);
-                //             // Assuming $loggedInUserID is defined elsewhere in your code
-                //             $stmtLog->bind_param("ssii", $currentDateTime, $activity, $loggedInUserID, $active);
-                //             $resultLog = $stmtLog->execute();
-                //         }
-                //     }
-                // }
+                            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                            $stmtLog = $conn->prepare($sqlLog);
+                            $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+                            $resultLog = $stmtLog->execute();
+                        }
+                    }
+                }
 
                  
             }

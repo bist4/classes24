@@ -27,8 +27,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Log the activity
+    if (isset($_SESSION['Username'])) {
+        $loggedInUsername = $_SESSION['Username'];
+    
+        $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+        $stmtUserCheck = $conn->prepare($sqlUserCheck);
+        $stmtUserCheck->bind_param("s", $loggedInUsername);
+        $stmtUserCheck->execute();
+        $resultUserCheck = $stmtUserCheck->get_result();
+    
+        if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+            $row = $resultUserCheck->fetch_assoc();
+            $userInfoID = $row['UserInfoID'];
+    
+            $currentDateTime = date('Y-m-d H:i:s');
+            $activity = "Updated instructor specializations";
+            $active = 1;
+    
+            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+            $stmtLog = $conn->prepare($sqlLog);
+            $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+            $resultLog = $stmtLog->execute();
+        }
+    }
+
     // Return success response
-    $response['success'] = "Records updated successfully";
+    $response['success'] = "Instructor Specialization(s) updated successfully";
     echo json_encode($response);
 
     // Close connection

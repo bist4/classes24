@@ -291,120 +291,73 @@ if ($row['is_Lock_Account'] == 1) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php
-                                            require('../config/db_connection.php');
-                                            $table = mysqli_query($conn, "SELECT usi.*, ust.UserTypeName
-                                            FROM userinfo usi 
-                                            INNER JOIN usertypes ust ON usi.UserTypeID = ust.UserTypeID
-                                            WHERE 
-                                                Active = 1 AND usi.UserTypeID NOT IN (2, 3)
-                                            ORDER BY 
-                                                is_Lock_Account ASC;
-                                        ");
+                                            <?php
+                                                require('../config/db_connection.php');
+                                                $table = mysqli_query($conn, "SELECT usi.*, ust.UserTypeName
+                                                                                FROM userinfo usi 
+                                                                                INNER JOIN usertypes ust ON usi.UserTypeID = ust.UserTypeID
+                                                                                WHERE 
+                                                                                    Active = 1 AND usi.UserTypeID NOT IN (2, 3)
+                                                                                ORDER BY 
+                                                                                    is_Lock_Account ASC;
+                                                                            ");
 
-                                        $count = 0;
-                                        // Initialize arrays outside of the loop
-                                        $userTypes = array(); 
-                                        $userDep = array();
+                                                $count = 0;
+                                                // Initialize arrays outside of the loop
+                                                $userTypes = array(); 
+                                                $userDep = array();
 
-                                        while ($row = mysqli_fetch_array($table)) {
-                                            $count++;
-                                            $lockAccountValue = $row['is_Lock_Account'];
-                                            $RolesUser = $row['UserTypeName'];
-                                            $highlightClass = ($count == 1) ? 'text-primary' : '';
+                                                while ($row = mysqli_fetch_array($table)) {
+                                                    $count++;
+                                                    $lockAccountValue = $row['is_Lock_Account'];
+                                                    $RolesUser = $row['UserTypeName'];
+                                                    $highlightClass = ($count == 1) ? 'text-primary' : '';
 
-                                            $userID = $row['UserInfoID'];
+                                                    $userID = $row['UserInfoID'];
 
-                                            // Fetch user roles for the current user
-                                            $rolesQuery = mysqli_query($conn, "SELECT UserTypeName FROM usertypes INNER JOIN userinfo ON usertypes.UserTypeID = userinfo.UserTypeID WHERE userinfo.UserInfoID = $userID");
-                                            // $depQuery = mysqli_query($conn, "SELECT DepartmentTypeName FROM departmenttypename INNER JOIN userdepartment ON departmenttypename.DepartmentTypeNameID = userdepartment.DepartmentID WHERE userdepartment.UserID = $userID");
-                                            
-                                            // Reset arrays before populating them
-                                            $userTypes = array();
-                                            // $userDep = array();
-                                            
-                                            while ($roleRow = mysqli_fetch_array($rolesQuery)) {
-                                                $userTypes[] = $roleRow['UserTypeName'];
-                                            }
-                                            
-                                            // while ($depRow = mysqli_fetch_array($depQuery)) {
-                                            //     $userDep[] = $depRow['DepartmentTypeName'];
-                                            // }
-                                        ?>
-                                        <tr class="<?php echo $highlightClass; ?>">
-                                            <td><?php echo $row['Username']; ?></td>
-                                            <td><?php echo $row['Email']; ?></td>
-                                            <td>
-                                                <?php
-                                                if (!empty($userTypes)) {
-                                                    foreach ($userTypes as $userType) {
-                                                        echo $userType . "<br>";
+                                                    // Fetch user roles for the current user
+                                                    $rolesQuery = mysqli_query($conn, "SELECT UserTypeName FROM usertypes INNER JOIN userinfo ON usertypes.UserTypeID = userinfo.UserTypeID WHERE userinfo.UserInfoID = $userID");
+
+                                                    // Reset arrays before populating them
+                                                    $userTypes = array();
+
+                                                    while ($roleRow = mysqli_fetch_array($rolesQuery)) {
+                                                        $userTypes[] = $roleRow['UserTypeName'];
                                                     }
-                                                } else {
-                                                    echo "N/A";   
-                                                }
                                                 ?>
-                                            </td>
-                                            <td>
-                                                <?php
-                                                if ($row['is_Lock_Account'] == 1) {
-                                                    echo "Deactive";
-                                                } else {
-                                                    echo "Active";
-                                                }
-                                                ?>
-                                            </td>
-                                                <td>
-                                                    <div class="d-flex justify-content-center">
-
-                                                        <a href="EditUser/edit_user.php?subid=<?php echo $row['UserInfoID']; ?>">
-                                                            <button class="btn btn-primary mx-2"> 
-                                                                <i class="fa fa-edit"></i>
-                                                            </button>        
-                                                        </a>
-                                                        
-
-                                                        <!-- <button class="btn btn-info" data-toggle="modal" data-target="#viewAccounts" title="View" data-user-id="<?php echo $row['UserID']; ?>"><i class="fas fa-eye"></i></button> -->
-                                                        <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal" title="View" 
-                                                            data-user-id="<?php echo $row['UserInfoID']; ?>"
-                                                            data-fname="<?php echo $row['Fname']; ?>"
-                                                            data-mname="<?php echo $row['Mname']; ?>"
-                                                            data-lname="<?php echo $row['Lname']; ?>"
-                                                            data-birthdate="<?php echo $row['Birthday']; ?>"
-                                                            data-cnumber="<?php echo $row['ContactNumber']; ?>"
-                                                            data-address="<?php echo $row['Address']; ?>"
-                                                            data-gender="<?php echo $row['Gender']; ?>"
-                                                            data-instructor="<?php echo $row['is_Instructor']; ?>"
-                                                            data-sda="<?php echo $row['is_SchoolDirectorAssistant']; ?>"
-                                                            data-sd="<?php echo $row['is_SchoolDirector']; ?>"
-                                                            data-role="<?php echo $row['UserTypeName']; ?>">
-
-                                                            
-                                                            <i class="fas fa-eye"></i>
-                                                        </button>
-                                                        <button class="btn <?php echo ($lockAccountValue == 1) ? 'btn-danger' : 'btn-success'; ?> mx-2 btn-toggle"
-                                                                data-toggle="modal"
-                                                                data-target="#confirmationModal"
-                                                                data-user-id="<?php echo $row['UserInfoID']; ?>"
-                                                                data-fname="<?php echo $row['Fname']; ?>"
-                                                                data-mname="<?php echo $row['Mname']; ?>"
-                                                                data-lname="<?php echo $row['Lname']; ?>"
-                                                                data-birthdate="<?php echo $row['Birthday']; ?>"
-                                                                data-cnumber="<?php echo $row['ContactNumber']; ?>"
-                                                                data-address="<?php echo $row['Address']; ?>"
-                                                                data-gender="<?php echo $row['Gender']; ?>"
-                                                                data-role="<?php echo $row['UserTypeName']; ?>">
-                                                            <i class="fas <?php echo ($lockAccountValue == 1) ? 'fa-lock' : 'fa-unlock'; ?>" data-placement="top"></i>
-                                                        </button>
-
-                                                        <!-- <button class="btn btn-secondary" title="Edit"><i class="fas fa-edit"></i></button> -->
-                                                    </div>
-
-                                                </td>
+                                                <tr class="<?php echo $highlightClass; ?>">
+                                                    <td><?php echo $row['Username']; ?></td>
+                                                    <td><?php echo $row['Email']; ?></td>
+                                                    <td>
+                                                        <?php
+                                                        if (!empty($userTypes)) {
+                                                            foreach ($userTypes as $userType) {
+                                                                echo $userType . "<br>";
+                                                            }
+                                                        } else {
+                                                            echo "N/A";   
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                        if ($row['is_Lock_Account'] == 1) {
+                                                            echo "Deactive";
+                                                        } else {
+                                                            echo "Active";
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center">
+                                                            <!-- Your buttons and actions here -->
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                                 <?php
                                                 }
                                             ?>
+
                                             
 
                                         </tbody>

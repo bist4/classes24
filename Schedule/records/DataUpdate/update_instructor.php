@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userInfoID = $row['UserInfoID'];
     
             $currentDateTime = date('Y-m-d H:i:s');
-            $activity = "Updated instructor records";
+            $activity = "Updated instructor Status";
             $active = 1;
     
             $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Return success response
-    $response['success'] = "Records updated successfully";
+    $response['success'] = "Instructor Status updated successfully";
     echo json_encode($response);
 
     // Close connection

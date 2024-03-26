@@ -428,7 +428,7 @@ include('session_out.php');
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
-    <script>
+    <!-- <script>
         $(document).ready(function() {
             $('#updateBtn').on('click', function() {
                 var roomIDs = []; // Array to store StrandIDs
@@ -464,8 +464,57 @@ include('session_out.php');
                 });
             });
         });
-    </script>
+    </script> -->
 
+    <!-- March 26 new code updated at update data -->
+
+    <script>
+        $(document).ready(function() {
+            $('#updateBtn').on('click', function() {
+                var roomIDs = []; // Array to store RoomIDs
+
+                // Loop through each input field with name RoomID[] and retrieve the values
+                $('input[name="RoomID[]"]').each(function() {
+                    roomIDs.push($(this).val()); // Push each RoomID into the array
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '../DataDelete/deleteAll_room.php',
+                    data: { roomIDs: roomIDs },
+                    dataType: 'json', // Expect JSON response
+                    success: function (response) {
+                        // Handle success response
+                        if (response.success) {
+                            Swal.fire({
+                                title: "Success!",
+                                text: response.message,
+                                icon: "success"
+                            }).then(function () {
+                                // Redirect after successful deletion
+                                window.location.href = '../view_room.php';
+                            });
+                        } else {
+                            // Display error message from the server
+                            Swal.fire({
+                                title: "Error!",
+                                text: response.message,
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Failed to delete room. Try again.",
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

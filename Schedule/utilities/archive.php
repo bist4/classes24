@@ -267,39 +267,86 @@ include('session_out.php');
                                             
                                             </tr>
                                         </thead>
+                                        <!-- March 26 -->
                                         <!-- Table body -->
                                         <tbody id="strandTable">
-                                            <?php
-                                                require('../config/db_connection.php');
-                                                
-                                                $sql =mysqli_query($conn, "SELECT instructors.*, userinfo.* FROM instructors 
-                                                INNER JOIN userinfo ON instructors.UserInfoID = userinfo.UserInfoID
-                                                WHERE instructors.Active =11");
-                                                
-                                                $count = 0;
-                                                while ($row = mysqli_fetch_array($sql)) {
-                                                    $count++;
-                                                    $FullName = $row['Fname'] . ' ' . $row['Mname'] . ' ' . $row['Lname'];
-                                                ?>
-                                                    <tr>    
-                                                        <td><?php echo $count; ?></td>
-                                                        <td><?php echo $FullName; ?></td>
-                                                        <td><?php echo $row['Gender']; ?></td>
-                                                        <td><?php echo $row['Age']; ?></td>
-                                                        <td><?php echo $row['Birthday']; ?></td>
-                                                        <td><?php echo $row['Address']; ?></td>
-                                                        <td><?php echo $row['ContactNumber']; ?></td>
-                                                        <td><?php echo $row['Email']; ?></td>
-                                                        <!-- <td><?php echo $row['Specialization']; ?></td> -->
-                                                        <td><?php echo $row['Status']; ?></td>
-                                                        <!-- <td><?php echo $row['DateArchived']; ?></td> -->
+                                        <?php
+                                            require "../config/db_connection.php";
 
-                                                        
-                                                    </tr>
-                                                <?php
+                                            $sql = "SELECT i.*, usi.*, isp.SpecializationName, isp.InstructorSpecializationsID
+                                                    FROM instructors i
+                                                    INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
+                                                    LEFT JOIN instructorspecializations isp ON isp.InstructorID = i.InstructorID WHERE i.Active = 0";
+
+                                            $result = $conn->query($sql);
+
+                                            if ($result->num_rows > 0) {
+                                                $userDetails = [];
+
+                                                while ($row = $result->fetch_assoc()) {
+                                                    $key = $row['Fname'] . '' . $row['Mname'] . '' . $row['Lname'] . '_' . $row['Email'];
+
+                                                    if (!isset($userDetails[$key])) {
+                                                        $userDetails[$key] = [
+                                                            'Fname' => $row['Fname'],
+                                                            'Mname' => $row['Mname'],
+                                                            'Lname' => $row['Lname'],
+                                                            'Gender' => $row['Gender'],
+                                                            'Age' => $row['Age'],
+                                                            'Birthday' => $row['Birthday'],
+                                                            'Address' => $row['Address'],
+                                                            'ContactNumber' => $row['ContactNumber'],
+                                                            'Email' => $row['Email'],
+                                                            'Status' => $row['Status'],
+                                                            'SpecializationName' => [],
+                                                            'UserInfoID' => $row['UserInfoID'],
+                                                            'InstructorID' => $row['InstructorID'],
+
+                                                        ];
+                                                    }
+                                                    if (!empty($row['SpecializationName'])) {
+                                                        $userDetails[$key]['SpecializationName'][] = $row['SpecializationName'];
+                                                    }
                                                 }
-                                            
+
+                                                foreach ($userDetails as $user) {
+                                                    echo "<tr>";
+                                                    echo "<td>" . $user['Fname'] . ' ' . $user['Mname'] . ' ' . $user['Lname'] . "</td>";
+                                                    echo "<td>" . (!empty($user['SpecializationName']) ? implode(', ', $user['SpecializationName']) : 'N/A') . "</td>";
+                                                    echo "<td>" . ($user['Status'] == 1 ? 'Full Time' : 'Part Time') . "</td>";
+                                                    echo "<td>";
+                                                    echo  "<div class='d-flex justify-content-center'>";
+                                                    echo "<button class='btn btn-info mr-3 view-btn' data-toggle='modal' data-target='#exampleModal' title='View'
+                                                            data-fname='" . $user['Fname'] . "'
+                                                            data-mname='" . $user['Mname'] . "'
+                                                            data-lname='" . $user['Lname'] . "'
+                                                            data-birthdate='" . $user['Birthday'] . "'
+                                                            data-cnumber='" . $user['ContactNumber'] . "'
+                                                            data-address='" . $user['Address'] . "'
+                                                            data-gender='" . $user['Gender'] . "'
+                                                            data-status='" . $user['Status'] . "'
+                                                            data-email=''>
+                                                            <i class='fas fa-eye'></i>
+                                                        </button>";
+                                                
+                                                    echo "<button class='btn btn-success retrieve-btn' title='Retrieve'
+                                                                data-user-id='" . $user['InstructorID'] . "'>
+                                                            <i class='fa fa-reply'></i>
+                                                        </button>";
+                                                    echo "</div>";
+                                                    echo "</td>";
+                                                    echo "</tr>";
+                                                }
+                                                
+                                            } else {
+                                                echo "<tr><td colspan='4'>No data available</td></tr>";
+                                            }
+
+                                            $result->close();
                                             ?>
+
+
+
                                         </tbody>
                                     </table>
                                 </div>

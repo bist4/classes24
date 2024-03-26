@@ -642,6 +642,7 @@ if ($row['is_Lock_Account'] == 1) {
     <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
+    
     <script src="../assets/js/demo/datatables-demo.js"></script>
     <!-- For filtering of strands details -->
     <script src="../assets/js/filteringStrand.js"></script>

@@ -693,7 +693,7 @@ include('../session_out.php');
 </script> -->
 
 
-<script>
+<!-- <script>
    $(document).ready(function(){
     $('#updateBtn').click(function(){
 
@@ -792,6 +792,118 @@ include('../session_out.php');
     });
 });
 
+</script> -->
+<script>
+   $(document).ready(function(){
+    $('#updateBtn').click(function(){
+
+        var fields = document.querySelectorAll("input");
+        var error = false;
+
+        fields.forEach(function(field) {
+            var trimmedValue = field.value.trim();
+            if (field.name !== "Mname" && trimmedValue === ""){
+                error = true;
+                field.classList.add("is-invalid");
+            } else if (field.name !== "Mname" && /^\s/.test(field.value)){
+                error = true;
+                field.classList.add("is-invalid");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Space before letters are not allowed',
+                });
+            } else {
+                field.classList.remove("is-invalid");
+            }
+
+            // Validate contact number
+            if (field.name === "Cnumber" && !/^\d+$/.test(field.value)) {
+                error = true;
+                field.classList.add("is-invalid");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Contact number must contain only numbers.',
+                });
+            }
+        });
+
+        if (error) {
+            return false;
+        }
+
+        // Show confirmation message before proceeding with the update
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'Do you want to update the user data?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, update it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Proceed with the update operation
+                if($('.needs-validation')[0].checkValidity()){
+                    var loading = Swal.fire({
+                        title: 'Please wait',
+                        html: 'Updating your data...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '../UpdateUser/update_user.php', 
+                        data: $('.needs-validation').serialize(),
+                        dataType: 'json', // Specify data type as JSON
+                        success: function(response){
+                            loading.close();
+                            if(response.success){
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success!',
+                                    text: response.message,
+                                    showConfirmButton: false,
+                                }).then(function() {
+                                    var subid = "<?php echo $_GET['subid']; ?>";
+                                    window.location.href = 'edit_user.php?subid=' + subid;
+                                });
+                            } else if(response.error){
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Warning',
+                                    text: response.message,
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error){
+                            // Close loading animation
+                            loading.close();
+
+                            // Show error message
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'An error occurred while submitting your data. Please try again later.'
+                            });
+                        }
+                    });
+                } else {
+                    // If the form is invalid, show a sweet alert message
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Please fill in all required fields.'
+                    });
+                }
+            }
+        });
+    });
+});
 </script>
 
     

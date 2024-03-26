@@ -755,7 +755,7 @@ include('../session_out.php');
                         Swal.fire({
                             icon: 'success',
                             title: 'Success!',
-                            text: response.success,
+                            text: response.message,
                             showConfirmButton: false,
                         }).then(function() {
                             var subid = "<?php echo $_GET['subid']; ?>";

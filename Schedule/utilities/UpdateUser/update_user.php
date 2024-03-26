@@ -22,9 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "UPDATE userinfo SET Fname='$Fname', Lname='$Lname', Mname='$Mname', Age=$age, Birthday='$Bday', Gender='$gender', ContactNumber='$Cnumber', Address='$address' WHERE UserInfoID=$UserInfoID";
 
     if ($conn->query($sql) === TRUE) {
-        echo json_encode(array("success" => true, "message" => "Account Updated Successfully"));
+        // echo json_encode(array("success" => true, "message" => "Account Updated Successfully"));
+        $response = array('success' => true, 'message' => 'Account Updated Successfully');
+        echo json_encode($response);
     } else {
-        echo json_encode(array("error" => true, "message" => "Error updating record: " . $conn->error));
+        $response = array('success' => true, 'message' => 'Error updating record: " '. $conn->error);
+        echo json_encode($response);
+        // echo json_encode(array("error" => true, "message" => "Error updating record: " . $conn->error));
     }
 }
 

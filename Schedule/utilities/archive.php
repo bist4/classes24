@@ -237,10 +237,10 @@ include('session_out.php');
                                 <i class="fas fa-print fa-sm text-white-50"></i> Print
                             </button>
                     
-                            <!-- Excel Button -->
+                            <!-- Excel Button
                             <button onclick="exportToExcel()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                                 <i class="fas fa-file-excel fa-sm text-white-50"></i> Export to Excel
-                            </button>
+                            </button> -->
                         </div>
                        
                     </div>

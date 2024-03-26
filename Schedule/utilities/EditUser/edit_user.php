@@ -765,7 +765,7 @@ include('../session_out.php');
                         Swal.fire({
                             icon: 'warning',
                             title: 'Warning',
-                            text: response.error,
+                            text: response.message,
                         });
                     }
                 },

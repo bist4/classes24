@@ -756,7 +756,7 @@ include('../session_out.php');
                             icon: 'success',
                             title: 'Success!',
                             text: response.success,
-                            
+                            showConfirmButton: false,
                         }).then(function() {
                             var subid = "<?php echo $_GET['subid']; ?>";
                             window.location.href = 'edit_user.php?subid=' + subid;

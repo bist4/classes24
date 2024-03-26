@@ -54,6 +54,8 @@ if ($row['is_Lock_Account'] == 1) {
 
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
     <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
     
     <title>Archive - Utilities</title>
 
@@ -252,19 +254,10 @@ include('session_out.php');
                                         <!-- Table headers -->
                                         <thead>
                                             <tr>
-                                                <th scope="col">#</th>
                                                 <th scope="col">Full Name</th>
-                                                <th scope="col">Gender</th>
-                                                <th scope="col">Age</th>
-                                                <th scope="col">Birthday</th>
-                                                <th scope="col">Address</th>
-                                                <th scope="col">Contact Number</th>
-                                                <th scope="col">Email</th>
-                                                <!-- <th scope="col">Specialization</th> -->
+                                                <th scope="col">Specialization Name</th>
                                                 <th scope="col">Status</th>
-                                                <!-- <th scope="col">Date Archived</th> -->
-
-                                            
+                                                <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <!-- March 26 -->
@@ -447,6 +440,64 @@ include('session_out.php');
     <!-- Page level custom scripts -->
     <script src="../assets/js/demo/datatables-demo.js"></script>     
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+$(document).ready(function () {
+    $(".retrieve-btn").click(function () {
+        var instructorID = $(this).data('user-id');
+
+        Swal.fire({
+            title: 'Confirmation',
+            text: "Do you want to retrieve?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform retrieval using AJAX
+                $.ajax({
+                    url: 'Retrieve/retrieve.php',
+                    type: 'POST',
+                    data: { instructorID: instructorID },
+                    success: function(response) {
+                        response = JSON.parse(response);
+                        if (response.success) {
+                            // Redirect to archive.php after successful retrieval
+                            Swal.fire(
+                                'Retrieved!',
+                                'Instructor has been retrieved.',
+                                'success'
+                            ).then(() => {
+                                window.location.href = 'archive.php';
+                            });
+                        } else {
+                            // Display error message
+                            Swal.fire(
+                                'Error!',
+                                response.message,
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors if any
+                        console.error(xhr.responseText);
+                        Swal.fire(
+                            'Error!',
+                            'Failed to retrieve instructor. Please try again later.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
+});
+
+</script>
 </body>
 
 </html>

@@ -43,7 +43,7 @@ if (isset($_SESSION['Username'])) {
     exit();
 }
 ?>
-
+hi!
 <!DOCTYPE html>
 	<html lang="zxx" class="no-js">
 	<head>

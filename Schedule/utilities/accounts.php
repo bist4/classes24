@@ -1038,7 +1038,47 @@ if ($row['is_Lock_Account'] == 1) {
     </script>
 
 
+<script>
+    // Get the input elements
+    var firstNameInput = document.getElementById("fname");
+    var lastNameInput = document.getElementById("lname");
+    var middleNameInput = document.getElementById("mname");
 
+
+    // Add event listeners for input event
+    firstNameInput.addEventListener("input", function(event) {
+        // Get the value entered by the user
+        var inputValue = event.target.value;
+
+        // Remove non-letter characters from the input value
+        var lettersOnly = inputValue.replace(/[^A-Za-z]/g, "");
+
+        // Update the input field value with letters-only value
+        event.target.value = lettersOnly;
+    });
+
+    lastNameInput.addEventListener("input", function(event) {
+        // Get the value entered by the user
+        var inputValue = event.target.value;
+
+        // Remove non-letter characters from the input value
+        var lettersOnly = inputValue.replace(/[^A-Za-z]/g, "");
+
+        // Update the input field value with letters-only value
+        event.target.value = lettersOnly;
+    });
+
+    middleNameInput.addEventListener("input", function(event) {
+        // Get the value entered by the user
+        var inputValue = event.target.value;
+
+        // Remove non-letter characters from the input value
+        var lettersOnly = inputValue.replace(/[^A-Za-z]/g, "");
+
+        // Update the input field value with letters-only value
+        event.target.value = lettersOnly;
+    });
+</script>
 
     
 

@@ -738,6 +738,7 @@ include('../session_out.php');
                 title: 'Please wait',
                 html: 'Updating your data...',
                 allowOutsideClick: false,
+                showConfirmButton: false,
                 onBeforeOpen: () => {
                     Swal.showLoading();
                 }

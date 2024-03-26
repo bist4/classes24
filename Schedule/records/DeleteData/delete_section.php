@@ -429,28 +429,36 @@ include('session_out.php');
                 type: 'POST',
                 url: '../DataDelete/deleteAll_section.php',
                 data: { sectionIDs: sectionIDs },
-                success: function (response) {
-                    // Handle success response
-                    Swal.fire({
-                        title: "Success!",
-                        text: "Section deleted successfully",
-                        icon: "success"
-                    }).then(function () {
-                        // Redirect after successful deletion
-                        window.location.href = '../view_section.php';
-                    });
-                },
-                error: function (xhr, status, error) {
-                    // Handle error
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Failed to delete section. Try again.",
-                        icon: "error"
-                    });
-                }
-            });
-
-                
+                dataType: 'json', // Expect JSON response
+                    success: function (response) {
+                        // Handle success response
+                        if (response.success) {
+                            Swal.fire({
+                                title: "Success!",
+                                text: response.message,
+                                icon: "success"
+                            }).then(function () {
+                                // Redirect after successful deletion
+                                window.location.href = '../view_section.php';
+                            });
+                        } else {
+                            // Display error message from the server
+                            Swal.fire({
+                                title: "Error!",
+                                text: response.message,
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Failed to delete room. Try again.",
+                            icon: "error"
+                        });
+                    }
+                });
             });
         });
     </script>

@@ -463,40 +463,49 @@ include('session_out.php');
     <script>
         $(document).ready(function() {
             $('#updateBtn').on('click', function() {
-            var strandIDs = []; // Array to store StrandIDs
+                var strandIDs = []; // Array to store StrandIDs
 
-            // Loop through each input field with name StrandID[] and retrieve the values
-            $('input[name="StrandID[]"]').each(function() {
-                strandIDs.push($(this).val()); // Push each StrandID into the array
-            });
-                
+                // Loop through each input field with name StrandID[] and retrieve the values
+                $('input[name="StrandID[]"]').each(function() {
+                    strandIDs.push($(this).val()); // Push each StrandID into the array
+                });
+                    
 
-            $.ajax({
-                type: 'POST',
-                url: '../DataDelete/deleteAll_strand.php',
-                data: { strandIDs: strandIDs },
-                success: function (response) {
-                    // Handle success response
-                    Swal.fire({
-                        title: "Success!",
-                        text: "Strand deleted successfully",
-                        icon: "success"
-                    }).then(function () {
-                        // Redirect after successful deletion
-                        window.location.href = '../view_strand.php';
-                    });
-                },
-                error: function (xhr, status, error) {
-                    // Handle error
-                    Swal.fire({
-                        title: "Error!",
-                        text: "Failed to delete strands. Try again.",
-                        icon: "error"
-                    });
-                }
-            });
-
-                
+                $.ajax({
+                    type: 'POST',
+                    url: '../DataDelete/deleteAll_strand.php',
+                    data: { strandIDs: strandIDs },
+                    dataType: 'json',
+                    success: function (response) {
+                            // Handle success response
+                        if (response.success) {
+                            Swal.fire({
+                                title: "Success!",
+                                text: response.message,
+                                icon: "success"
+                            }).then(function () {
+                                // Redirect after successful deletion
+                                window.location.href = '../view_strand.php';
+                            });
+                        } else {
+                            // Display error message from the server
+                            Swal.fire({
+                                title: "Error!",
+                                text: response.message,
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Failed to delete strands. Try again.",
+                            icon: "error"
+                        });
+                    }
+                });
+ 
             });
         });
     </script>

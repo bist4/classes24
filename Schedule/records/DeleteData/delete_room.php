@@ -467,7 +467,6 @@ include('session_out.php');
     </script> -->
 
     <!-- March 26 new code updated at update data -->
-
     <script>
         $(document).ready(function() {
             $('#updateBtn').on('click', function() {

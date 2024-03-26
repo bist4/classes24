@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute();
 
                 if ($stmt->affected_rows <= 0) {
-                    $response = array('success' => false, 'message' => 'Failed to deactivate rooms.');
+                    $response = array('success' => false, 'message' => 'Failed to deactivate room(s).');
                     echo json_encode($response);
                     exit;
                 }

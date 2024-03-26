@@ -372,7 +372,7 @@ include('../session_out.php');
                                         <div class="form-group">
                                             <label for="gender">Gender</label>
                                             <select name="gender" id="gender_<?php echo $secdata['UserInfoID']; ?>" class="form-control" required>
-                                                <option value=" ">Select gender</option>
+                                                <option value="">Select gender</option>
                                                 <option value="Male" <?php if ($secdata['Gender'] === 'Male') echo 'selected'; ?>>Male</option>
                                                 <option value="Female" <?php if ($secdata['Gender'] === 'Female') echo 'selected'; ?>>Female</option>
                                                  

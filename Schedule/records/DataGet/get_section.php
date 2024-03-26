@@ -51,12 +51,12 @@ if (isset($_POST['departmentID'])) {
             echo "<td>";
             echo  "<div class='d-flex justify-content-center'>";
             echo "<a href='EditData/edit_section.php?subid=" . $row['SectionID'] . "'>
-                    <button class='btn btn-primary mr-3' title='Edit Strand'>
+                    <button class='btn btn-primary mr-3' title='Edit Section'>
                         <i class='fa fa-edit'></i>
                     </button>
                 </a>";
             echo "<a href='DeleteData/delete_section.php?delid=" . $row['SectionID'] . "'>
-                    <button class='btn btn-danger' title='Delete Strand'>
+                    <button class='btn btn-danger' title='Delete Section'>
                         <i class='fa fa-trash'></i>
                     </button>
                 </a>";  

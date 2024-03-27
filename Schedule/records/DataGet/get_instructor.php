@@ -67,8 +67,8 @@ if (isset($_POST['departmentID'])) {
             echo "<td>" . (!empty($user['SpecializationName']) ? implode(', ', $user['SpecializationName']) : 'N/A') . "</td>";
             echo "<td>" . ($user['Status'] == 1 ? 'Full Time' : 'Part Time') . "</td>";
             echo "<td>";
-            echo  "<div class='d-inline-flex gap-3 mr-2'>";
-            echo "<button class='btn btn-info ' data-toggle='modal' data-target='#exampleModal' title='View'
+            echo "<div class='d-inline-flex mr-2'>";
+            echo "<button class='btn btn-info' data-toggle='modal' data-target='#exampleModal' title='View'
                     data-fname='" . $user['Fname'] . "'
                     data-mname='" . $user['Mname'] . "'
                     data-lname='" . $user['Lname'] . "'
@@ -78,16 +78,15 @@ if (isset($_POST['departmentID'])) {
                     data-gender='" . $user['Gender'] . "'
                     data-status='" . $user['Status'] . "'
                     data-email='" . $user['Email'] . "'>
-                
-           
-                <i class='fas fa-eye'></i>
+                    <i class='fas fa-eye'></i>
                 </button>";
-        
+
             echo "<button class='btn btn-success archive-btn' title='Archive'
                         data-user-id='" . $user['InstructorID'] . "'>
                     <i class='fas fa-archive'></i>
                 </button>";
             echo "</div>";
+
             echo "</td>";
             echo "<td>
                     <div class='dropdown'>

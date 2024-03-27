@@ -378,21 +378,18 @@ include('../session_out.php');
                                                  
                                             </select>
                                         </div> 
-                                        <!-- <div class="form-group">
-                                            
-                                            < if ($secdata['is_Instructor'] == 1): ?> 
-                                                <label for="status">Status</label>
-                                                <select class="form-control" id="status_< echo $secdata['UserInfoID']; ?>" name="Status" title="Select Status">
-                                                    <option value=" ">Select Status</option>
-                                                    <option value="Full Time" < if ($secdata['Status'] === 'Full Time') echo 'selected'; ?>>Full Time</option>
-                                                    <option value="Part Time" < if ($secdata['Status'] === 'Part Time') echo 'selected'; ?>>Part Time</option>
-                                                </select>
-                                            < endif; ?>
-                                        </div> -->
+                                        
 
                                     </div> 
                                     <div>
                                         <label for="contact"  style="font-size:1.5em;">Contact Information</label>
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="Email_<?php echo $secdata['UserInfoID']; ?>" name="Email" value="<?php echo $secdata['Email']; ?>" required autofocus>
+                                            <div class="invalid-feedback">
+                                                Please enter a valid email <br>
+                                            </div> 
+                                        </div>
                                         <div class="form-group">
                                             <label for="mobileNumber">Mobile Number</label>
                                             <input type="tel" class="form-control" id="mobile_<?php echo $secdata['UserInfoID']; ?>" value="<?php echo $secdata['ContactNumber']; ?>" name="Cnumber" pattern="[0-9]{11}" placeholder="Enter a valid 11-digit mobile number" required autofocus>

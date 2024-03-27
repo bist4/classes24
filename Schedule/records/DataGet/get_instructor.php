@@ -49,17 +49,10 @@ if (isset($_POST['departmentID'])) {
             echo "<td>" . ($user['Status'] == 1 ? 'Full Time' : 'Part Time') . "</td>";
             echo "<td>";
             echo  "<div class='d-flex justify-content-center'>";
-            echo "<button class='btn btn-info mr-3 view-btn' data-toggle='modal' data-target='#exampleModal' title='View'
-                    data-fname='" . $user['Fname'] . "'
-                    data-mname='" . $user['Mname'] . "'
-                    data-lname='" . $user['Lname'] . "'
-                    data-birthdate='" . $user['Birthday'] . "'
-                    data-cnumber='" . $user['ContactNumber'] . "'
-                    data-address='" . $user['Address'] . "'
-                    data-gender='" . $user['Gender'] . "'
-                    data-status='" . $user['Status'] . "'
-                    data-email=''>
-                    <i class='fas fa-eye'></i>
+            echo "<button class='btn btn-info' data-toggle='modal' data-target='#exampleModal' title='View'>
+                
+           
+                <i class='fas fa-eye'></i>
                 </button>";
         
             echo "<button class='btn btn-success archive-btn' title='Archive'
@@ -158,7 +151,6 @@ $(document).ready(function() {
 
 
 
-
 <!-- View Information Modal -->
 <div class="modal fade" id="exampleModal" aria-hidden="true" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
@@ -175,6 +167,7 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
+
 
 <script>
     $(document).ready(function() {

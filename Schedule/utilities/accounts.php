@@ -459,7 +459,7 @@ if ($row['is_Lock_Account'] == 1) {
 
         
         <!-- Modal Form -->
-        <div class="modal fade" id="addDataForm" aria-hidden="true" tabindex="-1" role="dialog" aria-labelledby="addDataFormLabel">
+        <div class="modal fade" id="addDataForm"  data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true" tabindex="-1" role="dialog" aria-labelledby="addDataFormLabel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -592,6 +592,9 @@ if ($row['is_Lock_Account'] == 1) {
                             </div>
                             
                             <br>
+                            
+                            <a  id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+
                             <input type="submit" class="btn btn-primary" id="addButton" value="Submit">
                         </form>
                     </div>

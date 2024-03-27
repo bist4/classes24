@@ -288,7 +288,7 @@ if ($row['is_Lock_Account'] == 1) {
                                                         echo "<tr>";
                                                         echo "<td>" . $row['Fname'] . ' ' . $row['Lname'] . "</td>"; // Display the activity column
                                                         echo "<td>" . $row['Activity'] . "</td>"; // Display the activity column
-                                                        echo "<td>" . $row['DateTime'] . "</td>"; // Display the activity column
+                                                        echo "<td>" . $row['CreatedAt'] . "</td>"; // Display the activity column
                                                         echo "</tr>";
                                                     }
                                                 } else {

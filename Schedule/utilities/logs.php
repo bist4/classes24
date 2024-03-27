@@ -298,7 +298,7 @@ if ($row['is_Lock_Account'] == 1) {
 
                                                 // Close the database connection
                                                 $conn->close();
-                                            ?>0
+                                            ?>
 
                                         </tbody>
                                     </table>

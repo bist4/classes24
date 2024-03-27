@@ -269,7 +269,7 @@ include('session_out.php');
                                             $sql = "SELECT i.*, usi.*, isp.SpecializationName, isp.InstructorSpecializationsID
                                                     FROM instructors i
                                                     INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
-                                                    LEFT JOIN instructorspecializations isp ON isp.InstructorID = i.InstructorID WHERE i.Active = 0";
+                                                    LEFT JOIN instructorspecializations isp ON isp.InstructorID = i.InstructorID WHERE i.Active = 11";
 
                                             $result = $conn->query($sql);
 

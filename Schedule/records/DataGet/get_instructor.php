@@ -97,52 +97,7 @@ if (isset($_POST['departmentID'])) {
 }
 ?>
 
-
-<!-- <script>
-    function confirmArchive(userID) {
-        console.log('Instructor ID:', userID);
-        
-        Swal.fire({
-            title: 'Confirmation',
-            text: 'Are you sure you want to archive?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                archive(userID);
-            }
-        });
-    }
-
-    function archive(userID) {
-        $.ajax({
-            url: 'Archive/archive_istructor.php',
-            method: 'POST',
-            data: { userID: userID },
-
-            success: function(response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Archived Instructor',
-                    text: 'The account has been successfully archived!'
-                }).then(function() {
-                    location.reload();
-                });
-            },
-            error: function(xhr, status, error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to archive instructor. Please try again.'
-                });
-                console.error(error);
-            }
-        });
-    }
-</script> -->
+ 
 <!-- ARCHIVE DATA -->
 
 <script>
@@ -165,7 +120,7 @@ $(document).ready(function() {
                 // User confirmed, proceed with archiving
                 $.ajax({
                     type: 'POST',
-                    url: '../DataDelete/deleteAll_instructor.php', // Update with your server-side script
+                    url: 'DataDelete/deleteAll_instructor.php', // Update with your server-side script
                     data: { instructorID: instructorID },
                     success: function(response) {
                         Swal.fire(

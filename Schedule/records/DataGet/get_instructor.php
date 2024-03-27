@@ -1,4 +1,9 @@
-<link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="../assets/js/demo/datatables-demo.js"></script>
 
 <?php
 require "../../config/db_connection.php";
@@ -10,6 +15,7 @@ if (isset($_POST['departmentID'])) {
         FROM instructors i
         INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
         LEFT JOIN instructorspecializations isp ON isp.InstructorID = i.InstructorID
+        
         WHERE i.is_$departmentID = 1 AND i.Active = 1";
 
     $result = $conn->query($sql);
@@ -35,34 +41,31 @@ if (isset($_POST['departmentID'])) {
                     'SpecializationName' => [],
                     'UserInfoID' => $row['UserInfoID'],
                     'InstructorID' => $row['InstructorID'],
+
                 ];
             }
             if (!empty($row['SpecializationName'])) {
                 $userDetails[$key]['SpecializationName'][] = $row['SpecializationName'];
             }
         }
-
-        echo "<div class='table-responsive'>";
-        echo "<table class='table table-bordered' id='dataTable' width='100%' cellspacing='0'>";
-        echo "<thead><tr>
-                <th scope='col'>Name</th>
-                <th scope='col'>Specializations</th>
-                <th scope='col'>Status</th>
-                <th scope='col'>Action</th>
-                <th scope='col'>Edit</th>
-              </tr></thead>";
-        echo "<tbody id='strandTable'>";
+        
 
         foreach ($userDetails as $user) {
+
+            
+
             echo "<tr>";
             echo "<td>" . $user['Fname'] . ' ' . $user['Mname'] . ' ' . $user['Lname'] . "</td>";
             echo "<td>" . (!empty($user['SpecializationName']) ? implode(', ', $user['SpecializationName']) : 'N/A') . "</td>";
             echo "<td>" . ($user['Status'] == 1 ? 'Full Time' : 'Part Time') . "</td>";
             echo "<td>";
-            echo "<div class='d-flex justify-content-center'>";
+            echo  "<div class='d-flex justify-content-center'>";
             echo "<button class='btn btn-info' data-toggle='modal' data-target='#exampleModal' title='View'>
-                    <i class='fas fa-eye'></i>
+                
+           
+                <i class='fas fa-eye'></i>
                 </button>";
+        
             echo "<button class='btn btn-success archive-btn' title='Archive'
                         data-user-id='" . $user['InstructorID'] . "'>
                     <i class='fas fa-archive'></i>
@@ -87,12 +90,11 @@ if (isset($_POST['departmentID'])) {
                     </td>";
             echo "</tr>";
         }
-        echo "</tbody></table></div>";
+        
         
     } else {
-        echo "<div class='table-responsive'><table class='table table-bordered' id='dataTable' width='100%' cellspacing='0'><tbody>";
         echo "<tr><td colspan='5'>No data available</td></tr>";
-        echo "</tbody></table></div>";
+        
     }
 
     $result->close();
@@ -100,11 +102,6 @@ if (isset($_POST['departmentID'])) {
     echo "Invalid request";
 }
 ?>
-
-<!-- Your JavaScript code goes here -->
-<script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="../../assets/js/demo/datatables-demo.js"></script>
 
  
 <!-- ARCHIVE DATA -->

@@ -275,9 +275,30 @@ if ($row['is_Lock_Account'] == 1) {
                                         <!-- Table body -->
                                         <tbody id="logTableBody">
                                             <?php
-                                            // Your PHP code to initially display logs (as you already have)
-                                            // Fetch logs for the default view or initial logs display
+                                                require("../config/db_connection.php");
+
+                                                // Fetch data from the 'logs' table
+                                                $sql = "SELECT * FROM logs";
+                                                $result = $conn->query($sql);
+
+                                                // Check if there are any rows returned
+                                                if ($result->num_rows > 0) {
+                                                    // Output data of each row
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        // Output each row as a table row
+                                                        echo "<tr>";
+                                                        echo "<td>" . $row['Activity'] . "</td>"; // Display the activity column
+                                                        echo "</tr>";
+                                                    }
+                                                } else {
+                                                    // If no rows are returned, display a message in a single table row
+                                                    echo "<tr><td colspan='4'>No logs available</td></tr>";
+                                                }
+
+                                                // Close the database connection
+                                                $conn->close();
                                             ?>
+
                                         </tbody>
                                     </table>
                                 </div>

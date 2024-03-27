@@ -265,8 +265,7 @@ if ($row['is_Lock_Account'] == 1) {
                                         <!-- Table headers -->
                                         <thead>
                                             <tr>
-                                                <th scope="col">#</th>
-                                                <!-- <th scope="col">User Type</th> -->
+                                                
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Activity</th>
                                                 <th scope="col">Date and Time</th>

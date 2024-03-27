@@ -67,7 +67,7 @@ if (isset($_POST['departmentID'])) {
             echo "<td>" . (!empty($user['SpecializationName']) ? implode(', ', $user['SpecializationName']) : 'N/A') . "</td>";
             echo "<td>" . ($user['Status'] == 1 ? 'Full Time' : 'Part Time') . "</td>";
             echo "<td>";
-            echo  "<div class='d-flex justify-content-center gap-3'>";
+            echo  "<div class='d-inline-flex gap-3 gap-3'>";
             echo "<button class='btn btn-info ' data-toggle='modal' data-target='#exampleModal' title='View'
                     data-fname='" . $user['Fname'] . "'
                     data-mname='" . $user['Mname'] . "'

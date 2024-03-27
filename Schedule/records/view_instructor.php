@@ -476,7 +476,8 @@ if ($row['is_Lock_Account'] == 1) {
                     data: { departmentID: departmentID },
                     success: function (data) {
                         // Update the table content with the fetched data
-                        $('tbody').html(data);
+                        // $('tbody').html(data);
+                        $('#strandTableContainer').html(response);
                     },
                     error: function (xhr, status, error) {
                         console.error(error);

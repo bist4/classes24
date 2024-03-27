@@ -48,8 +48,20 @@ if (isset($_POST['departmentID'])) {
                 $userDetails[$key]['SpecializationName'][] = $row['SpecializationName'];
             }
         }
+        echo "<div class='table-responsive'>";
+        echo "<table class='table table-bordered' id='dataTable' width='100%' cellspacing='0'>";
+        echo "<thead><tr>
+                <th scope='col'>#</th>
+                <th scope='col'>Room Number</th>
+                <th scope='col'>Capacity</th>
+                <th scope='col'>Room Type</th>
+                <th scope='col'>Action</th>
+              </tr></thead>";
+        echo "<tbody id='strandTable'>";
 
         foreach ($userDetails as $user) {
+
+            
 
             echo "<tr>";
             echo "<td>" . $user['Fname'] . ' ' . $user['Mname'] . ' ' . $user['Lname'] . "</td>";
@@ -87,9 +99,12 @@ if (isset($_POST['departmentID'])) {
                     </td>";
             echo "</tr>";
         }
+        echo "</tbody></table></div>";
         
     } else {
+        echo "<div class='table-responsive'><table class='table table-bordered' id='dataTable' width='100%' cellspacing='0'><tbody>";
         echo "<tr><td colspan='5'>No data available</td></tr>";
+        echo "</tbody></table></div>";
     }
 
     $result->close();

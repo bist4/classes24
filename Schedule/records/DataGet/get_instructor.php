@@ -53,11 +53,11 @@ if (isset($_POST['departmentID'])) {
         echo "<div class='table-responsive'>";
         echo "<table class='table table-bordered' id='dataTable' width='100%' cellspacing='0'>";
         echo "<thead><tr>
-                <th scope='col'>#</th>
-                <th scope='col'>Room Number</th>
-                <th scope='col'>Capacity</th>
-                <th scope='col'>Room Type</th>
+                <th scope='col'>Full Name</th>
+                <th scope='col'>Specialization</th>
+                <th scope='col'>Status</th>
                 <th scope='col'>Action</th>
+                <th scope='col'>Modify</th>
               </tr></thead>";
         echo "<tbody id='strandTable'>";
 

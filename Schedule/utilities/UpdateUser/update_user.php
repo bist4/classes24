@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = mysqli_real_escape_string($conn, $_POST['gender']);
     $Cnumber = mysqli_real_escape_string($conn, $_POST['Cnumber']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $email = mysqli_real_escape_string($conn, $_POST['Email']);
 
 
     // Calculate age based on the provided birthday

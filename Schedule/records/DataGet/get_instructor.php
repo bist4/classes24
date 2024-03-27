@@ -1,10 +1,3 @@
-<link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="../assets/js/demo/datatables-demo.js"></script>
-
 <?php
 require "../../config/db_connection.php";
 
@@ -48,12 +41,8 @@ if (isset($_POST['departmentID'])) {
                 $userDetails[$key]['SpecializationName'][] = $row['SpecializationName'];
             }
         }
-        
 
         foreach ($userDetails as $user) {
-
-            
-
             echo "<tr>";
             echo "<td>" . $user['Fname'] . ' ' . $user['Mname'] . ' ' . $user['Lname'] . "</td>";
             echo "<td>" . (!empty($user['SpecializationName']) ? implode(', ', $user['SpecializationName']) : 'N/A') . "</td>";
@@ -91,10 +80,8 @@ if (isset($_POST['departmentID'])) {
             echo "</tr>";
         }
         
-        
     } else {
         echo "<tr><td colspan='5'>No data available</td></tr>";
-        
     }
 
     $result->close();
@@ -214,5 +201,3 @@ $(document).ready(function() {
         });
     });
 </script>
-
- 

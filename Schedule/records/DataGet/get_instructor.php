@@ -1,6 +1,6 @@
-<link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <!-- Page level custom scripts -->
 <script src="../assets/js/demo/datatables-demo.js"></script>

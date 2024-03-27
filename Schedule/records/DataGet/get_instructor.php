@@ -77,7 +77,7 @@ if (isset($_POST['departmentID'])) {
                     data-address='" . $user['Address'] . "'
                     data-gender='" . $user['Gender'] . "'
                     data-status='" . $user['Status'] . "'
-                    data-email=''>
+                    data-email='" . $user['Email'] . "'>
                 
            
                 <i class='fas fa-eye'></i>

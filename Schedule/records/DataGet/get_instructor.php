@@ -120,7 +120,7 @@ $(document).ready(function() {
                 // User confirmed, proceed with archiving
                 $.ajax({
                     type: 'POST',
-                    url: 'DataDelete/deleteAll_instructor.php', // Update with your server-side script
+                    url: 'Archive/archive_istructor.php', // Update with your server-side script
                     data: { instructorID: instructorID },
                     success: function(response) {
                         Swal.fire(

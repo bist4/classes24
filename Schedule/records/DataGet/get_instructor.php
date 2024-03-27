@@ -1,6 +1,5 @@
 
 
-<link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 
 <?php
 require "../../config/db_connection.php";

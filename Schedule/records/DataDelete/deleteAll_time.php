@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtDelete = $conn->prepare($sqlDelete);
 
 
-// Prepare and execute the SQL update query for each SectionID
+    // Prepare and execute the SQL update query for each SectionID
         $updatesql = "UPDATE instructortimeavailabilities SET Active = 0 WHERE InstructorTimeAvailabilitiesID = ?";
         $stmt = $conn->prepare($updatesql);
 

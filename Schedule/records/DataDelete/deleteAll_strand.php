@@ -2,38 +2,64 @@
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    require('../../config/db_connection.php'); // Adjust the path to your database connection file
+    require('../../config/db_connection.php');
 
     if (isset($_POST['strandIDs'])) {
         $strandIDs = $_POST['strandIDs'];
 
-        // Prepare and execute the SQL update query for each StrandID
-        $updatesql = "UPDATE strands SET Active = 0 WHERE StrandID = ?";
-        $stmt = $conn->prepare($updatesql);
+        // Check if any of the strandIDs are associated with class schedules
+        $query = "SELECT COUNT(*) AS count FROM classschedules WHERE StrandID IN (" . implode(',', array_fill(0, count($strandIDs), '?')) . ")";
+        $stmt = $conn->prepare($query);
 
         if ($stmt) {
-            foreach ($strandIDs as $strandID) {
-                $stmt->bind_param("i", $strandID);
-                $stmt->execute();
-
-                // Check if the update was successful
-                if ($stmt->affected_rows <= 0) {
-                    $response = array('success' => false, 'message' => 'Failed to deactivate strand(s).');
-                    echo json_encode($response);
-                    exit;
-                }
-                 
+            // Bind parameters
+            foreach ($strandIDs as $key => $strandID) {
+                $stmt->bind_param('i', $strandIDs[$key]);
             }
+            
+            // Execute the statement
+            $stmt->execute();
+            
+            // Fetch the result
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            
+            // Check if any class schedules exist for the strand
+            if ($row['count'] > 0) {
+                $response = array('success' => false, 'message' => 'The strand is already scheduled.');
+                echo json_encode($response);
+                exit;
+            }
+            
+            // Proceed with deactivating the strand
+            $updatesql = "UPDATE strands SET Active = 0 WHERE StrandID = ?";
+            $stmt = $conn->prepare($updatesql);
 
-            $response = array('success' => true, 'message' => 'Strand(s) Deleted Successfully');
-            echo json_encode($response);
-            exit();
+            if ($stmt) {
+                foreach ($strandIDs as $strandID) {
+                    $stmt->bind_param("i", $strandID);
+                    $stmt->execute();
+
+                    if ($stmt->affected_rows <= 0) {
+                        $response = array('success' => false, 'message' => 'Failed to deactivate strand.');
+                        echo json_encode($response);
+                        exit;
+                    }
+                }
+
+                $response = array('success' => true, 'message' => 'Strand(s) Deleted Successfully');
+                echo json_encode($response);
+                exit();
+            } else {
+                $response = array('success' => false, 'message' => 'Error in preparing SQL statement: ' . $conn->error);
+                echo json_encode($response);
+            }
         } else {
             $response = array('success' => false, 'message' => 'Error in preparing SQL statement: ' . $conn->error);
             echo json_encode($response);
         }
     } else {
-        $response = array('success' => false, 'message' => 'No Strand IDs provided!');
+        $response = array('success' => false, 'message' => 'No strand IDs provided!');
         echo json_encode($response);
     }
 }

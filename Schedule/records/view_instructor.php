@@ -275,7 +275,7 @@ if ($row['is_Lock_Account'] == 1) {
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                  <!-- Table container -->
-                                <div id=tbody">
+                                <div id="strandTableContainer">
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <!-- Table headers -->
@@ -477,7 +477,7 @@ if ($row['is_Lock_Account'] == 1) {
                     success: function (data) {
                         // Update the table content with the fetched data
                         // $('tbody').html(data);
-                        $('tbody').html(response);
+                        $('strandTableContainer').html(data);
                     },
                     error: function (xhr, status, error) {
                         console.error(error);

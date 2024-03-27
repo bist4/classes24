@@ -278,7 +278,7 @@ if ($row['is_Lock_Account'] == 1) {
                                                 require("../config/db_connection.php");
 
                                                 // Fetch data from the 'logs' table
-                                                $sql = "SELECT * FROM logs";
+                                                $sql = "SELECT l.*, usi.Fname, usi.Lname FROM logs l INNER JOIN userinfo usi ON l.UserInfoID = usi.UserinfoID";
                                                 $result = $conn->query($sql);
 
                                                 // Check if there are any rows returned
@@ -287,7 +287,9 @@ if ($row['is_Lock_Account'] == 1) {
                                                     while ($row = $result->fetch_assoc()) {
                                                         // Output each row as a table row
                                                         echo "<tr>";
+                                                        echo "<td>" . $row['Fname'] . ' ' . $row['Lname'] . "</td>"; // Display the activity column
                                                         echo "<td>" . $row['Activity'] . "</td>"; // Display the activity column
+                                                        echo "<td>" . $row['DateTime'] . "</td>"; // Display the activity column
                                                         echo "</tr>";
                                                     }
                                                 } else {
@@ -297,7 +299,7 @@ if ($row['is_Lock_Account'] == 1) {
 
                                                 // Close the database connection
                                                 $conn->close();
-                                            ?>
+                                            ?>0
 
                                         </tbody>
                                     </table>

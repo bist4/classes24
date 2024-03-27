@@ -281,10 +281,7 @@ if ($row['is_Lock_Account'] == 1) {
                                             <!-- Table headers -->
                                             <thead>
                                                 <tr>
-                                                     
                                                     <th scope="col">Full Name</th>
-                                                     
-                                                     
                                                     <th scope="col">Specialization Name</th>
                                                     <th scope="col">Status</th>
                                                     <th scope="col">Action</th>
@@ -477,7 +474,7 @@ if ($row['is_Lock_Account'] == 1) {
                     success: function (data) {
                         // Update the table content with the fetched data
                         // $('tbody').html(data);
-                        $('strandTableContainer').html(data);
+                        $('#strandTableContainer').html(data);
                     },
                     error: function (xhr, status, error) {
                         console.error(error);

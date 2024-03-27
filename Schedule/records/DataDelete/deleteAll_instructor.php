@@ -16,21 +16,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute();
 
                 if ($stmt->affected_rows <= 0) {
-                    echo "Failed to deactivate instructors.";
+                    echo json_encode(["errors" => "Failed to deactivate instructors."]);
+
                     exit; // Stop further processing if any update fails
                 }
 
                 
             }
 
-            echo '<script>alert("Instructor(s) Deleted Successfully");</script>';
-            header("Location: ../file_instructor.php");
-            exit();
+            echo json_encode(["success" => "Instructor Archives successfully"]);
+            exit(); 
         } else {
-            echo "Error in preparing SQL statement: " . $conn->error;
+            echo json_encode(["errors" => "Error in preparing SQL statement: " . $conn->error]);
+ 
         }
     } else {
-        echo "No Instructor IDs provided!";
+        echo json_encode(["errors" => "No Instructor IDs provided!"]);
+
     }
 }
 ?>

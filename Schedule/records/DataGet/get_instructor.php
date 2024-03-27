@@ -115,7 +115,7 @@ $(document).ready(function() {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, archive it!'
-        }).then((result) => {
+            ).then((result) => {
             if (result.isConfirmed) {
                 // User confirmed, proceed with archiving
                 $.ajax({
@@ -123,12 +123,23 @@ $(document).ready(function() {
                     url: 'Archive/archive_istructor.php', // Update with your server-side script
                     data: { instructorID: instructorID },
                     success: function(response) {
-                        Swal.fire(
-                            'Archived!',
-                            'The instructor has been archived.',
-                            'success'
-                        );
-                        console.log(instructorID);
+                        response = JSON.parse(response);
+                        if (response.success) {
+                            Swal.fire({
+                                title: "Success!",
+                                text: response.success,
+                                icon: "success",
+                            }).then(function () {
+                                updateSuccess = true; // Set updateSuccess to true upon successful update
+                                window.location.href = 'view_instructor.php';
+                            });
+                        } else if (response.error) {
+                            Swal.fire({
+                                title: "Warning!",
+                                text: response.error,
+                                icon: "warning",
+                            });
+                        }
                     },
                     error: function(xhr, status, error) {
                         Swal.fire(

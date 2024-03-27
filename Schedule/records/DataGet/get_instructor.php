@@ -9,7 +9,7 @@ if (isset($_POST['departmentID'])) {
         INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
         LEFT JOIN instructorspecializations isp ON isp.InstructorID = i.InstructorID
         
-        WHERE i.is_$departmentID = 1";
+        WHERE i.is_$departmentID = 1 AND i.Active = 11";
 
     $result = $conn->query($sql);
 

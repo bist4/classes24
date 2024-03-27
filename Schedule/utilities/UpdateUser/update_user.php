@@ -12,6 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = mysqli_real_escape_string($conn, $_POST['gender']);
     $Cnumber = mysqli_real_escape_string($conn, $_POST['Cnumber']);
     $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+
 
     // Calculate age based on the provided birthday
     $dob = new DateTime($Bday);
@@ -19,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $age = $dob->diff($now)->y;
 
     // Update data in the database
-    $sql = "UPDATE userinfo SET Fname='$Fname', Lname='$Lname', Mname='$Mname', Age=$age, Birthday='$Bday', Gender='$gender', ContactNumber='$Cnumber', Address='$address' WHERE UserInfoID=$UserInfoID";
+    $sql = "UPDATE userinfo SET Fname='$Fname', Lname='$Lname', Mname='$Mname', Age=$age, Birthday='$Bday', Gender='$gender', Email='$email', ContactNumber='$Cnumber', Address='$address' WHERE UserInfoID=$UserInfoID";
 
     if ($conn->query($sql) === TRUE) {
         // echo json_encode(array("success" => true, "message" => "Account Updated Successfully"));

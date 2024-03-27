@@ -1,6 +1,9 @@
+<link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-
-<!-- <link href="../../css/sb-admin-2.min.css" rel="stylesheet"> -->
+<!-- Page level custom scripts -->
+<script src="../assets/js/demo/datatables-demo.js"></script>
 
 <?php
 require "../../config/db_connection.php";
@@ -47,6 +50,7 @@ if (isset($_POST['departmentID'])) {
         }
 
         foreach ($userDetails as $user) {
+
             echo "<tr>";
             echo "<td>" . $user['Fname'] . ' ' . $user['Mname'] . ' ' . $user['Lname'] . "</td>";
             echo "<td>" . (!empty($user['SpecializationName']) ? implode(', ', $user['SpecializationName']) : 'N/A') . "</td>";
@@ -206,10 +210,4 @@ $(document).ready(function() {
     });
 </script>
 
-<script src="../../assets/js/sb-admin-2.min.js"></script>
-
-<script src="../../vendor/jquery/jquery.min.js"></script>
-<script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Core plugin JavaScript-->
-<script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+ 

@@ -527,7 +527,7 @@ include('session_out.php');
                 var trimmedValue = field.value.trim();
                 if ((field.id === "fname" || field.id === "lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
-                } else if ((field.id === "Specialization" || field.id === "lname") && !trimmedValue) {
+                } else if ((field.id === "specialization" || field.id === "lname") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');
                 } else if (field.id === "mname") {
                     if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
@@ -680,7 +680,7 @@ $(document).ready(function() {
             var trimmedValue = field.value.trim();
             if ((field.id === "fname" || field.id === "lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                 showValidationMessage(field, 'Only letters are allowed.');
-            } else if ((field.id === "Specialization" || field.id === "lname") && !trimmedValue) {
+            } else if ((field.id === "specialization" || field.id === "lname") && !trimmedValue) {
                 showValidationMessage(field, 'This field cannot be empty.');
             } else if (field.id === "mname") {
                 if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
@@ -707,12 +707,13 @@ $(document).ready(function() {
 
     
     $('#addButton').on('click', function(event) {
-        event.preventDefault(); // Prevent the default form submission
         validateFormFields();
         var invalidFields = document.querySelectorAll(".is-invalid");
         if (invalidFields.length > 0) {
             return false; // Prevent form submission if there are validation errors
         }
+        event.preventDefault(); // Prevent the default form submission
+        
         // Unbind the click event to prevent redundant messages
         $(this).off('click');
 

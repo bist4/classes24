@@ -711,7 +711,7 @@ if ($row['is_Lock_Account'] == 1) {
                     // Show Confirmation? dialog
                     Swal.fire({
                         title: 'Confirmation?',
-                        text: 'You are about to restore this room.',
+                        text: 'Are you sure you want to restore this section?',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonText: 'Yes',
@@ -798,7 +798,7 @@ if ($row['is_Lock_Account'] == 1) {
 
                     Swal.fire({
                         title: 'Confirmation?',
-                        text: 'You are about to restore this strand.',
+                        text: 'Are you sure you want to restore this strand?',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonText: 'Yes',
@@ -891,7 +891,7 @@ if ($row['is_Lock_Account'] == 1) {
                      // Show Confirmation? dialog
                      Swal.fire({
                         title: 'Confirmation?',
-                        text: 'You are about to restore this subject.',
+                        text: 'Are you sure you want to restore this subject?',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonText: 'Yes',
@@ -999,7 +999,7 @@ if ($row['is_Lock_Account'] == 1) {
                     // Show Confirmation? message
                     Swal.fire({
                         title: 'Confirmation?',
-                        text: 'You are about to restore this class section.',
+                        text: 'Are you sure you want to restore this strand?',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -1094,7 +1094,7 @@ if ($row['is_Lock_Account'] == 1) {
                     // Show a Confirmation? dialog
                     Swal.fire({
                         title: 'Confirmation?',
-                        text: 'You are about to delete this item.',
+                        text: 'Are you sure you want to delete this item?',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',

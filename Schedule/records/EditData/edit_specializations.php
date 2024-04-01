@@ -34,7 +34,12 @@ if (isset($_SESSION['Username'])) {
         $placeholders = str_repeat('?,', count($sectionIDs) - 1) . '?';
  
 
-        $subsql = "SELECT * FROM instructorspecializations WHERE InstructorID IN ($placeholders)";
+        $subsql = "SELECT i.*, usi.*, isp.SpecializationName, isp.InstructorSpecializationsID 
+           FROM instructors i 
+           INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
+           LEFT JOIN instructorspecializations isp ON i.InstructorID = isp.InstructorID          
+           WHERE i.InstructorID IN ($placeholders)";
+
 
 
         // $subsql = "";
@@ -317,6 +322,31 @@ include('session_out.php');
                          
                     </div>
 
+                    <?php $secdata = $allSectionData[0]; ?>
+                
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="fname">First Name</label>
+                                    <input type="text" class="form-control" id="Fname<?php echo $secdata['UserInfoID']; ?>" value="<?php echo $secdata['Fname']; ?> <?php echo $secdata['Mname']; ?> <?php echo $secdata['Lname']; ?>" name="fname" readonly>
+                                </div>
+
+                                <input type="hidden" name="InstructorSpecializationsID[]" value="<?php echo $secdata['InstructorSpecializationsID']; ?>">
+
+                                <div class="form-group" id="specializationFields">
+                                    <input type="hidden" name="InstructorID" id="InstructorID" value="<?php echo $secdata['InstructorID']; ?>">
+                                    <label for="specializations">Specializations:</label>
+                                    <input type="text" class="form-control specialization" id="specialization" name="specializations[]" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary" id="addButton">Add</button>
+                        </div>
+
+
+
+
                     <div class="container mt-4">
                         <h6 class="d-inline-block active" id="viewInstructor">Edit Instructor</h6>
                         <div id="addContainer">
@@ -442,120 +472,12 @@ include('session_out.php');
  
 
      <!-- Update Data -->
-    <!-- <script>
-        var changesMade = false;
-        var updateSuccess = false;
-        $(document).ready(function(){
-            function setChangesMade() {
-                    changesMade = true;
-            }
-
-            // Bind change event to form elements
-            $(".form-control").change(setChangesMade);
-
-            // Bind beforeunload event to show confirmation message
-            window.addEventListener('beforeunload', function(e) {
-                if (changesMade && !updateSuccess) {
-                    var confirmationMessage = "Changes you made may not be saved. Are you sure you want to leave?";
-                    (e || window.event).returnValue = confirmationMessage;
-                    return confirmationMessage;
-                }
-            });
-
-            $('#updateButton').click(function(e){
-                e.preventDefault();
-                var form = $('.needs-validation')[0];
-                var error = false;
-
-                // Validate input fields for empty values and spaces at the beginning
-                var fields = form.querySelectorAll("input");
-                fields.forEach(function(field) {
-                    var trimmedValue = field.value.trim();
-                    if(trimmedValue === ""){
-                        error = true;
-                        field.classList.add("is-invalid");
-                    } else if (/^\s/.test(field.value)) {
-                        error = true;
-                        field.classList.add("is-invalid");
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Spaces before letters are not allowed.',
-                        });
-                    } else {
-                        field.classList.remove("is-invalid");
-                    }
-                });
-
-                if (error) {
-                    return false;
-                }
-
-                if (form.checkValidity()) {
-                    var formData = new FormData(form);
-                    var loading = Swal.fire({
-                        title: 'Please wait',
-                        html: 'Updating your data...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false, 
-                        onBeforeOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '../DataUpdate/update_specializations.php',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response){
-                            response = JSON.parse(response);
-                            loading.close(); // Close loading animation
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success',
-                                    text: response.success,
-                                }).then(function() {
-                                    var subid = "<?php echo $_GET['subid']; ?>";
-                                    window.location.href = 'edit_specializations.php?subid=' + subid;
-                                });
-                            } else if (response.error) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Warning',
-                                    text: response.error,
-                                });
-                            }
-                        },
-                        error: function() {
-                            loading.close(); // Close loading animation
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while submitting data.',
-                            });
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Warning',
-                        text: 'Please fill in all required fields.'
-                    });
-                }
-                form.classList.add('was-validated');
-            });
-        });
-    </script> -->
-
-    <script>
+<script>
     var changesMade = false;
     var updateSuccess = false;
     $(document).ready(function(){
         function setChangesMade() {
-            changesMade = true;
+                changesMade = true;
         }
 
         // Bind change event to form elements
@@ -621,8 +543,6 @@ include('session_out.php');
                         response = JSON.parse(response);
                         loading.close(); // Close loading animation
                         if (response.success) {
-                            changesMade = false; // Reset changesMade flag
-                            updateSuccess = true; // Set updateSuccess flag to true
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success',
@@ -660,6 +580,53 @@ include('session_out.php');
     });
 </script>
 
+<script>
+$(document).ready(function() {
+    $('#addButton').on('click', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        
+        // Unbind the click event to prevent redundant messages
+        $(this).off('click');
+
+        Swal.fire({
+            title: 'Confirmation',
+            text: 'Are you sure you want to add this specialization?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var instructorID = $('#InstructorID').val(); // Get specific value(s) from the form
+                var specializations = $('.specialization').map(function() {
+                    return $(this).val();
+                }).get();
+                
+                // Construct data object
+                var data = {
+                    InstructorID: instructorID,
+                    Specializations: specializations
+                };
+                console.log(data);
+                
+                // Perform AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: '../DataAdd/add_spec.php',
+                    data: data,
+                    success: function(response) {
+                        Swal.fire('Success', response, 'success'); // Display success message
+                        $('form')[0].reset(); // Reset the form
+                    },
+                    error: function() {
+                        Swal.fire('Error', 'Failed to add specialization', 'error'); // Display error message
+                    }
+                });
+            }
+        });
+    });
+});
+
+</script>
 
 
     

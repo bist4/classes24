@@ -1,13 +1,6 @@
-<link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="../assets/js/demo/datatables-demo.js"></script>
-
-
 <?php
 require "../../config/db_connection.php";
+session_start(); // Start the session
 
 if (isset($_POST['departmentID'])) {
     $departmentID = $_POST['departmentID'];
@@ -18,6 +11,7 @@ if (isset($_POST['departmentID'])) {
         LEFT JOIN instructorspecializations isp ON isp.InstructorID = i.InstructorID
         
         WHERE i.is_$departmentID = 1 AND i.Active = 1";
+
 
     $result = $conn->query($sql);
 
@@ -50,25 +44,14 @@ if (isset($_POST['departmentID'])) {
             }
         }
 
-        echo "<div class='table-responsive'>";
-        echo "<table class='table table-bordered' id='dataTable' width='100%' cellspacing='0'>";
-        echo "<thead><tr>
-                <th scope='col'>Full Name</th>
-                <th scope='col'>Specialization</th>
-                <th scope='col'>Status</th>
-                <th scope='col'>Action</th>
-                <th scope='col'>Modify</th>
-              </tr></thead>";
-        echo "<tbody id='strandTable'>";
-
         foreach ($userDetails as $user) {
             echo "<tr>";
             echo "<td>" . $user['Fname'] . ' ' . $user['Mname'] . ' ' . $user['Lname'] . "</td>";
             echo "<td>" . (!empty($user['SpecializationName']) ? implode(', ', $user['SpecializationName']) : 'N/A') . "</td>";
             echo "<td>" . ($user['Status'] == 1 ? 'Full Time' : 'Part Time') . "</td>";
             echo "<td>";
-            echo "<div class='d-inline-flex mr-2'>";
-            echo "<button class='btn btn-info' data-toggle='modal' data-target='#exampleModal' title='View'
+            echo  "<div class='d-flex justify-content-center'>";
+            echo "<button class='btn btn-info mr-3 view-btn' data-toggle='modal' data-target='#exampleModal' title='View'
                     data-fname='" . $user['Fname'] . "'
                     data-mname='" . $user['Mname'] . "'
                     data-lname='" . $user['Lname'] . "'
@@ -77,26 +60,28 @@ if (isset($_POST['departmentID'])) {
                     data-address='" . $user['Address'] . "'
                     data-gender='" . $user['Gender'] . "'
                     data-status='" . $user['Status'] . "'
-                    data-email='" . $user['Email'] . "'>
+                    data-email=''>
                     <i class='fas fa-eye'></i>
                 </button>";
-
+        
             echo "<button class='btn btn-success archive-btn' title='Archive'
                         data-user-id='" . $user['InstructorID'] . "'>
                     <i class='fas fa-archive'></i>
                 </button>";
-            echo "</div>";
 
+            echo "</div>";
             echo "</td>";
             echo "<td>
                     <div class='dropdown'>
                         <button title='Edit' class='btn btn-primary mr-3 dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>
                         <div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>";
             
+                        
             // Check if instructor has specializations
             if (!empty($user['SpecializationName'])) {
                 echo "<a class='dropdown-item' href='EditData/edit_specializations.php?subid=" . $user['InstructorID'] . "'>Edit Specializations</a>";
-            } else {
+            } 
+            else {
                 echo "<a class='dropdown-item' href='AddData/add_specialization.php?subid=" . $user['InstructorID'] . "'>Add Specialization</a>";
             }
             
@@ -106,14 +91,9 @@ if (isset($_POST['departmentID'])) {
                     </td>";
             echo "</tr>";
         }
-
-        echo "</tbody></table></div>";
-
         
     } else {
-        echo "<div class='table-responsive'><table class='table table-bordered' id='dataTable' width='100%' cellspacing='0'><tbody>";
         echo "<tr><td colspan='5'>No data available</td></tr>";
-        echo "</tbody></table></div>";
     }
 
     $result->close();
@@ -122,15 +102,62 @@ if (isset($_POST['departmentID'])) {
 }
 ?>
 
- 
+
+<!-- <script>
+    function confirmArchive(userID) {
+        console.log('Instructor ID:', userID);
+        
+        Swal.fire({
+            title: 'Confirmation',
+            text: 'Are you sure you want to archive?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                archive(userID);
+            }
+        });
+    }
+
+    function archive(userID) {
+        $.ajax({
+            url: 'Archive/archive_istructor.php',
+            method: 'POST',
+            data: { userID: userID },
+
+            success: function(response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Archived Instructor',
+                    text: 'The account has been successfully archived!'
+                }).then(function() {
+                    location.reload();
+                });
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to archive instructor. Please try again.'
+                });
+                console.error(error);
+            }
+        });
+    }
+</script> -->
 <!-- ARCHIVE DATA -->
 
-<script>
+
+
+<!-- <script>
 $(document).ready(function() {
     $('.archive-btn').click(function() {
         var instructorID = $(this).data('user-id');
         
-        console.log(instructorID);
+
 
         Swal.fire({
             title: 'Are you sure?',
@@ -140,7 +167,7 @@ $(document).ready(function() {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, archive it!'
-            }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 // User confirmed, proceed with archiving
                 $.ajax({
@@ -148,23 +175,12 @@ $(document).ready(function() {
                     url: 'DataDelete/deleteAll_instructor.php', // Update with your server-side script
                     data: { instructorID: instructorID },
                     success: function(response) {
-                        response = JSON.parse(response);
-                        if (response.success) {
-                            Swal.fire({
-                                title: "Success!",
-                                text: response.success,
-                                icon: "success",
-                            }).then(function () {
-                                updateSuccess = true; // Set updateSuccess to true upon successful update
-                                window.location.href = 'view_instructor.php';
-                            });
-                        } else if (response.error) {
-                            Swal.fire({
-                                title: "Warning!",
-                                text: response.error,
-                                icon: "warning",
-                            });
-                        }
+                        Swal.fire(
+                            'Archived!',
+                            'The instructor has been archived.',
+                            'success'
+                        );
+                        console.log(instructorID);
                     },
                     error: function(xhr, status, error) {
                         Swal.fire(
@@ -179,7 +195,65 @@ $(document).ready(function() {
         });
     });
 });
+</script> -->
+
+<script>
+$(document).ready(function () {
+    $(".archive-btn").click(function () {
+        var instructorID = $(this).data('user-id');
+
+        Swal.fire({
+            title: 'Confirmation',
+            text: "Do you want to archive?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform retrieval using AJAX
+                $.ajax({
+                    url: 'Archive/archive_instructor.php',
+                    type: 'POST',
+                    data: { instructorID: instructorID },
+                    success: function(response) {
+                        response = JSON.parse(response);
+                        if (response.success) {
+                            // Redirect to archive.php after successful retrieval
+                            Swal.fire(
+                                'Archived!',
+                                'Instructor has been archived.',
+                                'success'
+                            ).then(() => {
+                                window.location.href = 'view_instructor.php';
+                            });
+                        } else {
+                            // Display error message
+                            Swal.fire(
+                                'Error!',
+                                response.message,
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors if any
+                        console.error(xhr.responseText);
+                        Swal.fire(
+                            'Error!',
+                            'Failed to archive instructor. Please try again later.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
+});
+
 </script>
+
 
 
 
@@ -200,36 +274,64 @@ $(document).ready(function() {
     </div>
 </div>
 
-
 <script>
-    $(document).ready(function() {
-        $('.btn-info').click(function() {
-            var fname = $(this).data('fname');
-            var mname = $(this).data('mname');
-            var lname = $(this).data('lname');
-            var birthdate = $(this).data('birthdate');
-            var cnumber = $(this).data('cnumber');
-            var address = $(this).data('address');
-            var gender = $(this).data('gender');
-            var email = $(this).data('email');
-            var status = $(this).data('status');
+        $(document).ready(function() {
+            $('.btn-info').click(function() {
+                // Get data attributes from the clicked button
+                // var userId = $(this).data('user-id');
+                var fname = $(this).data('fname');
+                var mname = $(this).data('mname');
+                var lname = $(this).data('lname');
+                var birthdate = $(this).data('birthdate');
+                var cnumber = $(this).data('cnumber');
+                var address = $(this).data('address');
+                var gender = $(this).data('gender');
+                var role = $(this).data('role');
 
-            // Construct HTML with the information
-            var content = '<label style="font-size:1.5em;">Personal Information</label>' +
-                '<p>First Name: ' + fname + '</p>' +
-                '<p>Middle Name: ' + mname + '</p>' +
-                '<p>Last Name: ' + lname + '</p>' +
-                '<p>Birthday: ' + birthdate + '</p>' +
-                '<p>Gender: ' + gender + '</p>' +
-                '<label style="font-size:1.5em;">Contact Information</label>' +
-                '<p>Contact Number: ' + cnumber + '</p>' +
-                '<p>Address: ' + address + '</p>' +
-                '<p>Email: ' + email + '</p>' +
-                '<label style="font-size:1.5em;">Other Information</label>' +
-                '<p>Status: ' + (status == 1 ? 'Full Time' : 'Part Time') + '</p>';
+                var position = [
+                    $(this).data('instructor'),
+                    $(this).data('sda'),
+                    $(this).data('sd')
+                ]
+                
+                var pos = '';
 
-            // Insert the HTML into the modal body
-            $('#modalBody').html(content);
+                if (position[0] === 1) {
+                    pos += 'Instructor';
+                }
+                if (position[1] === 1) {
+                    if (pos !== '') pos += ', ';
+                    pos += 'School Director Assistant';
+                }
+                if (position[2] === 1) {
+                    if (pos !== '') pos += ', ';
+                    pos += 'School Director';
+                }
+               
+
+                // var department = $(this).data('department')
+                
+
+                // Construct HTML with the information
+                var content = '<label style="font-size:1.5em;">'+ 'Personal Information' + '</label>' +
+                            '<p>First Name: ' + fname + '</p>' +
+                            '<p>Middle Name: ' + mname + '</p>' +
+                            '<p>Last Name: ' + lname + '</p>' +
+                            '<p>Birthday: ' + birthdate + '</p>' +
+                            '<p>Gender: ' + gender + '</p>' +
+                            '<label style="font-size:1.5em;">'+ 'Contact Information' + '</label>' +
+                            '<p>Contact Number: ' + cnumber + '</p>' +
+                            '<p>Address: ' + address + '</p>' +
+                            //   '<label style="font-size:1.5em;">'+ 'Other Information' + '</label>' +
+                            //   '<p>Department: ' + department + '</p>';
+
+                            '<p>Role: ' + role + '</p>' +
+                            '<p>Position: ' + pos + '</p>' ;
+                    
+                            
+
+                // Insert the HTML into the modal body
+                $('#modalBody').html(content);
+            });
         });
-    });
-</script>
+    </script>

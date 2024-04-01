@@ -25,8 +25,6 @@ if (isset($_SESSION['Username'])) {
         // Handle the case where the query fails
         echo "Error in fetching RoleID and UserID: " . $conn->error;
     }
-
-
     if (isset($_GET['subid']) && !empty($_GET['subid'])) {
         // Get the rooms IDs from the URL
         $sectionIDs = explode(',', $_GET['subid']);
@@ -34,16 +32,17 @@ if (isset($_SESSION['Username'])) {
     
         // Prepare the SQL statement to fetch data for multiple SubjectIDs
         $placeholders = str_repeat('?,', count($sectionIDs) - 1) . '?';
-        // $subsql = "SELECT i.*, usi.*, isp.SpecializationName, isp.InstructorSpecializationsID FROM instructors i 
-        // INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
-        // LEFT JOIN instructorspecializations isp ON i.InstructorID = isp.InstructorID          
-        // WHERE i.InstructorID IN ($placeholders) GROUP BY i.InstructorID";
-        $subsql ="SELECT i.*, usi.*, isp.*
-        FROM instructors i 
-        INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
-        LEFT JOIN instructorspecializations isp ON i.InstructorID = isp.InstructorID 
-               
-        WHERE i.InstructorID IN ($placeholders)";
+ 
+
+        $subsql = "SELECT i.*, usi.*, isp.SpecializationName, isp.InstructorSpecializationsID 
+           FROM instructors i 
+           INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
+           LEFT JOIN instructorspecializations isp ON i.InstructorID = isp.InstructorID          
+           WHERE i.InstructorID IN ($placeholders)";
+
+
+
+        // $subsql = "";
         $stmt = mysqli_prepare($conn, $subsql);
     
         // Bind parameters for each RoomID
@@ -62,7 +61,7 @@ if (isset($_SESSION['Username'])) {
                 $allSectionData[] = $secdata;
             }
             if (empty($allSectionData)) {
-                echo "No Schedule found for the provided IDs";
+                echo "No Instructor found for the provided IDs";
             }
         } else {
             echo "Error executing the query: " . mysqli_error($conn);
@@ -74,7 +73,7 @@ if (isset($_SESSION['Username'])) {
         echo "No Instructor ID provided!";
     }
     
-
+    
     // Close the database connection
     $conn->close();
 }
@@ -326,34 +325,34 @@ include('../../session_out.php');
                     <div class="container mt-4">
                         <h6 class="d-inline-block active" id="viewInstructor">Add Specialization</h6>
                         <div id="addContainer">
-                            <?php foreach ($allSectionData  as $secdata) { ?>
+                        <?php $secdata = $allSectionData[0]; ?>
                             
-                                <form method="POST"  class="needs-validation" novalidate>
-                                    
-                                        <div class="card mb-3">
-                                            <div class="card-body">
-                                                <div class="form-group">
-                                                    <label for="fname">First Name</label>
-                                                    <input type="text" class="form-control" id="Fname<?php echo $secdata['UserInfoID']; ?>" value="<?php echo $secdata['Fname']; ?> <?php echo $secdata['Mname']; ?> <?php echo $secdata['Lname']; ?>" name="fname" readonly>
-                                                </div>
-                                            
-                                            <input type="hidden" name="InstructorSpecializationsID[]" value="<?php echo $secdata['InstructorSpecializationsID']; ?>">
-                                    
-                                            <div class="form-group" id="specializationFields">
-                                                <input type="hidden" name="InstructorID[]" value="<?php echo $secdata['InstructorID']; ?>">
-                                                <label for="specializations">Specializations:</label>
-                                                <input type="text" class="form-control specialization" id="specialization" name="specializations[]" required>
-                                            </div>
-                                            <button type="button" class="btn btn-primary" id="addMoreButton" >Add More Specialization</button>
-                                                    
-                                            </div>
+                        <form method="POST" class="needs-validation" novalidate>
+                            
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="fname">First Name</label>
+                                            <input type="text" class="form-control" id="Fname<?php echo $secdata['UserInfoID']; ?>" value="<?php echo $secdata['Fname']; ?> <?php echo $secdata['Mname']; ?> <?php echo $secdata['Lname']; ?>" name="fname" readonly>
                                         </div>
-                                    <div class="d-flex justify-content-end">
-                                        <a href="../view_instructor.php"><button type="button" class="btn btn-outline-secondary mr-2 cancelBtn">Cancel</button></a>
-                                        <button type="submit" class="btn btn-primary" id="updateButton">Add</button>
+                                    
+                                    <input type="hidden" name="InstructorSpecializationsID[]" value="<?php echo $secdata['InstructorSpecializationsID']; ?>">
+                            
+                                    <div class="form-group" id="specializationFields">
+                                        <input type="hidden" name="InstructorID" id="InstructorID" value="<?php echo $secdata['InstructorID']; ?>">  
+                                        <label for="specializations">Specializations:</label>
+                                        <input type="text" class="form-control specialization mb-3" id="specialization" name="specializations[]" required>
                                     </div>
-                                </form>
-                            <?php } ?>
+                                    <button type="button" class="btn btn-primary" id="addMoreButton" >Add More Specialization</button>
+                                            
+                                    </div>
+                                </div>
+                            <div class="d-flex justify-content-end">
+                                <a href="../view_instructor.php"><button type="button" class="btn btn-outline-secondary mr-2 cancelBtn">Cancel</button></a>
+                                <button type="submit" class="btn btn-primary" id="updateButton">Add</button>
+                            </div>
+                        </form>
+                    
                     
 
                         </div>
@@ -455,70 +454,53 @@ include('../../session_out.php');
  
 
      <!-- Add Data -->
-    <script>
-        $(document).ready(function(){
-            $('#updateButton').click(function(e){
-                e.preventDefault();
-                var form = $('.needs-validation')[0];
-                
-                if (form.checkValidity()) {
-                    var formData = new FormData(form);
-                    var loading = Swal.fire({
-                        title: 'Please wait',
-                        html: 'Updating your data...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false, 
-                        onBeforeOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
+     <script>
+$(document).ready(function() {
+    $('#updateButton').on('click', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+        
+        // Unbind the click event to prevent redundant messages
+        $(this).off('click');
 
-                    $.ajax({
-                        type: 'POST',
-                        url: '../DataAdd/add_spec.php',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response){
-                            response = JSON.parse(response);
-                            loading.close(); // Close loading animation
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success',
-                                    text: response.success,
-                                }).then(function() {
-                                    var subid = "<?php echo $_GET['subid']; ?>";
-                                    window.location.href = 'add_specializations.php?subid=' + subid;
-                                });
-                            } else if (response.error) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Warning',
-                                    text: response.error,
-                                });
-                            }
-                        },
-                        error: function() {
-                            loading.close(); // Close loading animation
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while submitting data.',
-                            });
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Warning',
-                        text: 'Please fill in all required fields.'
-                    });
-                }
-                form.classList.add('was-validated');
-            });
+        Swal.fire({
+            title: 'Confirmation',
+            text: 'Are you sure you want to add this specialization?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var instructorID = $('#InstructorID').val(); // Get specific value(s) from the form
+                var specializations = $('.specialization').map(function() {
+                    return $(this).val();
+                }).get();
+                
+                // Construct data object
+                var data = {
+                    InstructorID: instructorID,
+                    Specializations: specializations
+                };
+                console.log(data);
+                
+                // Perform AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: '../DataAdd/add_spec.php',
+                    data: data,
+                    success: function(response) {
+                        Swal.fire('Success', response, 'success'); // Display success message
+                        $('form')[0].reset(); // Reset the form
+                    },
+                    error: function() {
+                        Swal.fire('Error', 'Failed to add specialization', 'error'); // Display error message
+                    }
+                });
+            }
         });
-    </script>
+    });
+});
+
+</script>
 
 <script>
     document.getElementById('addMoreButton').addEventListener('click', function() {

@@ -2,69 +2,42 @@
 require('../../config/db_connection.php');
 session_start();
 
-// Check connection
-if ($conn->connect_error) {
-    $response['error'] = "Connection failed: " . $conn->connect_error;
-    echo json_encode($response);
-    exit;
+// Assuming you have a database connection established
+
+// Get the posted data
+$instructorID = $_POST['InstructorID'];
+$specializations = $_POST['Specializations'];
+
+// Initialize an array to store successfully added specializations
+$addedSpecializations = array();
+
+// Loop through specializations array and insert into the database
+foreach ($specializations as $specialization) {
+    // Sanitize the data before inserting to prevent SQL injection
+    $specialization = mysqli_real_escape_string($conn, $specialization);
+
+    // Insert query
+    $query = "INSERT INTO instructorspecializations (InstructorID, SpecializationName) VALUES ('$instructorID', '$specialization')";
+
+    // Execute query
+    if (mysqli_query($conn, $query)) {
+        // If insertion is successful, add specialization to the array
+        $addedSpecializations[] = $specialization;
+    } else {
+        // If insertion fails, output the specific error message
+        echo "Error adding specialization: " . mysqli_error($conn);
+        // Stop the loop to prevent further insert attempts
+        break;
+    }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if data is set and not empty
-    if (!isset($_POST['specializations']) || !isset($_POST['InstructorID'])) {
-        $response['error'] = "Form data missing";
-        echo json_encode($response);
-        exit;
-    }
-    
-    // Collect form data
-    $specializations = $_POST['specializations'];
-    $instructorIDs = $_POST['InstructorID'];
-
-    // Prepare and bind statement
-    $stmt = $conn->prepare("INSERT INTO instructorspecializations (InstructorID, SpecializationName) VALUES (?, ?)");
-    $stmt->bind_param("is", $instructorID, $specialization);
-
-    // Insert new records
-    $response = array();
-    foreach ($instructorIDs as $index => $instructorID) {
-        // Escape special characters
-        $instructorID = htmlspecialchars($instructorID);
-        $specialization = htmlspecialchars($specializations[$index]);
-
-        // Check if InstructorID exists
-        $check_stmt = $conn->prepare("SELECT * FROM instructors WHERE InstructorID = ?");
-        $check_stmt->bind_param("i", $instructorID);
-        $check_stmt->execute();
-        $check_result = $check_stmt->get_result();
-        if ($check_result->num_rows == 0) {
-            $response['error'] = "Instructor with ID $instructorID does not exist";
-            echo json_encode($response);
-            $stmt->close();
-            $conn->close();
-            exit;
-        }
-        $check_stmt->close();
-
-        // Execute the statement
-        if ($stmt->execute()) {
-            $response['success'] = "Records inserted successfully";
-        } else {
-            $response['error'] = "Error inserting instructor record: " . $conn->error;
-            echo json_encode($response);
-            $stmt->close();
-            $conn->close();
-            exit;
-        }
-    }
-    
-    // Close statement
-    $stmt->close();
-
-    // Return success response
-    echo json_encode($response);
+// Check if any specializations were added successfully
+if (!empty($addedSpecializations)) {
+    // Output success message along with the list of added specializations
+  
+    echo "Specializations added: " . implode(", ", $addedSpecializations);
 }
 
-// Close connection
-$conn->close();
+// Close database connection
+mysqli_close($conn);
 ?>

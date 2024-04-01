@@ -647,9 +647,72 @@ include('session_out.php');
 
 <script>
 $(document).ready(function() {
+    function showValidationMessage(inputField, message) {
+            // Check if validation message element exists, if not, create it
+        var validationMessageId = inputField.id + "_validation_message";
+        var validationMessageElement = document.getElementById(validationMessageId);
+        if (!validationMessageElement) {
+            validationMessageElement = document.createElement("div");
+            validationMessageElement.id = validationMessageId;
+            validationMessageElement.classList.add("invalid-feedback");
+            inputField.parentNode.appendChild(validationMessageElement);
+        }
+        // Update validation message text and display it
+        validationMessageElement.innerText = message;
+        inputField.classList.add("is-invalid");
+    }
+
+    // Function to hide validation message
+    function hideValidationMessage(inputField) {
+        var validationMessageId = inputField.id + "_validation_message";
+        var validationMessageElement = document.getElementById(validationMessageId);
+        if (validationMessageElement) {
+            validationMessageElement.innerText = "";
+            inputField.classList.remove("is-invalid");
+        }
+    }
+
+    
+    // Function to validate form fields
+    function validateFormFields() {
+        var fields = document.querySelectorAll("input");
+        fields.forEach(function(field) {
+            var trimmedValue = field.value.trim();
+            if ((field.id === "fname" || field.id === "lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                showValidationMessage(field, 'Only letters are allowed.');
+            } else if ((field.id === "Specialization" || field.id === "lname") && !trimmedValue) {
+                showValidationMessage(field, 'This field cannot be empty.');
+            } else if (field.id === "mname") {
+                if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                    showValidationMessage(field, 'Only letters are allowed.');
+                } else if (/^\s/.test(field.value)) {
+                    showValidationMessage(field, 'Spaces before letters are not allowed.');
+                } else {
+                    hideValidationMessage(field);
+                }
+            } else if (field.id !== "mname" && /^\s/.test(field.value)) {
+                showValidationMessage(field, 'Spaces before letters are not allowed.');
+            } else if (field.id === "contact" && !/^\d*$/.test(field.value)) {
+                showValidationMessage(field, 'Contact number must contain only numbers.');
+            } else {
+                hideValidationMessage(field);
+            }
+        });
+    }
+
+    // Event listener for input fields to validate while typing
+    $("input").on("input", function() {
+        validateFormFields();
+    });
+
+    
     $('#addButton').on('click', function(event) {
         event.preventDefault(); // Prevent the default form submission
-        
+        validateFormFields();
+        var invalidFields = document.querySelectorAll(".is-invalid");
+        if (invalidFields.length > 0) {
+            return false; // Prevent form submission if there are validation errors
+        }
         // Unbind the click event to prevent redundant messages
         $(this).off('click');
 

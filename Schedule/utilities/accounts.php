@@ -953,6 +953,66 @@ if ($row['is_Lock_Account'] == 1) {
       <!-- Add data -->
       <script>
         $(document).ready(function(){
+
+            function showValidationMessage(inputField, message) {
+                // Check if validation message element exists, if not, create it
+                var validationMessageId = inputField.id + "_validation_message";
+                var validationMessageElement = document.getElementById(validationMessageId);
+                if (!validationMessageElement) {
+                    validationMessageElement = document.createElement("div");
+                    validationMessageElement.id = validationMessageId;
+                    validationMessageElement.classList.add("invalid-feedback");
+                    inputField.parentNode.appendChild(validationMessageElement);
+                }
+                // Update validation message text and display it
+                validationMessageElement.innerText = message;
+                inputField.classList.add("is-invalid");
+            }
+
+            // Function to hide validation message
+            function hideValidationMessage(inputField) {
+                var validationMessageId = inputField.id + "_validation_message";
+                var validationMessageElement = document.getElementById(validationMessageId);
+                if (validationMessageElement) {
+                    validationMessageElement.innerText = "";
+                    inputField.classList.remove("is-invalid");
+                }
+            }
+
+            
+            // Function to validate form fields
+            function validateFormFields() {
+                var fields = document.querySelectorAll("input");
+                fields.forEach(function(field) {
+                    var trimmedValue = field.value.trim();
+                    if ((field.id === "Fname" || field.id === "Lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                        showValidationMessage(field, 'Only letters are allowed.');
+                    } else if ((field.id === "Fname" || field.id === "Lname") && !trimmedValue) {
+                        showValidationMessage(field, 'This field cannot be empty.');
+                    } else if (field.id === "Mname") {
+                        if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                            showValidationMessage(field, 'Only letters are allowed.');
+                        } else if (/^\s/.test(field.value)) {
+                            showValidationMessage(field, 'Spaces before letters are not allowed.');
+                        } else {
+                            hideValidationMessage(field);
+                        }
+                    } else if (field.id !== "Mname" && /^\s/.test(field.value)) {
+                        showValidationMessage(field, 'Spaces before letters are not allowed.');
+                    } else if (field.id === "ContactNumber" && !/^\d*$/.test(field.value)) {
+                        showValidationMessage(field, 'Contact number must contain only numbers.');
+                    } else {
+                        hideValidationMessage(field);
+                    }
+                });
+            }
+
+            // Event listener for input fields to validate while typing
+            $("input").on("input", function() {
+                validateFormFields();
+            });
+
+
             $('#instructor').change(function() {
                 var instructorFields = $('#instructor_fields');
                 instructorFields.toggle($(this).is(':checked'));
@@ -960,6 +1020,11 @@ if ($row['is_Lock_Account'] == 1) {
 
             $('#addButton').click(function(e){
                 e.preventDefault();
+                validateFormFields();
+                var invalidFields = document.querySelectorAll(".is-invalid");
+                if (invalidFields.length > 0) {
+                    return false; // Prevent form submission if there are validation errors
+                }
                 var form = $('.needs-validation')[0];
                 if (form.checkValidity()) {
                     var formData = new FormData(form);

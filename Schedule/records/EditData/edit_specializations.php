@@ -618,7 +618,7 @@ include('session_out.php');
                                 var subid = "<?php echo $_GET['subid']; ?>";
                                 window.location.href = 'edit_specializations.php?subid=' + subid;
                             });
-                        setChangesMade = false;
+                        
                         } else if (response.error) {
                             Swal.fire({
                                 icon: 'warning',
@@ -750,6 +750,7 @@ $(document).ready(function() {
                         $('form')[0].reset(); // Reset the form
                         location.reload();
                     },
+                    changesMade = false;
                     error: function() {
                         Swal.fire('Error', 'Failed to add specialization', 'error'); // Display error message
                     }

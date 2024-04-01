@@ -42,18 +42,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $yearLevels = [11, 11, 12, 12];
             $semesters = [1, 2, 1, 2];
 
-            $sqlInsertDepartment = "INSERT INTO departments (DepartmentTypeNameID, GradeLevel, Semester, StrandID, Active)
-                                    VALUES (?, ?, ?, ?, ?)";
+            $sqlInsertDepartment = "INSERT INTO departments (DepartmentTypeNameID, GradeLevel, Semester, StrandID)
+                                    VALUES (?, ?, ?, ?)";
             $stmtInsertDepartment = $conn->prepare($sqlInsertDepartment);
 
             for ($i = 0; $i < count($yearLevels); $i++) {
                 $stmtInsertDepartment->bind_param(
-                    "iiiii",
+                    "iiii",
                     $departmentTypeNameID,
                     $yearLevels[$i],
                     $semesters[$i],
-                    $StrandID,
-                    $active
+                    $StrandID
+                    
                 );
                 $resultInsertDepartment = $stmtInsertDepartment->execute();
 

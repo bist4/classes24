@@ -361,7 +361,13 @@ include('session_out.php');
                                     <div class="form-group d-flex align-items-center">
                                         <input type="text" class="form-control" id="Specialization<?php echo $secdata['InstructorSpecializationsID'];?> " name="specializations[]" value="<?php echo $secdata['SpecializationName'];?>" required> 
                                         <div>
-                                            <a href="#"><i class="fas fa-trash"></i></a> 
+                                            <!-- <a href="#" class="trash-btn">
+                                                <i class="fas fa-trash"></i>
+                                            </a>  -->
+                                            <button class='btn btn-success trash-btn' title='Trash' data-user-id='<?php echo $secdata['InstructorSpecializationsID']; ?>'>
+                                                <i class='fas fa-trash'></i>
+                                            </button>
+
                                         </div>
                                     </div>
                                     </div>
@@ -792,15 +798,15 @@ $(document).ready(function () {
 </script>
 
 
-<!-- 
+
 <script>
 $(document).ready(function () {
-    $(".archive-btn").click(function () {
+    $(".trash-btn").click(function () {
         var instructorID = $(this).data('user-id');
 
         Swal.fire({
             title: 'Confirmation',
-            text: "Do you want to archive?",
+            text: "Do you want to delete this item?",
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -810,7 +816,7 @@ $(document).ready(function () {
             if (result.isConfirmed) {
                 // Perform retrieval using AJAX
                 $.ajax({
-                    url: 'Archive/archive_istructor.php',
+                    url: 'DataDelete/delete_spec.php',
                     type: 'POST',
                     data: { instructorID: instructorID },
                     success: function(response) {
@@ -818,11 +824,11 @@ $(document).ready(function () {
                         if (response.success) {
                             // Redirect to archive.php after successful retrieval
                             Swal.fire(
-                                'Archived!',
-                                'Instructor has been archived.',
+                                'Deleted',
+                                'Specialization deleted succesfully.',
                                 'success'
                             ).then(() => {
-                                window.location.href = 'view_instructor.php';
+                                window.location.href = 'edit_specializations.php';
                             });
                         } else {
                             // Display error message
@@ -848,7 +854,7 @@ $(document).ready(function () {
     });
 });
 
-</script> -->
+</script>
 
 
     

@@ -74,8 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach($specializationsArray as $specialization){
             $specialization = $conn->real_escape_string($specialization); // Escape special characters
-            $specializations_sql = "INSERT INTO instructorspecializations (InstructorID, SpecializationName)
-            VALUES ($instructor_id, '$specialization')";
+            $specializations_sql = "INSERT INTO instructorspecializations (InstructorID, SpecializationName, Active)
+            VALUES ($instructor_id, '$specialization', 1)";
             if ($conn->query($specializations_sql) === TRUE) {
                 $response['success'] = "New instructor specialization(s) record created successfully";
             } else {

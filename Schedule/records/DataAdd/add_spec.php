@@ -7,6 +7,7 @@ session_start();
 // Get the posted data
 $instructorID = $_POST['InstructorID'];
 $specializations = $_POST['Specializations'];
+$active = 1;
 
 // Initialize an array to store successfully added specializations
 $addedSpecializations = array();
@@ -17,7 +18,7 @@ foreach ($specializations as $specialization) {
     $specialization = mysqli_real_escape_string($conn, $specialization);
 
     // Insert query
-    $query = "INSERT INTO instructorspecializations (InstructorID, SpecializationName) VALUES ('$instructorID', '$specialization')";
+    $query = "INSERT INTO instructorspecializations (InstructorID, SpecializationName, Active) VALUES ('$instructorID', '$specialization', '$active')";
 
     // Execute query
     if (mysqli_query($conn, $query)) {

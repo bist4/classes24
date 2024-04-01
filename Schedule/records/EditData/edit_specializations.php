@@ -792,6 +792,65 @@ $(document).ready(function () {
 </script>
 
 
+<!-- 
+<script>
+$(document).ready(function () {
+    $(".archive-btn").click(function () {
+        var instructorID = $(this).data('user-id');
+
+        Swal.fire({
+            title: 'Confirmation',
+            text: "Do you want to archive?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform retrieval using AJAX
+                $.ajax({
+                    url: 'Archive/archive_istructor.php',
+                    type: 'POST',
+                    data: { instructorID: instructorID },
+                    success: function(response) {
+                        response = JSON.parse(response);
+                        if (response.success) {
+                            // Redirect to archive.php after successful retrieval
+                            Swal.fire(
+                                'Archived!',
+                                'Instructor has been archived.',
+                                'success'
+                            ).then(() => {
+                                window.location.href = 'view_instructor.php';
+                            });
+                        } else {
+                            // Display error message
+                            Swal.fire(
+                                'Error!',
+                                response.message,
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors if any
+                        console.error(xhr.responseText);
+                        Swal.fire(
+                            'Error!',
+                            'Failed to archive instructor. Please try again later.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
+});
+
+</script> -->
+
+
     
 
 </body>

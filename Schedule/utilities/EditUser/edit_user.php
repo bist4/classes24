@@ -657,8 +657,10 @@ include('../session_out.php');
 </script> -->
 <script>
     $(document).ready(function(){
-        $('#updateBtn').click(function(){
+        $('#updateBtn').click(function(event){
 
+            event.preventDefault()
+            
             var fields = document.querySelectorAll("input");
             var error = false;
 
@@ -701,7 +703,7 @@ include('../session_out.php');
                 text: 'Do you want to update the user data?',
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, update it!',
+                confirmButtonText: 'Yes',
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {

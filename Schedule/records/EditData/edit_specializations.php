@@ -38,7 +38,7 @@ if (isset($_SESSION['Username'])) {
            FROM instructors i 
            INNER JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
            LEFT JOIN instructorspecializations isp ON i.InstructorID = isp.InstructorID          
-           WHERE i.InstructorID IN ($placeholders)";
+           WHERE i.InstructorID IN ($placeholders) AND isp.Active = 1";
 
 
 

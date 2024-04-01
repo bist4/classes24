@@ -827,9 +827,10 @@ $(document).ready(function () {
                                 'Deleted',
                                 'Specialization deleted succesfully.',
                                 'success'
-                            ).then(() => {
-                                window.location.href = 'edit_specializations.php';
-                            });
+                            ).then(function() {
+				    var subid ="<?php echo $_GET['subid']?>";
+                                    window.location.href = 'edit_specializations.php?subid=' + subid;
+                                });
                         } else {
                             // Display error message
                             Swal.fire(

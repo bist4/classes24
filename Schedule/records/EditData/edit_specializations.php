@@ -553,7 +553,9 @@ include('session_out.php');
         });
 
         $('#updateButton').click(function(e){
+            changesMade = false;
             e.preventDefault();
+
             validateFormFields();
             var invalidFields = document.querySelectorAll(".is-invalid");
             if (invalidFields.length > 0) {

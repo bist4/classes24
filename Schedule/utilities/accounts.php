@@ -985,11 +985,11 @@ if ($row['is_Lock_Account'] == 1) {
                 var fields = document.querySelectorAll("input");
                 fields.forEach(function(field) {
                     var trimmedValue = field.value.trim();
-                    if ((field.id === "Fname" || field.id === "Lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                    if ((field.id === "fname" || field.id === "lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                         showValidationMessage(field, 'Only letters are allowed.');
-                    } else if ((field.id === "Fname" || field.id === "Lname") && !trimmedValue) {
+                    } else if ((field.id === "fname" || field.id === "lname") && !trimmedValue) {
                         showValidationMessage(field, 'This field cannot be empty.');
-                    } else if (field.id === "Mname") {
+                    } else if (field.id === "mname") {
                         if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                             showValidationMessage(field, 'Only letters are allowed.');
                         } else if (/^\s/.test(field.value)) {
@@ -997,9 +997,9 @@ if ($row['is_Lock_Account'] == 1) {
                         } else {
                             hideValidationMessage(field);
                         }
-                    } else if (field.id !== "Mname" && /^\s/.test(field.value)) {
+                    } else if (field.id !== "mname" && /^\s/.test(field.value)) {
                         showValidationMessage(field, 'Spaces before letters are not allowed.');
-                    } else if (field.id === "ContactNumber" && !/^\d*$/.test(field.value)) {
+                    } else if (field.id === "contact" && !/^\d*$/.test(field.value)) {
                         showValidationMessage(field, 'Contact number must contain only numbers.');
                     } else {
                         hideValidationMessage(field);

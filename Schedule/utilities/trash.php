@@ -1004,7 +1004,7 @@ if ($row['is_Lock_Account'] == 1) {
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes!'
+                        confirmButtonText: 'Yes'
                     }).then(function(result) {
                         if (result.isConfirmed) {
                             var loading = Swal.fire({

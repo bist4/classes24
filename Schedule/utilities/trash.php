@@ -711,7 +711,7 @@ if ($row['is_Lock_Account'] == 1) {
                     // Show Confirmation dialog
                     Swal.fire({
                         title: 'Confirmation',
-                        text: 'Are you sure you want to restore this section?',
+                        text: 'Are you sure you want to restore this room?',
                         icon: 'question',
                         showCancelButton: true,
                         confirmButtonText: 'Yes',

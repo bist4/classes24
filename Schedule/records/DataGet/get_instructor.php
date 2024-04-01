@@ -197,7 +197,7 @@ $(document).ready(function () {
             if (result.isConfirmed) {
                 // Perform retrieval using AJAX
                 $.ajax({
-                    url: 'Archive/archive_instructor.php',
+                    url: 'Archive/archive_istructor.php',
                     type: 'POST',
                     data: { instructorID: instructorID },
                     success: function(response) {

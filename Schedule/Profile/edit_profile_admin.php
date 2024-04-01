@@ -520,48 +520,78 @@ include('session_out.php');
 
     <script>
     $(document).ready(function () {
-        $("#update_btn").click(function () {
-            // Validate form fields
-            var fields = document.querySelectorAll("input");
-            var error = false;
-            fields.forEach(function(field) {
-                var trimmedValue = field.value.trim(); // Trim the value to remove leading and trailing spaces
-                if (field.id !== "Mname" && trimmedValue === "") { // Exclude middle name field from validation
-                    error = true;
-                    field.classList.add("is-invalid");
-                } else if (field.id !== "Mname" && /^\s/.test(field.value)) { // Exclude middle name field from validation
-                    error = true;
-                    field.classList.add("is-invalid");
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Spaces before letters are not allowed.',
-                    });
-                } else {
-                    field.classList.remove("is-invalid");
-                }
+        // Function to create and show validation message
+        function showValidationMessage(inputField, message) {
+            // Check if validation message element exists, if not, create it
+            var validationMessageId = inputField.id + "_validation_message";
+            var validationMessageElement = document.getElementById(validationMessageId);
+            if (!validationMessageElement) {
+                validationMessageElement = document.createElement("div");
+                validationMessageElement.id = validationMessageId;
+                validationMessageElement.classList.add("invalid-feedback");
+                inputField.parentNode.appendChild(validationMessageElement);
+            }
+            // Update validation message text and display it
+            validationMessageElement.innerText = message;
+            inputField.classList.add("is-invalid");
+        }
 
-                // Validate contact number
-                if (field.id === "ContactNumber" && !/^\d+$/.test(field.value)) {
-                    error = true;
-                    field.classList.add("is-invalid");
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Contact number must contain only numbers.',
-                    });
+        // Function to hide validation message
+        function hideValidationMessage(inputField) {
+            var validationMessageId = inputField.id + "_validation_message";
+            var validationMessageElement = document.getElementById(validationMessageId);
+            if (validationMessageElement) {
+                validationMessageElement.innerText = "";
+                inputField.classList.remove("is-invalid");
+            }
+        }
+
+        // Function to validate form fields
+        function validateFormFields() {
+            var fields = document.querySelectorAll("input");
+            fields.forEach(function(field) {
+                var trimmedValue = field.value.trim();
+                if ((field.id === "Fname" || field.id === "Lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                    showValidationMessage(field, 'Only letters are allowed.');
+                } else if ((field.id === "Fname" || field.id === "Lname") && !trimmedValue) {
+                    showValidationMessage(field, 'This field cannot be empty.');
+                } else if (field.id === "Mname") {
+                    if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                        showValidationMessage(field, 'Only letters are allowed.');
+                    } else if (/^\s/.test(field.value)) {
+                        showValidationMessage(field, 'Spaces before letters are not allowed.');
+                    } else {
+                        hideValidationMessage(field);
+                    }
+                } else if (field.id !== "Mname" && /^\s/.test(field.value)) {
+                    showValidationMessage(field, 'Spaces before letters are not allowed.');
+                } else if (field.id === "ContactNumber" && !/^\d*$/.test(field.value)) {
+                    showValidationMessage(field, 'Contact number must contain only numbers.');
+                } else {
+                    hideValidationMessage(field);
                 }
             });
+        }
 
-            if (error) {
-                return false;
+
+        // Event listener for input fields to validate while typing
+        $("input").on("input", function() {
+            validateFormFields();
+        });
+
+        // Event listener for update button to trigger validation
+        $("#update_btn").click(function () {
+            validateFormFields();
+            var invalidFields = document.querySelectorAll(".is-invalid");
+            if (invalidFields.length > 0) {
+                return false; // Prevent form submission if there are validation errors
             }
 
             // Display a SweetAlert confirmation message
             Swal.fire({
-                title: 'Warning',
+                title: 'Confirmation',
                 text: 'Do you want to update your profile?',
-                icon: 'warning',
+                icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',

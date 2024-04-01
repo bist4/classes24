@@ -998,7 +998,7 @@ if ($row['is_Lock_Account'] == 1) {
 
                     // Show confirmation message
                     Swal.fire({
-                        title: 'Are you sure?',
+                        title: 'Confirmation',
                         text: 'You are about to restore this class section.',
                         icon: 'question',
                         showCancelButton: true,
@@ -1093,7 +1093,7 @@ if ($row['is_Lock_Account'] == 1) {
 
                     // Show a confirmation dialog
                     Swal.fire({
-                        title: 'Are you sure?',
+                        title: 'Confirmation',
                         text: 'You are about to delete this item.',
                         icon: 'question',
                         showCancelButton: true,

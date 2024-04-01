@@ -618,6 +618,7 @@ include('session_out.php');
                                 var subid = "<?php echo $_GET['subid']; ?>";
                                 window.location.href = 'edit_specializations.php?subid=' + subid;
                             });
+                        setChangesMade = false;
                         } else if (response.error) {
                             Swal.fire({
                                 icon: 'warning',

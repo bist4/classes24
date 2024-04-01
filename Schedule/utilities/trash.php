@@ -714,7 +714,7 @@ if ($row['is_Lock_Account'] == 1) {
                         text: 'You are about to restore this room.',
                         icon: 'question',
                         showCancelButton: true,
-                        confirmButtonText: 'Yes, restore it',
+                        confirmButtonText: 'Yes',
                         cancelButtonText: 'Cancel',
                         cancelButtonColor: '#d33',
                         reverseButtons: false
@@ -801,7 +801,7 @@ if ($row['is_Lock_Account'] == 1) {
                         text: 'You are about to restore this strand.',
                         icon: 'question',
                         showCancelButton: true,
-                        confirmButtonText: 'Yes, restore it',
+                        confirmButtonText: 'Yes',
                         cancelButtonText: 'Cancel',
                         cancelButtonColor: '#d33',
                         reverseButtons: false
@@ -894,7 +894,7 @@ if ($row['is_Lock_Account'] == 1) {
                         text: 'You are about to restore this subject.',
                         icon: 'question',
                         showCancelButton: true,
-                        confirmButtonText: 'Yes, restore it',
+                        confirmButtonText: 'Yes',
                         cancelButtonText: 'Cancel',
                         cancelButtonColor: '#d33',
                         reverseButtons: false
@@ -1004,7 +1004,7 @@ if ($row['is_Lock_Account'] == 1) {
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, restore it!'
+                        confirmButtonText: 'Yes!'
                     }).then(function(result) {
                         if (result.isConfirmed) {
                             var loading = Swal.fire({
@@ -1099,7 +1099,7 @@ if ($row['is_Lock_Account'] == 1) {
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes, delete it'
+                        confirmButtonText: 'Yes'
                     }).then((result) => {
 
                        

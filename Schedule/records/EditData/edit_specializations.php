@@ -746,17 +746,46 @@ $(document).ready(function() {
                     url: '../DataAdd/add_spec.php',
                     data: data,
                     success: function(response) {
+                        changesMade = false;
                         Swal.fire('Success', response, 'success'); // Display success message
                         $('form')[0].reset(); // Reset the form
                         location.reload();
                     },
-                    changesMade = false;
+                    
                     error: function() {
                         Swal.fire('Error', 'Failed to add specialization', 'error'); // Display error message
                     }
                 });
             }
         });
+    });
+});
+
+</script>
+
+<script>
+    // Function to handle the beforeunload event
+function handleBeforeUnload(event) {
+    if (changesMade) {
+        const confirmationMessage = "Changes you made may not be saved. Are you sure you want to leave?";
+        (event || window.event).returnValue = confirmationMessage;
+        return confirmationMessage;
+    }
+}
+
+// Function to show a warning for unsaved changes
+function showUnsavedChangesWarning() {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Changes you made may not be saved. Are you sure you want to leave?',
+    });
+}
+
+window.addEventListener('beforeunload', handleBeforeUnload);
+$(document).ready(function () {
+    $(".form-control").change(function() {
+        changesMade = true; // Set changesMade flag to true when form fields change
     });
 });
 

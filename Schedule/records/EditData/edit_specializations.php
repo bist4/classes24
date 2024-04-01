@@ -816,7 +816,7 @@ $(document).ready(function () {
             if (result.isConfirmed) {
                 // Perform retrieval using AJAX
                 $.ajax({
-                    url: 'DataDelete/delete_spec.php',
+                    url: '../DataDelete/delete_spec.php',
                     type: 'POST',
                     data: { instructorID: instructorID },
                     success: function(response) {

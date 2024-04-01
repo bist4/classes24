@@ -68,7 +68,7 @@ if (isset($_POST['departmentID'])) {
             echo "<td>" . ($user['Status'] == 1 ? 'Full Time' : 'Part Time') . "</td>";
             echo "<td>";
             echo "<div class='d-flex justify-content-center'>";
-            echo "<button class='btn btn-info' data-toggle='modal' data-target='#exampleModal' title='View'
+            echo "<button class='btn btn-info mr-3' data-toggle='modal' data-target='#exampleModal' title='View'
                     data-fname='" . $user['Fname'] . "'
                     data-mname='" . $user['Mname'] . "'
                     data-lname='" . $user['Lname'] . "'

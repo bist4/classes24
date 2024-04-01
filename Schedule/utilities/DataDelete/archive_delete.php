@@ -1,10 +1,23 @@
 <?php
 require('../../config/db_connection.php');
  
+
+session_start();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     
     if (isset($_POST['RoomID'])) {
         $roomID = $_POST['RoomID'];
+
+
+          // Fetch room information before deletion
+        $sqlRoomInfo = "SELECT RoomNumber FROM rooms WHERE RoomID = ?";
+        $stmtRoomInfo = $conn->prepare($sqlRoomInfo);
+        $stmtRoomInfo->bind_param("i", $roomID);
+        $stmtRoomInfo->execute();
+        $resultRoomInfo = $stmtRoomInfo->get_result();
+        $rowRoomInfo = $resultRoomInfo->fetch_assoc();
+        $roomNumber = $rowRoomInfo['RoomNumber']; // Get RoomNumber
 
         $newActiveStatus = 10;  // 10 means delete
 
@@ -16,16 +29,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             // Update was successful
             echo "Room deleted successfully.";
 
-            // Log the activity
-            $dateTime = date('Y-m-d H:i:s');
-            $activity = "Deleted Room with ID: $roomID";
-            $userID = 19; // Replace with the actual user ID
-            $active = 1; // Assuming 1 means active in the logs
+           // Log Activity
+           if(isset($_SESSION['Username'])){
+            $loginnedUsername = $_SESSION['Username'];
 
-            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active) VALUES (?, ?, ?, ?)";
-            $stmtLog = $conn->prepare($sqlLog);
-            $stmtLog->bind_param("ssii", $dateTime, $activity, $userID, $active);
-            $stmtLog->execute();
+            $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+            $stmtUserCheck = $conn->prepare($sqlUserCheck);
+            $stmtUserCheck->bind_param("s", $loginnedUsername);
+            $stmtUserCheck->execute();
+            $resultUserCheck = $stmtUserCheck->get_result();
+
+
+            if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                $row = $resultUserCheck->fetch_assoc();
+                $userInfoID = $row['UserInfoID'];
+
+                $activity = 'Delete Room number ' . $roomNumber;
+                $currentDateTime = date('Y-m-d H:i:s');
+                $active = 1;
+
+                $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                $stmtLog = $conn->prepare($sqlLog);
+                $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+                $resultLog = $stmtLog->execute();
+                
+            }
+
+
+        }
+            
         } else {
             // Update failed
             echo "Error deleting rooms: " . $conn->error;
@@ -38,6 +70,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     elseif(isset($_POST['StrandID'])){
         $strandID = $_POST['StrandID'];
 
+
+          // Fetch room information before deletion
+          $sqlStrandInfo = "SELECT StrandName FROM strands WHERE StrandID = ?";
+          $stmtStrandInfo = $conn->prepare($sqlStrandInfo);
+          $stmtStrandInfo->bind_param("i", $strandID);
+          $stmtStrandInfo->execute();
+          $resultStrandInfo = $stmtStrandInfo->get_result();
+          $rowStrandInfo = $resultStrandInfo->fetch_assoc();
+          $strandName = $rowStrandInfo['StrandName']; // Get StrandName
+       
+
+
         $newActiveStatus = 10;  //10 means delete
 
         $sqlUpdate = "UPDATE strands SET Active = ? WHERE StrandID = ?";
@@ -48,17 +92,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             // Update was successful
             echo "Strand deleted successfully.";
 
+            // Log Activity
+            if(isset($_SESSION['Username'])){
+                $loginnedUsername = $_SESSION['Username'];
 
-            // Log the activity
-            $dateTime = date('Y-m-d H:i:s');
-            $activity = "Deleted Strand with ID: $strandID";
-            $userID = 19; // Replace with the actual user ID
-            $active = 1; // Assuming 1 means active in the logs
+                $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                $stmtUserCheck->bind_param("s", $loginnedUsername);
+                $stmtUserCheck->execute();
+                $resultUserCheck = $stmtUserCheck->get_result();
 
-            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active) VALUES (?, ?, ?, ?)";
-            $stmtLog = $conn->prepare($sqlLog);
-            $stmtLog->bind_param("ssii", $dateTime, $activity, $userID, $active);
-            $stmtLog->execute();
+
+                if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                    $row = $resultUserCheck->fetch_assoc();
+                    $userInfoID = $row['UserInfoID'];
+    
+                    $activity = 'Delete Strand name' .$strandName;
+                    $currentDateTime = date('Y-m-d H:i:s');
+                    $active = 1;
+
+                    $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                    $stmtLog = $conn->prepare($sqlLog);
+                    $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+                    $resultLog = $stmtLog->execute();
+                    
+                }
+
+
+            }
+ 
         } else {
             // Update failed
             echo "Error deleting strand: " . $conn->error;
@@ -71,6 +133,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     elseif(isset($_POST['SubjectID'])){
         $subjectID = $_POST['SubjectID'];
 
+        // Fetch room information before deletion
+        $sqlSubjectInfo = "SELECT SubjectName FROM subjects WHERE SubjectID = ?";
+        $stmtSubjectInfo = $conn->prepare($sqlSubjectInfo);
+        $stmtSubjectInfo->bind_param("i", $subjectID);
+        $stmtSubjectInfo->execute();
+        $resultSubjectInfo = $stmtSubjectInfo->get_result();
+        $rowSubjectInfo = $resultSubjectInfo->fetch_assoc();
+        $subjectName = $rowSubjectInfo['SubjectName']; // Get SubjectName
+
         $newActiveStatus = 10;  //10 means delete
 
         $sqlUpdate = "UPDATE subjects SET Active = ? WHERE SubjectID = ?";
@@ -81,16 +152,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             // Update was successful
             echo "Subject deleted successfully.";
 
-            // Log the activity
-            $dateTime = date('Y-m-d H:i:s');
-            $activity = "Deleted Subject with ID: $subjectID";
-            $userID = 19; // Replace with the actual user ID
-            $active = 1; // Assuming 1 means active in the logs
+             // Log Activity
+            if(isset($_SESSION['Username'])){
+                $loginnedUsername = $_SESSION['Username'];
 
-            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active) VALUES (?, ?, ?, ?)";
-            $stmtLog = $conn->prepare($sqlLog);
-            $stmtLog->bind_param("ssii", $dateTime, $activity, $userID, $active);
-            $stmtLog->execute();
+                $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                $stmtUserCheck->bind_param("s", $loginnedUsername);
+                $stmtUserCheck->execute();
+                $resultUserCheck = $stmtUserCheck->get_result();
+
+
+                if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                    $row = $resultUserCheck->fetch_assoc();
+                    $userInfoID = $row['UserInfoID'];
+    
+                    $activity = 'Delete Subject name' . $subjectName;
+                    $currentDateTime = date('Y-m-d H:i:s');
+                    $active = 1;
+
+                    $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                    $stmtLog = $conn->prepare($sqlLog);
+                    $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+                    $resultLog = $stmtLog->execute();
+                    
+                }
+
+
+            }
         } else {
             // Update failed
             echo "Error deleting subject: " . $conn->error;
@@ -104,9 +193,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     elseif(isset($_POST['SectionID'])){
         $sectionID = $_POST['SectionID'];
 
+        // Fetch room information before deletion
+        $sqlSectionInfo = "SELECT SectionName FROM classsections WHERE SectionID = ?";
+        $stmtSectionInfo = $conn->prepare($sqlSectionInfo);
+        $stmtSectionInfo->bind_param("i", $sectionID);
+        $stmtSectionInfo->execute();
+        $resultSectionInfo = $stmtSectionInfo->get_result();
+        $rowSectionInfo = $resultSectionInfo->fetch_assoc();
+        $sectionName = $rowSectionInfo['SectionName']; // Get SectionName
+        
         $newActiveStatus = 10;  //10 means delete
 
-        $sqlUpdate = "UPDATE sections SET Active = ? WHERE SectionID = ?";
+        $sqlUpdate = "UPDATE classsections SET Active = ? WHERE SectionID = ?";
         $stmtUpdate = $conn->prepare($sqlUpdate);
         $stmtUpdate->bind_param("ii", $newActiveStatus, $sectionID);
 
@@ -114,16 +212,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             // Update was successful
             echo "Section deleted successfully.";
 
-            // Log the activity
-            $dateTime = date('Y-m-d H:i:s');
-            $activity = "Deleted Section with ID: $sectionID";
-            $userID = 19; // Replace with the actual user ID
-            $active = 1; // Assuming 1 means active in the logs
+            // Log Activity
+            if(isset($_SESSION['Username'])){
+                $loginnedUsername = $_SESSION['Username'];
 
-            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active) VALUES (?, ?, ?, ?)";
-            $stmtLog = $conn->prepare($sqlLog);
-            $stmtLog->bind_param("ssii", $dateTime, $activity, $userID, $active);
-            $stmtLog->execute();
+                $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                $stmtUserCheck->bind_param("s", $loginnedUsername);
+                $stmtUserCheck->execute();
+                $resultUserCheck = $stmtUserCheck->get_result();
+
+
+                if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                    $row = $resultUserCheck->fetch_assoc();
+                    $userInfoID = $row['UserInfoID'];
+    
+                    $activity = 'Delete Class Section name ' . $sectionName;
+                    $currentDateTime = date('Y-m-d H:i:s');
+                    $active = 1;
+
+                    $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                    $stmtLog = $conn->prepare($sqlLog);
+                    $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+                    $resultLog = $stmtLog->execute();
+                    
+                }
+
+
+            }
         } else {
             // Update failed
             echo "Error deleting section: " . $conn->error;
@@ -134,37 +250,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     }
 
-    elseif(isset($_POST['InstructorID'])){
-        $instructorID = $_POST['InstructorID'];
-
-        $newActiveStatus = 10;  //10 means delete
-
-        $sqlUpdate = "UPDATE instructor SET Active = ? WHERE InstructorID = ?";
-        $stmtUpdate = $conn->prepare($sqlUpdate);
-        $stmtUpdate->bind_param("ii", $newActiveStatus, $instructorID);
-
-        if ($stmtUpdate->execute()) {
-            // Update was successful
-            echo "Instructor deleted successfully.";
-            // Log the activity
-            $dateTime = date('Y-m-d H:i:s');
-            $activity = "Deleted Instructor with ID: $instructorID";
-            $userID = 19; // Replace with the actual user ID
-            $active = 1; // Assuming 1 means active in the logs
-
-            $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active) VALUES (?, ?, ?, ?)";
-            $stmtLog = $conn->prepare($sqlLog);
-            $stmtLog->bind_param("ssii", $dateTime, $activity, $userID, $active);
-            $stmtLog->execute();
-        } else {
-            // Update failed
-            echo "Error deleting instructor: " . $conn->error;
-        }
-            
-         // Close the prepared statement
-        $stmtUpdate->close();
-
-    }
     
 
 }else {

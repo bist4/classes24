@@ -51,6 +51,7 @@ if ($row['is_Lock_Account'] == 1) {
         <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
+        
         <link href="../css/sb-admin-2.min.css" rel="stylesheet">
         <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
         <script src="../assets/js/alert.js"></script>
@@ -151,7 +152,7 @@ if ($row['is_Lock_Account'] == 1) {
                             
                             <a class="collapse-item" href="accounts.php">Account Management</a>
                             <a class="collapse-item" href="archive.php">Archive</a>
-                            <!-- <a class="collapse-item" href="backup.php">Backup</a> -->
+                            <a class="collapse-item" href="backup.php">Backup</a>
                             <a class="collapse-item" href="logs.php">Activity History</a>
                             <a class="collapse-item active" href="trash.php">Trash</a>
 
@@ -199,8 +200,8 @@ if ($row['is_Lock_Account'] == 1) {
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
-                                    <!-- <img class="img-profile rounded-circle"
-                                        src="../img/undraw_profile.svg"> -->
+                                    <img class="img-profile rounded-circle"
+                                        src="../img/undraw_profile.svg">
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -241,7 +242,7 @@ if ($row['is_Lock_Account'] == 1) {
                                     <h5 class="card-title">Strand</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-text">Click here to view strand archives data.</p>
+                                    <p class="card-text">Click here to view the trashed data.</p>
                                     <!-- <button class="btn btn-primary" id="buttonId" onclick="toggleTable('userTableInstructor', 'buttonId')">View Instructor</button> -->
                                     <button class="btn btn-primary" id="buttonStrand" onclick="toggleTable('userTableStrand', 'buttonStrand', 'userTableInsTructor')">View</button>
                                     
@@ -328,7 +329,7 @@ if ($row['is_Lock_Account'] == 1) {
                                     <h5 class="card-title">Subject</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-text">Click here to view subject archives data.</p>
+                                    <p class="card-text">Click here to view the trashed data.</p>
                                     <!-- <button class="btn btn-primary" id="buttonId" onclick="toggleTable('userTableInstructor', 'buttonId')">View Instructor</button> -->
                                     <button class="btn btn-primary" id="buttonSubject" onclick="toggleTable('userTableSubject', 'buttonSubject', 'userTableRoom')">View</button>
                                 </div>
@@ -345,7 +346,6 @@ if ($row['is_Lock_Account'] == 1) {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Department</th>
                                                 <th>Subject Code</th>
                                                 <th>Subject Name</th>
                                                 <th>Minutes Per Week</th>
@@ -355,7 +355,6 @@ if ($row['is_Lock_Account'] == 1) {
                                         <tfoot>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Department</th>
                                                 <th>Subject Code</th>
                                                 <th>Subject Name</th>
                                                 <th>Minutes Per Week</th>
@@ -415,10 +414,10 @@ if ($row['is_Lock_Account'] == 1) {
                              <!-- Section -->
                              <div class="card" id="userCard">
                                 <div class="card-header">
-                                    <h5 class="card-title">Section</h5>
+                                    <h5 class="card-title">Class Section</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-text">Click here to view section archives data.</p>
+                                    <p class="card-text">Click here to view the trashed data.</p>
                                     <!-- <button class="btn btn-primary" id="buttonId" onclick="toggleTable('userTableRoom', 'buttonId')">View Room</button> -->
                                     <button class="btn btn-primary" id="buttonSection" onclick="toggleTable('userTableSection', 'buttonSection', 'userTableInstructor')">View</button>
                                 
@@ -454,7 +453,7 @@ if ($row['is_Lock_Account'] == 1) {
                                         <tbody>
                                             <?php
                                                 require('../config/db_connection.php');
-                                                $table = mysqli_query($conn, "SELECT *  FROM sections 
+                                                $table = mysqli_query($conn, "SELECT *  FROM classsections 
                                                 where Active=0");
 
                                                 $count = 0;
@@ -495,128 +494,6 @@ if ($row['is_Lock_Account'] == 1) {
                         </div>
 
 
-                        <!-- Instructor Table -->
-                        <!-- <div class="card shadow mb-4" >
-                            <div class="card" id="userCard">
-                                <div class="card-header">
-                                    <h5 class="card-title">Instructors</h5>
-                                </div>
-                                <div class="card-body"> -->
-                                    <!-- <p class="card-text">Click here to view instructor archives data.</p> -->
-                                    <!-- <button class="btn btn-primary" id="buttonId" onclick="toggleTable('userTableInstructor', 'buttonId')">View Instructor</button> -->
-                                    <!-- <button class="btn btn-primary" id="buttonInstructor" onclick="toggleTable('userTableInstructor', 'buttonInstructor', 'userTableRoom')">View</button>
-                                </div>
-                            </div> -->
-                           
-
-                            <!-- <div class="card mt-3" id="userTableInstructor" style="display: none;">
-                                <div class="card-header">
-                                    <h5 class="card-title">Instructor Table</h5>
-                                </div>
-
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Department</th>
-                                                <th>Full Name</th>
-                                                <th>Gender</th>
-                                                <th>Age</th>
-                                                <th>Birthday</th>
-                                                <th>Address</th>
-                                                <th>Contact Number</th>
-                                                <th>Email</th>
-                                                <th>Specialization</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-					                        </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Department</th>
-                                                <th>Full Name</th>
-                                                <th>Gender</th>
-                                                <th>Age</th>
-                                                <th>Birthday</th>
-                                                <th>Address</th>
-                                                <th>Contact Number</th>
-                                                <th>Email</th>
-                                                <th>Specialization</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody> -->
-                                            <!-- <
-                                                require('../config/db_connection.php');
-                                                $table = mysqli_query($conn, "SELECT instructor.*, department.DepartmentID, departmenttypename.DepartmentTypeName FROM instructor 
-                                                INNER JOIN department ON instructor.DepartmentID = department.DepartmentID
-                                                INNER JOIN departmenttypename ON department.DepartmentTypeNameID = departmenttypename.DepartmentTypeNameID
-                                                WHERE instructor.Active = 0");
-
-                                                $count = 0;
-                                                while ($row = mysqli_fetch_array($table)) {
-                                                    $count++;
-                                                ?>
-                                                    <tr>
-                                                        <td>< echo $count; ?></td>
-                                                        <td>< echo $row['DepartmentTypeName']; ?></td>
-                                                        <td>    
-                                                            < echo $row['Fname']; ?>
-                                                            < echo $row['Mname']; ?>
-                                                            < echo $row['Lname']; ?>
-                                                    
-                                                        </td>
-                                                        <td>< echo $row['Gender']; ?></td>
-                                                        <td>< echo $row['Age']; ?></td>
-                                                        <td>< echo $row['Birthday']; ?></td>
-                                                        <td>< echo $row['Address']; ?></td>
-                                                        <td>< echo $row['ContactNumber']; ?></td>
-                                                        <td>< echo $row['Email']; ?></td>
-                                                        <td>< echo $row['Specialization']; ?></td>
-                                                        <td>< echo $row['Status']; ?></td>
-
-                                                        <td>
-                                                        <div class="d-flex justify-content-center"> -->
-                                                            <!-- <a href="#" class="btn btn-primary mx-2"><i class="fa fa-edit"></i></a> -->
-                                                            <!-- <button class="btn btn-primary mx-2 btn-reply" data-toggle="modal" 
-                                                                    data-instructor-id="< echo $row['InstructorID']; ?>"
-                                                                    data-department-name="< echo $row['DepartmentTypeName']; ?>"
-                                                                    data-first-name="< echo $row['Fname']; ?>"
-                                                                    data-middle-name="< echo $row['Mname']; ?>"
-                                                                    data-last-name="< echo $row['Lname']; ?>"
-                                                                    data-gender="< echo $row['Gender']; ?>"
-                                                                    data-birthday="< echo $row['Birthday']; ?>"
-                                                                    data-address="< echo $row['Address']; ?>"
-                                                                    data-contact-number="< echo $row['ContactNumber']; ?>"
-                                                                    data-email="< echo $row['Email']; ?>"
-                                                                    data-specialization="< echo $row['Address']; ?>"
-                                                                    data-status="< echo $row['Status']; ?>">
-                                                                <i class="fas fa-reply" data-toggle="tooltip" data-placement="top" title="Retrieve Section"></i>
-                                                            </button>
-                                                            <a href="#" class="btn btn-danger mx-2 btn-delete" data-instructor-id="< echo $row['InstructorID']; ?>">
-                                                                <i class="fa fa-trash" data-toggle="tooltip" data-placement="top" title="Delete Instructor"></i>
-                                                            </a>
-
-                                                        </div>
-
-                                                        </td>
-                                                    </tr>
-                                                <p -->
-                                            <!-- //     }
-                                            // ?>  -->
-<!-- 
-                                        </tbody>
-                                    </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
-
-
                         <!-- Room Table -->
                         <div class="card shadow mb-4">
                              <!-- Room -->
@@ -625,7 +502,7 @@ if ($row['is_Lock_Account'] == 1) {
                                     <h5 class="card-title">Room</h5>
                                 </div>
                                 <div class="card-body">
-                                    <p class="card-text">Click here to view room archives data.</p>
+                                    <p class="card-text">Click here to view the trashed data.</p>
                                     <!-- <button class="btn btn-primary" id="buttonId" onclick="toggleTable('userTableRoom', 'buttonId')">View Room</button> -->
                                     <button class="btn btn-primary" id="buttonRoom" onclick="toggleTable('userTableRoom', 'buttonRoom', 'userTableInstructor')">View</button>
                                 </div>
@@ -672,7 +549,7 @@ if ($row['is_Lock_Account'] == 1) {
                                                         <td><?php echo $count; ?></td>
                                                         <td><?php echo $row['RoomNumber']; ?></td>
                                                         <td><?php echo $row['Capacity']; ?></td>
-                                                        <td><?php echo $row['RoomType']; ?></td>
+                                                        <td><?php echo $row['RoomTypeName']; ?></td>
 
                                                         <td>
                                                             <div class="d-flex justify-content-center">
@@ -681,7 +558,7 @@ if ($row['is_Lock_Account'] == 1) {
                                                                         data-room-id="<?php echo $row['RoomID']; ?>"
                                                                         data-room-number="<?php echo $row['RoomNumber']; ?>"
                                                                         data-capacity="<?php echo $row['Capacity']; ?>"
-                                                                        data-room-type="<?php echo $row['RoomType']; ?>">
+                                                                        data-room-type="<?php echo $row['RoomTypeName']; ?>">
                                                                     <i class="fa fa-reply" data-toggle="tooltip" data-placement="top" title="Retrirve Room"></i>
                                                                 </button>
                                                                 <a href="#" class="btn btn-danger mx-2 btn-delete" data-room-id="<?php echo $row['RoomID']; ?>">
@@ -813,13 +690,15 @@ if ($row['is_Lock_Account'] == 1) {
        
        <!-- Include jQuery library -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="../assets/js/jquery-3.6.0.min.js"></script>
         <!-- Include SweetAlert library -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="../assets/js/alert11.js"></script>
 
         
 
         <script>
-             $(document).ready(function() {
+            $(document).ready(function() {
                 // Handle click event on the "Room" button
                 $('.btn-reply[data-room-id]').click(function() {
                     var roomID = $(this).data('room-id');
@@ -827,40 +706,84 @@ if ($row['is_Lock_Account'] == 1) {
                         RoomID: roomID
                     };
 
-                    // Send an AJAX request to update the Active status for Room
-                    $.ajax({
-                        type: 'POST',
-                        url: 'DataRetrieve/retrieve_room.php',
-                        data: dataToSend,
-                        success: function(response) {
-                            response = JSON.parse(response);
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success',
-                                    text: response.success,
-                                }).then(function() {
-                                    window.location.href = 'trash.php';
-                                });
-                            } else if (response.error) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Warning',
-                                    text: response.error,
-                                });
-                            }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while retrieving data.',
+                    
+
+                    // Show confirmation dialog
+                    Swal.fire({
+                        title: 'Are your sure?',
+                        text: 'You are about to restore this room.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, restore it',
+                        cancelButtonText: 'Cancel',
+                        cancelButtonColor: '#d33',
+                        reverseButtons: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // User confirmed, send AJAX request
+                            var loading = Swal.fire({
+                                title: 'Please wait',
+                                html: 'Restoring your data...',
+                                allowOutsideClick: false,
+                                showConfirmButton: false, 
+                                onBeforeOpen: () => {
+                                    Swal.showLoading();
+                                }
                             });
-                        }
+
+                            $.ajax({
+                                type: 'POST',
+                                url: 'DataRetrieve/retrieve_room.php',
+                                data: dataToSend,
+                                success: function(response) {
+                                    response = JSON.parse(response);
+                                    loading.close();
+                                    if (response.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text: response.success,
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        }).then(function() {
+                                            window.location.href = 'trash.php';
+                                        });
+                                    } else if (response.error) {
+                                        loading.close();
+                                        Swal.fire({
+                                            icon: 'warning',
+                                            title: 'Warning',
+                                            text: response.error,
+                                        });
+                                    }
+                                },
+                                error: function() {
+                                    loading.close();
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'An error occurred while retrieving data.',
+                                    });
+                                }
+                            });
+                        } 
+                        // else if (result.dismiss === Swal.DismissReason.cancel) {
+                        //     // User cancelled, do nothing
+                        //     Swal.fire({
+                        //         title: 'Cancelled',
+                        //         text: 'Room restoration cancelled.',
+                        //         icon: 'info',
+                        //         showConfirmButton: false,
+                        //         timer: 2000
+                        //     }).then(function() {
+                        //         window.location.href = 'trash.php';
+                        //     });
+                        // }
                     });
                 });
             });
         </script>
+
 
 
         <!-- =====================Strand====================== -->
@@ -873,52 +796,84 @@ if ($row['is_Lock_Account'] == 1) {
                         StrandID: strandID
                     };
 
-                    // Send an AJAX request to update the Active status for the strand
-                    $.ajax({
-                        type: 'POST',
-                        url: 'DataRetrieve/retrieve_strand.php',
-                        data: dataToSend,
-                        success: function(response) {
-                            try {
-                                response = JSON.parse(response);
-                                if (response.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: response.success,
-                                    }).then(function() {
-                                        window.location.href = 'trash.php';
-                                    });
-                                } else if (response.error) {
-                                    Swal.fire({
-                                        icon: 'warning',
-                                        title: 'Warning',
-                                        text: response.error,
-                                    });
-                                } else {
+                    Swal.fire({
+                        title: 'Are your sure?',
+                        text: 'You are about to restore this strand.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, restore it',
+                        cancelButtonText: 'Cancel',
+                        cancelButtonColor: '#d33',
+                        reverseButtons: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var loading = Swal.fire({
+                                title: 'Please wait',
+                                html: 'Restoring your data...',
+                                allowOutsideClick: false,
+                                showConfirmButton: false, 
+                                onBeforeOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
+                             // Send an AJAX request to update the Active status for the strand
+                            $.ajax({
+                                type: 'POST',
+                                url: 'DataRetrieve/retrieve_strand.php',
+                                data: dataToSend,
+                                success: function(response) {
+                                    try {
+                                        response = JSON.parse(response);
+                                        loading.close();
+                                        if (response.success) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Success',
+                                                text: response.success,
+                                                showConfirmButton: false, 
+                                                timer: 2000
+                                            }).then(function() {
+                                                window.location.href = 'trash.php';
+                                            });
+                                        } else if (response.error) {
+                                            loading.close();
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: 'Warning',
+                                                text: response.error,
+                                            });
+                                        } else {
+                                            loading.close();
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error',
+                                                text: 'An unknown error occurred while retrieving data.',
+                                            });
+                                        }
+                                    } catch (error) {
+                                        // console.error('Error parsing response:', error);
+                                        loading.close();
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: 'An error occurred while processing the response.',
+                                        });
+                                    }
+                                },
+                                error: function() {
+                                    loading.close();
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Error',
-                                        text: 'An unknown error occurred while retrieving data.',
+                                        text: 'An error occurred while retrieving data.',
                                     });
                                 }
-                            } catch (error) {
-                                console.error('Error parsing response:', error);
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'An error occurred while processing the response.',
-                                });
-                            }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while retrieving data.',
                             });
                         }
                     });
+
+                   
                 });
             });
         </script>
@@ -933,58 +888,105 @@ if ($row['is_Lock_Account'] == 1) {
                         SubjectID: subjectID
                     };
 
-                    // Send an AJAX request to update the Active status for the subject
-                    $.ajax({
-                        type: 'POST',
-                        url: 'DataRetrieve/retrieve_subject.php',
-                        data: dataToSend,
-                        success: function(response) {
-                            try {
-                                response = JSON.parse(response);
-                                if (response.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: response.success,
-                                    }).then(function() {
-                                        window.location.href = 'trash.php';
-                                    });
-                                } else if (response.error) {
-                                    Swal.fire({
-                                        icon: 'warning',
-                                        title: 'Warning',
-                                        text: response.error,
-                                    });
-                                } else {
+                     // Show confirmation dialog
+                     Swal.fire({
+                        title: 'Are your sure?',
+                        text: 'You are about to restore this subject.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, restore it',
+                        cancelButtonText: 'Cancel',
+                        cancelButtonColor: '#d33',
+                        reverseButtons: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // User confirmed, send AJAX request
+                            var loading = Swal.fire({
+                                title: 'Please wait',
+                                html: 'Restoring your data...',
+                                allowOutsideClick: false,
+                                showConfirmButton: false, 
+                                onBeforeOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
+                             // Send an AJAX request to update the Active status for the subject
+                            $.ajax({
+                                type: 'POST',
+                                url: 'DataRetrieve/retrieve_subject.php',
+                                data: dataToSend,
+                                success: function(response) {
+                                    try {
+                                        response = JSON.parse(response);
+                                        loading.close();
+                                        if (response.success) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Success',
+                                                text: response.success,
+                                                showConfirmButton: false,
+                                                timer: 2000
+                                            }).then(function() {
+                                                window.location.href = 'trash.php';
+                                            });
+                                        } else if (response.error) {
+                                            loading.close();
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: 'Warning',
+                                                text: response.error,
+                                            });
+                                        } else {
+                                            loading.close();
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error',
+                                                text: 'An unknown error occurred while retrieving data.',
+                                            });
+                                        }
+                                    } catch (error) {
+                                        console.error('Error parsing response:', error);
+                                        loading.close();
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: 'An error occurred while processing the response.',
+                                        });
+                                    }
+                                },
+                                error: function() {
+                                    loading.close();
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Error',
-                                        text: 'An unknown error occurred while retrieving data.',
+                                        text: 'An error occurred while retrieving data.',
                                     });
                                 }
-                            } catch (error) {
-                                console.error('Error parsing response:', error);
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'An error occurred while processing the response.',
-                                });
-                            }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while retrieving data.',
                             });
-                        }
+                        } 
+                        // else if (result.dismiss === Swal.DismissReason.cancel) {
+                        //     // User cancelled, do nothing
+                        //     Swal.fire({
+                        //         title: 'Cancelled',
+                        //         text: 'Room restoration cancelled.',
+                        //         icon: 'info',
+                        //         showConfirmButton: false,
+                        //         timer: 2000
+                        //     }).then(function() {
+                        //         window.location.href = 'trash.php';
+                        //     });
+                        // }
                     });
+
+                   
                 });
             });
         </script>
         <!-- ====================End======================= -->
 
         <!-- ===================Section==================== -->
+       
         <script>
             $(document).ready(function() {
                 // Handle click event on the "Reply" button
@@ -994,192 +996,197 @@ if ($row['is_Lock_Account'] == 1) {
                         SectionID: sectionID
                     };
 
-                    // Send an AJAX request to update the Active status for the section
-                    $.ajax({
-                        type: 'POST',
-                        url: 'DataRetrieve/retrieve_section.php',
-                        data: dataToSend,
-                        success: function(response) {
-                            try {
-                                response = JSON.parse(response);
-                                if (response.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: response.success,
-                                    }).then(function() {
-                                        window.location.href = 'trash.php';
-                                    });
-                                } else if (response.error) {
-                                    Swal.fire({
-                                        icon: 'warning',
-                                        title: 'Warning',
-                                        text: response.error,
-                                    });
-                                } else {
+                    // Show confirmation message
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You are about to restore this class section.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, restore it!'
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            var loading = Swal.fire({
+                                title: 'Please wait',
+                                html: 'Restoring your data...',
+                                allowOutsideClick: false,
+                                showConfirmButton: false, 
+                                onBeforeOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+                            // Send an AJAX request to update the Active status for the section
+                            $.ajax({
+                                type: 'POST',
+                                url: 'DataRetrieve/retrieve_section.php',
+                                data: dataToSend,
+                                success: function(response) {
+                                    try {
+                                        response = JSON.parse(response);
+                                        loading.close();
+                                        if (response.success) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Success',
+                                                text: response.success,
+                                                timer: 2000, // Set the timer to 2000 milliseconds (2 seconds)
+                                                showConfirmButton: false, // Hide the confirmation button
+                                                allowOutsideClick: false // Prevent outside clicks from dismissing the alert
+                                            }).then(function() {
+                                                // Redirect to trash.php after the timer expires
+                                                window.location.href = 'trash.php';
+                                            });
+
+                                        } else if (response.error) {
+                                            loading.close();
+                                            Swal.fire({
+                                                icon: 'warning',
+                                                title: 'Warning',
+                                                text: response.error,
+                                            });
+                                        } else {
+                                            loading.close();
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Error',
+                                                text: 'An unknown error occurred while retrieving data.',
+                                            });
+                                        }
+                                    } catch (error) {
+                                        console.error('Error parsing response:', error);
+                                        loading.close();
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Error',
+                                            text: 'An error occurred while processing the response.',
+                                        });
+                                    }
+                                },
+                                error: function() {
+                                    loading.close();
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Error',
-                                        text: 'An unknown error occurred while retrieving data.',
+                                        text: 'An error occurred while retrieving data.',
                                     });
                                 }
-                            } catch (error) {
-                                console.error('Error parsing response:', error);
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'An error occurred while processing the response.',
-                                });
-                            }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while retrieving data.',
                             });
                         }
                     });
                 });
             });
         </script>
+
         <!-- ====================END======================= -->
 
-        <!-- ===================Instructor==================== -->
-        <script>
-            $(document).ready(function() {
-                // Handle click event on the "Reply" button
-                $('.btn-reply[data-instructor-id]').click(function() {
-                    var instructorID = $(this).data('instructor-id');
-                    var dataToSend = {
-                        InstructorID: instructorID
-                    };
 
-                    // Send an AJAX request to update the Active status for the section
-                    $.ajax({
-                        type: 'POST',
-                        url: 'DataRetrieve/retrieve_instructor.php',
-                        data: dataToSend,
-                        success: function(response) {
-                            try {
-                                response = JSON.parse(response);
-                                if (response.success) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Success',
-                                        text: response.success,
-                                    }).then(function() {
-                                        window.location.href = 'trash.php';
-                                    });
-                                } else if (response.error) {
-                                    Swal.fire({
-                                        icon: 'warning',
-                                        title: 'Warning',
-                                        text: response.error,
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: 'An unknown error occurred while retrieving data.',
-                                    });
-                                }
-                            } catch (error) {
-                                console.error('Error parsing response:', error);
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'An error occurred while processing the response.',
-                                });
-                            }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while retrieving data.',
-                            });
-                        }
-                    });
-                });
-            });
-        </script>
-        <!-- ====================END======================= -->
-
+            
         <!-- Delete Query -->
         <script>
             $(document).ready(function() {
                 // Handle click event on the "Delete" button
                 $('.btn-delete').click(function() {
-                    // Retrieve the data attributes
-                    
+                    var deleteButton = $(this); // Store the reference to the delete button
 
-                    var instructorID = $(this).data('instructor-id');
-                    var roomID = $(this).data('room-id');
-                    var strandID = $(this).data('strand-id');
-                    var subjectID = $(this).data('subject-id');
-                    var sectionID = $(this).data('section-id');
-                    
+                   
 
-                    // Determine whether to update an instructor or a room
-                    var dataToSend = {};
-                    if (instructorID !== undefined) {
-                        dataToSend = {
-                            InstructorID: instructorID
-                        };
-                    } else if (strandID !== undefined){
-                        dataToSend = {
-                            StrandID: strandID
-                        };
-                    } else if (subjectID !== undefined) {
-                        dataToSend = {
-                            SubjectID: subjectID
-                        };
-                    } else if (sectionID !== undefined){
-                        dataToSend = {
-                            SectionID: sectionID
-                        };
-                    }
-                    else if (roomID !== undefined) {
-                        dataToSend = {
-                            RoomID: roomID
-                        };
-                    }
+                    // Show a confirmation dialog
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You are about to delete this item.',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it'
+                    }).then((result) => {
 
-                    // Send an AJAX request to your delete_room.php script
-                    $.ajax({
-                        type: 'POST',
-                        url: 'DataDelete/archive_delete.php', // Replace with the actual URL for your server-side script
-                        data: dataToSend,
-                        success: function(response) {
-                            // Handle the response from the server
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: response, // Message from the server
-                            }).then(function() {
-                                // After the success message is closed
-                                // You can redirect to another page or update the UI as needed
-                                // For example, you can remove the deleted item from the UI
-                                $(this).closest('.btn-delete').parent().remove();
-                                window.location.href = 'trash.php';
+                       
+                        if (result.isConfirmed) {
+
+                            var loading = Swal.fire({
+                                title: 'Please wait',
+                                html: 'Deleting your data...',
+                                allowOutsideClick: false,
+                                showConfirmButton: false, 
+                                onBeforeOpen: () => {
+                                    Swal.showLoading();
+                                }
                             });
-                        },
-                        error: function() {
-                            // Handle errors, if any
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while deleting.' 
+
+                            // Retrieve the data attributes
+                            var instructorID = deleteButton.data('instructor-id');
+                            var roomID = deleteButton.data('room-id');
+                            var strandID = deleteButton.data('strand-id');
+                            var subjectID = deleteButton.data('subject-id');
+                            var sectionID = deleteButton.data('section-id');
+
+                            // Determine whether to update an instructor or a room
+                            var dataToSend = {};
+                            if (instructorID !== undefined) {
+                                dataToSend = {
+                                    InstructorID: instructorID
+                                };
+                            } else if (strandID !== undefined) {
+                                dataToSend = {
+                                    StrandID: strandID
+                                };
+                            } else if (subjectID !== undefined) {
+                                dataToSend = {
+                                    SubjectID: subjectID
+                                };
+                            } else if (sectionID !== undefined) {
+                                dataToSend = {
+                                    SectionID: sectionID
+                                };
+                            } else if (roomID !== undefined) {
+                                dataToSend = {
+                                    RoomID: roomID
+                                };
+                            }
+
+                            // Send an AJAX request to your delete_room.php script
+                            $.ajax({
+                                type: 'POST',
+                                url: 'DataDelete/archive_delete.php', // Replace with the actual URL for your server-side script
+                                data: dataToSend,
+                                success: function(response) {
+                                    // Handle the response from the server
+                                    loading.close();
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        showConfirmButton: false,
+                                        text: response, // Message from the server
+                                        timer: 2000 // Set the timer to close the alert after 2 seconds
+                                    }).then(function() {
+                                        window.location.href = 'trash.php';
+                                    });
+
+                                },
+                                error: function() {
+                                    // Handle errors, if any
+                                    loading.close();
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'An error occurred while deleting.'
+                                    });
+                                }
+
                             });
                         }
-                       
                     });
                 });
             });
         </script>
 
+
+
         <script>
+        
+        
             function toggleTable(tableId, buttonId, otherTableId) {
                 // Your logic to toggle table visibility based on IDs
                 // Fetch elements by IDs and toggle their display property

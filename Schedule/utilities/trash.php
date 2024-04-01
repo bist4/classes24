@@ -708,7 +708,7 @@ if ($row['is_Lock_Account'] == 1) {
 
                     
 
-                    // Show confirmation dialog
+                    // Show Confirmation? dialog
                     Swal.fire({
                         title: 'Are your sure?',
                         text: 'You are about to restore this room.',
@@ -888,7 +888,7 @@ if ($row['is_Lock_Account'] == 1) {
                         SubjectID: subjectID
                     };
 
-                     // Show confirmation dialog
+                     // Show Confirmation? dialog
                      Swal.fire({
                         title: 'Are your sure?',
                         text: 'You are about to restore this subject.',
@@ -996,9 +996,9 @@ if ($row['is_Lock_Account'] == 1) {
                         SectionID: sectionID
                     };
 
-                    // Show confirmation message
+                    // Show Confirmation? message
                     Swal.fire({
-                        title: 'Confirmation',
+                        title: 'Confirmation?',
                         text: 'You are about to restore this class section.',
                         icon: 'question',
                         showCancelButton: true,
@@ -1031,7 +1031,7 @@ if ($row['is_Lock_Account'] == 1) {
                                                 title: 'Success',
                                                 text: response.success,
                                                 timer: 2000, // Set the timer to 2000 milliseconds (2 seconds)
-                                                showConfirmButton: false, // Hide the confirmation button
+                                                showConfirmButton: false, // Hide the Confirmation? button
                                                 allowOutsideClick: false // Prevent outside clicks from dismissing the alert
                                             }).then(function() {
                                                 // Redirect to trash.php after the timer expires
@@ -1091,9 +1091,9 @@ if ($row['is_Lock_Account'] == 1) {
 
                    
 
-                    // Show a confirmation dialog
+                    // Show a Confirmation? dialog
                     Swal.fire({
-                        title: 'Confirmation',
+                        title: 'Confirmation?',
                         text: 'You are about to delete this item.',
                         icon: 'question',
                         showCancelButton: true,

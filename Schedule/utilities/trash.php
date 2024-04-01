@@ -708,9 +708,9 @@ if ($row['is_Lock_Account'] == 1) {
 
                     
 
-                    // Show Confirmation? dialog
+                    // Show Confirmation dialog
                     Swal.fire({
-                        title: 'Confirmation?',
+                        title: 'Confirmation',
                         text: 'Are you sure you want to restore this section?',
                         icon: 'question',
                         showCancelButton: true,
@@ -797,7 +797,7 @@ if ($row['is_Lock_Account'] == 1) {
                     };
 
                     Swal.fire({
-                        title: 'Confirmation?',
+                        title: 'Confirmation',
                         text: 'Are you sure you want to restore this strand?',
                         icon: 'question',
                         showCancelButton: true,
@@ -888,9 +888,9 @@ if ($row['is_Lock_Account'] == 1) {
                         SubjectID: subjectID
                     };
 
-                     // Show Confirmation? dialog
+                     // Show Confirmation dialog
                      Swal.fire({
-                        title: 'Confirmation?',
+                        title: 'Confirmation',
                         text: 'Are you sure you want to restore this subject?',
                         icon: 'question',
                         showCancelButton: true,
@@ -996,9 +996,9 @@ if ($row['is_Lock_Account'] == 1) {
                         SectionID: sectionID
                     };
 
-                    // Show Confirmation? message
+                    // Show Confirmation message
                     Swal.fire({
-                        title: 'Confirmation?',
+                        title: 'Confirmation',
                         text: 'Are you sure you want to restore this strand?',
                         icon: 'question',
                         showCancelButton: true,
@@ -1031,7 +1031,7 @@ if ($row['is_Lock_Account'] == 1) {
                                                 title: 'Success',
                                                 text: response.success,
                                                 timer: 2000, // Set the timer to 2000 milliseconds (2 seconds)
-                                                showConfirmButton: false, // Hide the Confirmation? button
+                                                showConfirmButton: false, // Hide the Confirmation button
                                                 allowOutsideClick: false // Prevent outside clicks from dismissing the alert
                                             }).then(function() {
                                                 // Redirect to trash.php after the timer expires
@@ -1091,9 +1091,9 @@ if ($row['is_Lock_Account'] == 1) {
 
                    
 
-                    // Show a Confirmation? dialog
+                    // Show a Confirmation dialog
                     Swal.fire({
-                        title: 'Confirmation?',
+                        title: 'Confirmation',
                         text: 'Are you sure you want to delete this item?',
                         icon: 'question',
                         showCancelButton: true,

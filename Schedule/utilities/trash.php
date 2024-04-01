@@ -710,7 +710,7 @@ if ($row['is_Lock_Account'] == 1) {
 
                     // Show Confirmation? dialog
                     Swal.fire({
-                        title: 'Are your sure?',
+                        title: 'Confirmation?',
                         text: 'You are about to restore this room.',
                         icon: 'question',
                         showCancelButton: true,
@@ -797,7 +797,7 @@ if ($row['is_Lock_Account'] == 1) {
                     };
 
                     Swal.fire({
-                        title: 'Are your sure?',
+                        title: 'Confirmation?',
                         text: 'You are about to restore this strand.',
                         icon: 'question',
                         showCancelButton: true,
@@ -890,7 +890,7 @@ if ($row['is_Lock_Account'] == 1) {
 
                      // Show Confirmation? dialog
                      Swal.fire({
-                        title: 'Are your sure?',
+                        title: 'Confirmation?',
                         text: 'You are about to restore this subject.',
                         icon: 'question',
                         showCancelButton: true,

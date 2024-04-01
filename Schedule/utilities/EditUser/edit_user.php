@@ -725,6 +725,7 @@ include('../session_out.php');
                             success: function(response){
                                 loading.close();
                                 if(response.success){
+                                    changesMade = false;
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'Success!',
@@ -835,6 +836,35 @@ include('../session_out.php');
 
         
     });
+</script>
+
+
+<script>
+    // Function to handle the beforeunload event
+function handleBeforeUnload(event) {
+    if (changesMade) {
+        const confirmationMessage = "Changes you made may not be saved. Are you sure you want to leave?";
+        (event || window.event).returnValue = confirmationMessage;
+        return confirmationMessage;
+    }
+}
+
+// Function to show a warning for unsaved changes
+function showUnsavedChangesWarning() {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Changes you made may not be saved. Are you sure you want to leave?',
+    });
+}
+
+window.addEventListener('beforeunload', handleBeforeUnload);
+$(document).ready(function () {
+    $(".form-control").change(function() {
+        changesMade = true; // Set changesMade flag to true when form fields change
+    });
+});
+
 </script>
     
 

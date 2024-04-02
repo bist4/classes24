@@ -80,7 +80,8 @@ if (isset($_POST['subject']) && isset($_POST['timeStart']) && isset($_POST['time
                       FROM userinfo usi
                       INNER JOIN instructors i ON i.UserInfoID = usi.UserInfoID
                       WHERE usi.is_Instructor = 1
-                      AND Active = 1 
+                      AND usi.Active = 1 
+                      AND i.Active = 1
                       AND Status = 1 
                       AND i.is_JuniorHighSchool = 1
                       AND NOT EXISTS (
@@ -123,7 +124,9 @@ if (isset($_POST['subject']) && isset($_POST['timeStart']) && isset($_POST['time
                       INNER JOIN instructors i ON i.UserInfoID = usi.UserInfoID
                       JOIN instructortimeavailabilities ita ON i.InstructorID = ita.InstructorID
                       WHERE usi.is_Instructor = 1
-                      AND ita.Active = 1  
+                      AND ita.Active = 1 
+                      AND i.Active = 1
+                      AND usi.Active = 1 
                       AND Status = 0 
                       AND i.is_JuniorHighSchool = 1
                       AND (

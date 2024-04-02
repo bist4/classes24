@@ -25,8 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $toUser = 2;   // Assuming UserTo value is 3
 
         // Use NOW() to get the current timestamp
-        $insertMessageSql = "INSERT INTO message (CreatedAt, UserFrom, UserTo, YearLevel, Section, Action) 
-                             VALUES (NOW(), $fromUser, $toUser,'$gradeLevel', '$sectionName', 2)";
+        $insertMessageSql = "INSERT INTO message (CreatedAt, UserFrom, UserTo, YearLevel, Section, Action, Request) 
+                             VALUES (NOW(), $fromUser, $toUser,'$gradeLevel', '$sectionName', 2, 'Waiting')";
 
         if ($conn->query($insertMessageSql) === TRUE) {
             // If the message insertion is successful, send a success response

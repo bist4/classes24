@@ -5,7 +5,7 @@ $username= "root";
 $password = "ccbc-2025";
 // $dbname = "classschedule";
 // $dbname = "onlineclassschedule";
-$dbname = "tope";
+$dbname = "saasi";
 
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);

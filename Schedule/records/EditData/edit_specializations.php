@@ -716,6 +716,7 @@ $(document).ready(function() {
 
     
     $('#addButton').on('click', function(event) {
+        event.preventDefault()
         validateFormFields();
         var invalidFields = document.querySelectorAll(".is-invalid");
         if (invalidFields.length > 0) {
@@ -801,7 +802,8 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function () {
-    $(".trash-btn").click(function () {
+    $(".trash-btn").click(function (event) {
+        event.preventDefault()
         var instructorID = $(this).data('user-id');
 
         Swal.fire({

@@ -639,7 +639,7 @@ if (isset($_SESSION['Username'])) {
     });
 </script>
 
-<script>
+<!-- <script>
     $(document).ready(function() {
         $("#sendButton").on("click", function() {
             // Display SweetAlert confirmation
@@ -697,7 +697,68 @@ if (isset($_SESSION['Username'])) {
             });
         });        
     });
+</script> -->
+
+<script>
+    $(document).ready(function() {
+        $("#sendButton").on("click", function() {
+            // Display SweetAlert confirmation
+            Swal.fire({
+                title: 'Confirmation',
+                text: 'Are you sure you want to send this schedule for Grade '+ $("#yearLevel option:selected").text() + ' ' + $("#section option:selected").text() + '. Continue?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // User clicked "Yes," proceed with the update
+                    var gradeLevel = $("#yearLevel option:selected").text();
+		            var sectionName = $("#section option:selected").text();
+                    // Get selected values from dropdowns
+                    var yearLevel = $("#strand").val();
+                    var section = $("#section").val();
+
+                    // Create a data object to send in the AJAX request
+                    var data = {
+                        gradeLevel: gradeLevel,
+			            sectionName: sectionName,
+                        yearLevel: yearLevel,
+                        section: section
+                    };
+
+                    // Send AJAX request to update Active column
+                    $.ajax({
+                        type: "POST",  // Change to the appropriate HTTP method for your API
+                        url: "SendSchedule/primary_send_schedule.php",  // Change to the endpoint of your API
+                        data: data,
+                        success: function(response) {
+                            // Handle success, e.g., show a success message
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Schedule sent successfully!',
+                                showConfirmButton: false,
+                                timer: 1500  // Time in milliseconds (1.5 seconds)
+                            });
+
+                            // Reload the page after a short delay
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1500);  // Time in milliseconds (1.5 seconds)
+                        },
+                        error: function(error) {
+                            // Handle error, e.g., show an error message
+                            Swal.fire('Error', 'Failed to update schedule. Please try again.', 'error');
+                            console.error("Error updating schedule:", error);
+                        }
+                    });
+                }
+            });
+        });        
+    });
 </script>
+
 
 
 

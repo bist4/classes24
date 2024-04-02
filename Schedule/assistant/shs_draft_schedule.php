@@ -661,7 +661,7 @@ if (isset($_SESSION['Username'])) {
                     var section = $("#section").val();
 
                     // Create a data object to send in the AJAX request
-                    var data = {
+                     var data = {
                         gradeLevel: gradeLevel,
 			            sectionName: sectionName,
                         yearLevel: yearLevel,

@@ -313,7 +313,10 @@ include('session_out.php');
             echo '<div class="message-content" style="display: none; ">' . $row['Message'] . '</div><br>';
             echo '<div class="row">';
             echo '<div class="col-md-12 text-center">';
-            echo '<a href="#" class="see-more-link" style="color: #007bff;">See More</a>';
+            // echo '<a href="#" class="see-more-link" style="color: #007bff;">See More</a>';
+            if (!empty($row['Message'])) {
+                echo '<a href="#" class="see-more-link" style="color: #007bff;">See More</a>';
+            }
             echo '</div>';
             echo '</div>';
             echo '</div>';

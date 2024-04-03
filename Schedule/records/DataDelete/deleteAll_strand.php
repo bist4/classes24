@@ -47,15 +47,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
-                $response = array('success' => true, 'message' => 'Strand(s) Deleted Successfully');
+                // Delete records from departments table based on strandIDs
+                $deletesql = "DELETE FROM departments WHERE StrandID IN (" . implode(',', array_fill(0, count($strandIDs), '?')) . ")";
+                $stmt = $conn->prepare($deletesql);
+
+                if ($stmt) {
+                    foreach ($strandIDs as $key => $strandID) {
+                        $stmt->bind_param('i', $strandIDs[$key]);
+                        $stmt->execute();
+                    }
+                } else {
+                    $response = array('success' => false, 'message' => 'Error in preparing SQL statement for department deletion: ' . $conn->error);
+                    echo json_encode($response);
+                    exit;
+                }
+
+                $response = array('success' => true, 'message' => 'Strand(s) Deactivated and Departments Deleted Successfully');
                 echo json_encode($response);
                 exit();
             } else {
-                $response = array('success' => false, 'message' => 'Error in preparing SQL statement: ' . $conn->error);
+                $response = array('success' => false, 'message' => 'Error in preparing SQL statement for strand deactivation: ' . $conn->error);
                 echo json_encode($response);
             }
         } else {
-            $response = array('success' => false, 'message' => 'Error in preparing SQL statement: ' . $conn->error);
+            $response = array('success' => false, 'message' => 'Error in preparing SQL statement for class schedule check: ' . $conn->error);
             echo json_encode($response);
         }
     } else {

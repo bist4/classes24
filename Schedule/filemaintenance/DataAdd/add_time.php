@@ -55,23 +55,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
             }
 
-            // Insert the availability into the database only if there's no existing entry with Active = 1
-            $active = 1;
-            $sql = "INSERT INTO instructortimeavailabilities (is_Monday, is_Tuesday, is_Wednesday, is_Thursday, is_Friday, InstructorID, Time_Start, Time_End, Active,CreatedAt) 
-                    SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW() 
-                    FROM DUAL 
-                    WHERE NOT EXISTS (
-                        SELECT 1 FROM instructortimeavailabilities 
-                        WHERE InstructorID = ? AND Active = 1
-                    )";
+            // Check if an active entry with the same schedule already exists
+            $checkExistingQuery = "SELECT COUNT(*) as count FROM instructortimeavailabilities 
+                                   WHERE is_Monday = ? AND is_Tuesday = ? AND is_Wednesday = ? AND is_Thursday = ? AND is_Friday = ? 
+                                   AND InstructorID = ? AND Time_Start = ? AND Time_End = ? AND Active = 1";
 
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iiiiiissii", $daysValues["Monday"], $daysValues["Tuesday"], $daysValues["Wednesday"], $daysValues["Thursday"], $daysValues["Friday"], $InstructorID, $timeStart, $timeEnd, $active, $InstructorID);
-            $stmt->execute();
+            $stmtCheckExisting = $conn->prepare($checkExistingQuery);
+            $stmtCheckExisting->bind_param("iiiiiiis", $daysValues["Monday"], $daysValues["Tuesday"], $daysValues["Wednesday"], $daysValues["Thursday"], $daysValues["Friday"], $InstructorID, $timeStart, $timeEnd);
+            $stmtCheckExisting->execute();
+            $resultCheckExisting = $stmtCheckExisting->get_result();
+            $rowCheckExisting = $resultCheckExisting->fetch_assoc();
 
-            if ($stmt->affected_rows === -1) {
+            if ($rowCheckExisting['count'] > 0) {
+                // Entry with the same schedule and active status already exists, display a message
+                echo json_encode(["error" => "An active entry with the same schedule already exists."]);
                 $success = false;
-                break; // Break the loop
+            } else {
+                // No active entry with the same schedule found, proceed with insertion
+                $active = 1;
+                $sql = "INSERT INTO instructortimeavailabilities (is_Monday, is_Tuesday, is_Wednesday, is_Thursday, is_Friday, InstructorID, Time_Start, Time_End, Active, CreatedAt) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("iiiiiissi", $daysValues["Monday"], $daysValues["Tuesday"], $daysValues["Wednesday"], $daysValues["Thursday"], $daysValues["Friday"], $InstructorID, $timeStart, $timeEnd, $active);
+                $stmt->execute();
+
+                if ($stmt->affected_rows === -1) {
+                    // Failed to insert data
+                    $success = false;
+                    break; // Break the loop
+                }
             }
         }
 
@@ -108,10 +120,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         $userInfoID = $row['UserInfoID'];
                         foreach ($TimeAvail as $time) {
                             $days = explode(",", $time['Day']); // Split days if provided as a comma-separated string
-                    
+
                             $timeStart = date("H:i:s", strtotime($time['TimeStart']));
                             $timeEnd = date("H:i:s", strtotime($time['TimeEnd']));
-                    
+
                             // Fetch Fname and Mname based on InstructorID from the Instructors table
                             $sqlInstructor = "SELECT ist.InstructorID, usi.Fname, usi.Mname FROM instructortimeavailabilities ist
                             INNER JOIN instructors i ON ist.InstructorID = i.InstructorID
@@ -123,15 +135,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             $stmtInstructor->execute();
                             $resultInstructor = $stmtInstructor->get_result();
                             $instructorData = $resultInstructor->fetch_assoc();
-                    
+
                             $Fname = $instructorData['Fname'];
                             $Mname = $instructorData['Mname'];
-                    
+
                             // Proceed with logging
                             $activity = 'Add Instructor Availability: ' . '<br>Instructor: ' . $Fname . ' ' . $Mname . ' <br>Day: (' . implode(", ", $days) . ')<br>Time Start: ' . $timeStart . ', Time End: ' . $timeEnd;
                             $currentDateTime = date('Y-m-d H:i:s');
                             $active = 1;
-                    
+
                             $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
                             $stmtLog = $conn->prepare($sqlLog);
                             $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);

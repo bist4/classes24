@@ -39,7 +39,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $row = $resultUserCheck->fetch_assoc();
                     $userInfoID = $row['UserInfoID'];
 
-                    $activity = 'Delete Instructor Availabilities';
+                    // Fetch Fname and Mname based on InstructorID from the Instructors table
+                    $sqlInstructor = "SELECT ist.InstructorID, usi.Fname, usi.Mname FROM instructortimeavailabilities ist
+                    INNER JOIN instructors i ON ist.InstructorID = i.InstructorID
+                    LEFT JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
+
+                    WHERE ist.InstructorID = ?";
+                    $stmtInstructor = $conn->prepare($sqlInstructor);
+                    $stmtInstructor->bind_param("i", $InstructorID);
+                    $stmtInstructor->execute();
+                    $resultInstructor = $stmtInstructor->get_result();
+                    $instructorData = $resultInstructor->fetch_assoc();
+            
+                    $Fname = $instructorData['Fname'];
+                    $Mname = $instructorData['Mname'];
+            
+                    // Proceed with logging
+                    $activity = 'Add Instructor Availability: ' . '<br>Instructor: ' . $Fname . ' ' . $Mname . ' <br>Day: (' . implode(", ", $days) . ')<br>Time Start: ' . $timeStart . ', Time End: ' . $timeEnd;
                     $currentDateTime = date('Y-m-d H:i:s');
                     $active = 1;
 

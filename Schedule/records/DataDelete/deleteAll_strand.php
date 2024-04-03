@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit;
                 }
 
-                $response = array('success' => true, 'message' => 'Strand(s) Deactivated and Departments Deleted Successfully');
+                $response = array('success' => true, 'message' => 'Strand(s) Deleted Successfully');
                 echo json_encode($response);
                 exit();
             } else {

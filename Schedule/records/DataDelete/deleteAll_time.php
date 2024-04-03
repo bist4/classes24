@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $row = $resultUserCheck->fetch_assoc();
                     $userInfoID = $row['UserInfoID'];
 
-                    $activity = 'Delete Instructor Availability';
+                    $activity = 'Delete Instructor Availabilities';
                     $currentDateTime = date('Y-m-d H:i:s');
                     $active = 1;
 

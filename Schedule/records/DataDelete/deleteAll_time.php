@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $Mname = $instructorData['Mname'];
             
                     // Proceed with logging
-                    $activity = 'Add Instructor Availability: ' . '<br>Instructor: ' . $Fname . ' ' . $Mname . ' <br>Day: (' . implode(", ", $days) . ')<br>Time Start: ' . $timeStart . ', Time End: ' . $timeEnd;
+                    $activity = 'Delete Instructor Availability: ' . '<br>Instructor: ' . $Fname . ' ' . $Mname;
                     $currentDateTime = date('Y-m-d H:i:s');
                     $active = 1;
 

@@ -37,6 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $stmtInsertDepartment->bind_param("iiii", $departmentTypeNameID, $gradeLevel, $semester, $strandID);
                     $stmtInsertDepartment->execute();
 
+                    // Check if insertion for GradeLevel 11 and Semester 1 failed
+                    if ($stmtInsertDepartment->errno) {
+                        echo json_encode(["error" => "Failed to restore strand: " . $stmtInsertDepartment->error]);
+                        exit; // Exit to prevent further execution
+                    }
+
                     // Bind parameters and execute for GradeLevel 11 and Semester 2
                     $semester = 2;
                     $stmtInsertDepartment->bind_param("iiii", $departmentTypeNameID, $gradeLevel, $semester, $strandID);
@@ -86,11 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     } else {
                         // Insertion failed
                         echo json_encode(["error" => "Failed to restore strand"]);
-                        // echo json_encode(["error" => "Failed to restore strand"]);
-
                     }
                     $stmtInsertDepartment->close();
 
+                } else {
+                    // Update failed
+                    echo json_encode(["error" => "Failed to update strand status"]);
                 }
                 
             }

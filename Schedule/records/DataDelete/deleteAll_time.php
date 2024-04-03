@@ -8,11 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $timeAvailIDs = $_POST['timeAvailIDs'];
 
-        // $sqlDelete = "UPDATE instructortimeavailabilities SET Active = 0 WHERE InstructorTimeAvailabilitiesID = ?";
-        // $stmtDelete = $conn->prepare($sqlDelete);
-
-
-    // Prepare and execute the SQL update query for each SectionID
+        // Prepare and execute the SQL update query for each SectionID
         $updatesql = "UPDATE instructortimeavailabilities SET Active = 0 WHERE InstructorTimeAvailabilitiesID = ?";
         $stmt = $conn->prepare($updatesql);
 
@@ -29,12 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            $response = array('success' => true, 'message' => 'Instructor Availability Deleted Successfully');
-            echo json_encode($response);
-            exit();
-            
-             // Add logs activity
-             if (isset($_SESSION['Username'])) {
+            // Add logs activity
+            if (isset($_SESSION['Username'])) {
                 $loggedInUsername = $_SESSION['Username'];
 
                 $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
@@ -47,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $row = $resultUserCheck->fetch_assoc();
                     $userInfoID = $row['UserInfoID'];
 
-                    // $activity = 'Retrieved room number ';
                     $activity = 'Delete Instructor Availability';
                     $currentDateTime = date('Y-m-d H:i:s');
                     $active = 1;
@@ -56,11 +47,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmtLog = $conn->prepare($sqlLog);
                     $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
                     $resultLog = $stmtLog->execute();
+                    
+                    // Check if the insertion into logs was successful
+                    if (!$resultLog) {
+                        $response = array('success' => false, 'message' => 'Failed to insert log entry.');
+                        echo json_encode($response);
+                        exit;
+                    }
                 }
             }
 
-
-
+            $response = array('success' => true, 'message' => 'Instructor Availability Deleted Successfully');
+            echo json_encode($response);
+            exit();
+            
         } else {
             $response = array('success' => false, 'message' => 'Error in preparing SQL statement: ' . $conn->error);
             echo json_encode($response);

@@ -281,7 +281,7 @@ if ($row['is_Lock_Account'] == 1) {
                                             <?php
                                                 require('../config/db_connection.php');
                                                 $table = mysqli_query($conn,  "SELECT * FROM strands 
-                                                WHERE strands.Active = 0");
+                                                WHERE Active = 0");
 
                                                 $count = 0;
                                                 while ($row = mysqli_fetch_array($table)) {

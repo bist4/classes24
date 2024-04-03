@@ -8,7 +8,7 @@
             $subjectID = $_POST['SubjectID'];
 
             // Check if the Subject with the given ID exists and if it's active
-            $stmtCheckSubject = $conn->prepare("SELECT SubjectName, Active FROM subjects WHERE SubjectID = ?");
+            $stmtCheckSubject = $conn->prepare("SELECT SubjectName, MinutesPerWeek,Active FROM subjects WHERE SubjectID = ?");
             $stmtCheckSubject->bind_param("i", $subjectID);
             $stmtCheckSubject->execute();
             $resultCheckStrand = $stmtCheckSubject->get_result();
@@ -16,6 +16,7 @@
             if ($resultCheckStrand->num_rows === 1) {
                 $row = $resultCheckStrand->fetch_assoc();
                 $subjectDescription = $row['SubjectName'];
+                $minPerweek = $row['MinutesPerWeek'];
                 $isActive = $row['Active'];
 
                 // Check if the SubjectName exists and is active
@@ -24,8 +25,8 @@
                     echo json_encode(["error" => "The data already exists and is active"]); 
                 } else {
                     // Check if another record with the same SubjectName is active
-                    $stmtCheckActiveSubject = $conn->prepare("SELECT SubjectID FROM subjects WHERE SubjectName = ? AND Active = 1");
-                    $stmtCheckActiveSubject->bind_param("s", $subjectDescription);
+                    $stmtCheckActiveSubject = $conn->prepare("SELECT SubjectID FROM subjects WHERE SubjectName = ? AND MinutesPerWeek =? AND Active = 1");
+                    $stmtCheckActiveSubject->bind_param("ss", $subjectDescription, $minPerweek);
                     $stmtCheckActiveSubject->execute();
                     $resultCheckActiveSubject = $stmtCheckActiveSubject->get_result();
     

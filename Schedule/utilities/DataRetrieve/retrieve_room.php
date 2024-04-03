@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $userInfoID = $row['UserInfoID'];
 
                                 // $activity = 'Retrieved room number ';
-                                $activity = 'Retrieved room number ' . $roomNumber;
+                                $activity = 'Restored room number ' . $roomNumber;
                                 $currentDateTime = date('Y-m-d H:i:s');
                                 $active = 1;
 

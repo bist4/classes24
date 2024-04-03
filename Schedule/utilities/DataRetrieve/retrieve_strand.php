@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $row = $resultUserCheck->fetch_assoc();
                                 $userInfoID = $row['UserInfoID'];
 
-                                $activity = 'Retrieved strand name ' . $strandName;
+                                $activity = 'Restored strand name ' . $strandName;
                                 $currentDateTime = date('Y-m-d H:i:s');
                                 $active = 1;
 

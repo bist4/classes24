@@ -58,8 +58,8 @@
                                     $row = $resultUserCheck->fetch_assoc();
                                     $userInfoID = $row['UserInfoID'];
 
-                                    // $activity = 'Retrieved room number ';
-                                    $activity = 'Retrieved subject name ' . $subjectDescription;
+                                    // $activity = 'Restored room number ';
+                                    $activity = 'Restored subject name ' . $subjectDescription;
                                     $currentDateTime = date('Y-m-d H:i:s');
                                     $active = 1;
 

@@ -58,30 +58,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         // Insertion was successful
                         echo json_encode(["success" => "Strand restored successfully"]);
 
-                        // // Add logs activity
-                        // if (isset($_SESSION['Username'])) {
-                        //     $loggedInUsername = $_SESSION['Username'];
+                        // Add logs activity
+                        if (isset($_SESSION['Username'])) {
+                            $loggedInUsername = $_SESSION['Username'];
 
-                        //     $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
-                        //     $stmtUserCheck = $conn->prepare($sqlUserCheck);
-                        //     $stmtUserCheck->bind_param("s", $loggedInUsername);
-                        //     $stmtUserCheck->execute();
-                        //     $resultUserCheck = $stmtUserCheck->get_result();
+                            $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                            $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                            $stmtUserCheck->bind_param("s", $loggedInUsername);
+                            $stmtUserCheck->execute();
+                            $resultUserCheck = $stmtUserCheck->get_result();
 
-                        //     if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
-                        //         $row = $resultUserCheck->fetch_assoc();
-                        //         $userInfoID = $row['UserInfoID'];
+                            if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                                $row = $resultUserCheck->fetch_assoc();
+                                $userInfoID = $row['UserInfoID'];
 
-                        //         $activity = 'Retrieved strand name ' . $strandName;
-                        //         $currentDateTime = date('Y-m-d H:i:s');
-                        //         $active = 1;
+                                $activity = 'Retrieved strand name ' . $strandName;
+                                $currentDateTime = date('Y-m-d H:i:s');
+                                $active = 1;
 
-                        //         $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
-                        //         $stmtLog = $conn->prepare($sqlLog);
-                        //         $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
-                        //         $resultLog = $stmtLog->execute();
-                        //     }
-                        // }
+                                $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                                $stmtLog = $conn->prepare($sqlLog);
+                                $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+                                $resultLog = $stmtLog->execute();
+                            }
+                        }
 
                     } else {
                         // Insertion failed

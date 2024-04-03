@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $sqlUpdateActive = "UPDATE strands SET Active = 1 WHERE StrandID = ?";
                 $stmtUpdateActive = $conn->prepare($sqlUpdateActive);
                 $stmtUpdateActive->bind_param("i", $strandID);
-                
 
                 if ($stmtUpdateActive->execute()) {
                     $insertDepartmentSql = "INSERT INTO departments (DepartmentTypeNameID, GradeLevel, Semester, StrandID) VALUES (?, ?, ?, ?)";
@@ -73,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $row = $resultUserCheck->fetch_assoc();
                                 $userInfoID = $row['UserInfoID'];
 
-                                
                                 $activity = 'Retrieved strand name ' . $strandName;
                                 $currentDateTime = date('Y-m-d H:i:s');
                                 $active = 1;
@@ -93,7 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 }
                 
-               
             }
         } else {
             echo json_encode(["error" => "Strand not found or invalid ID"]);

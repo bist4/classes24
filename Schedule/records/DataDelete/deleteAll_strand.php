@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $strandIDs = $_POST['strandIDs'];
 
         // Check if any of the strandIDs are associated with class schedules
-        $query = "SELECT COUNT(*) AS count FROM classschedules WHERE StrandID IN (" . implode(',', array_fill(0, count($strandIDs), '?')) . ")";
+        $query = "SELECT COUNT(*) AS count FROM departments WHERE StrandID IN (" . implode(',', array_fill(0, count($strandIDs), '?')) . ")";
         $stmt = $conn->prepare($query);
 
         if ($stmt) {
@@ -26,9 +26,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Check if any class schedules exist for the strand
             if ($row['count'] > 0) {
-                $response = array('success' => false, 'message' => 'The strand is already scheduled.');
-                echo json_encode($response);
-                exit;
+                // Check if there are corresponding class schedules in the classschedules table
+                $classScheduleQuery = "SELECT COUNT(*) AS count FROM classschedules WHERE DepartmentID IN (SELECT DepartmentID FROM departments WHERE StrandID IN (" . implode(',', array_fill(0, count($strandIDs), '?')) . "))";
+                $classStmt = $conn->prepare($classScheduleQuery);
+
+                if ($classStmt) {
+                    // Bind parameters
+                    foreach ($strandIDs as $key => $strandID) {
+                        $classStmt->bind_param('i', $strandIDs[$key]);
+                    }
+
+                    // Execute the statement
+                    $classStmt->execute();
+
+                    // Fetch the result
+                    $classResult = $classStmt->get_result();
+                    $classRow = $classResult->fetch_assoc();
+
+                    if ($classRow['count'] > 0) {
+                        $response = array('success' => false, 'message' => 'The strand is already scheduled.');
+                        echo json_encode($response);
+                        exit;
+                    }
+                } else {
+                    $response = array('success' => false, 'message' => 'Error in preparing SQL statement for class schedule check: ' . $conn->error);
+                    echo json_encode($response);
+                    exit;
+                }
             }
             
             // Proceed with deactivating the strand

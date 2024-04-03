@@ -55,12 +55,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
             }
 
-            // Insert the availability into the database
-	    $active = 1;            
+            // Insert the availability into the database only if there's no existing entry with Active = 1
+            $active = 1;
             $sql = "INSERT INTO instructortimeavailabilities (is_Monday, is_Tuesday, is_Wednesday, is_Thursday, is_Friday, InstructorID, Time_Start, Time_End, Active,CreatedAt) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?,  ?, NOW())";
+                    SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW() 
+                    FROM DUAL 
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM instructortimeavailabilities 
+                        WHERE InstructorID = ? AND Active = 1
+                    )";
+
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("iiiiiissi", $daysValues["Monday"], $daysValues["Tuesday"], $daysValues["Wednesday"], $daysValues["Thursday"], $daysValues["Friday"], $InstructorID, $timeStart, $timeEnd, $active);
+            $stmt->bind_param("iiiiiissii", $daysValues["Monday"], $daysValues["Tuesday"], $daysValues["Wednesday"], $daysValues["Thursday"], $daysValues["Friday"], $InstructorID, $timeStart, $timeEnd, $active, $InstructorID);
             $stmt->execute();
 
             if ($stmt->affected_rows === -1) {
@@ -96,7 +102,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $stmtUserCheck->bind_param("s", $loggedInUsername);
                     $stmtUserCheck->execute();
                     $resultUserCheck = $stmtUserCheck->get_result();
-        
 
                     if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
                         $row = $resultUserCheck->fetch_assoc();
@@ -133,10 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             $resultLog = $stmtLog->execute();
                         }
                     }
-                    
                 }
-
-                 
             }
         }
     } else {

@@ -40,13 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $userInfoID = $row['UserInfoID'];
 
                     // Fetch Fname and Mname based on InstructorID from the Instructors table
-                    $sqlInstructor = "SELECT ist.InstructorID, usi.Fname, usi.Mname FROM instructortimeavailabilities ist
+                    $sqlInstructor = "SELECT i.InstructorID, usi.Fname, usi.Mname FROM instructortimeavailabilities ist
                     INNER JOIN instructors i ON ist.InstructorID = i.InstructorID
                     LEFT JOIN userinfo usi ON i.UserInfoID = usi.UserInfoID
-
-                    WHERE ist.InstructorID = ?";
+                    WHERE ist.InstructorTimeAvailabilitiesID = ?";
                     $stmtInstructor = $conn->prepare($sqlInstructor);
-                    $stmtInstructor->bind_param("i", $InstructorID);
+                    $stmtInstructor->bind_param("i", $timeAvailID); // Use $timeAvailID here
                     $stmtInstructor->execute();
                     $resultInstructor = $stmtInstructor->get_result();
                     $instructorData = $resultInstructor->fetch_assoc();

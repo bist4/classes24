@@ -514,6 +514,7 @@ include('session_out.php');
                 var trimmedValue = field.value.trim();
                 if ((field.id === "SubjectName" || field.id === "subDesc" ) && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
+                    $('#updateBtn').prop('disabled', true);
                 } else if ((field.id === "sectionNo" || field.id === "sectionName") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');
                 } else if (field.id === "SubjectCode") {
@@ -526,8 +527,12 @@ include('session_out.php');
                     }
                 } else if (field.id !== "sectionNo" || field.id !== "sectionName" && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before letters are not allowed.');
+                    $('#updateBtn').prop('disabled', true);
+                    
                 } else if (field.id === "sectionNo" || field.id !== "sectionName" && !/^\d*$/.test(field.value)) {
                     showValidationMessage(field, 'It must contain only numbers.');
+                    $('#updateBtn').prop('disabled', true);
+
                 } else {
                     hideValidationMessage(field);
                 }

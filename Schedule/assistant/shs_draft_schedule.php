@@ -705,7 +705,7 @@ if (isset($_SESSION['Username'])) {
             // Display SweetAlert confirmation
             Swal.fire({
                 title: 'Confirmation',
-                text: 'Are you sure you want to send this schedule for Grade '+ $("#yearLevel option:selected").text() + ' ' + $("#section option:selected").text() + '. Continue?',
+                text: 'Are you sure you want to send this schedule for '+ $("#yearLevel option:selected").text() + ' ' + $("#section option:selected").text() + '. Continue?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -714,7 +714,7 @@ if (isset($_SESSION['Username'])) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     // User clicked "Yes," proceed with the update
-                    var gradeLevel = $("#yearLevel option:selected").text();
+                    var gradeLevel = $("#yearLevel").val();
 		            var sectionName = $("#section option:selected").text();
                     // Get selected values from dropdowns
                     var yearLevel = $("#strand").val();

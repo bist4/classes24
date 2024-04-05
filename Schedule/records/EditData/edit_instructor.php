@@ -349,21 +349,21 @@ include('session_out.php');
                                             </div>
 
                                                <div class="form-group">
-                                               <div class="form-check form-check-inline">
-                                                    <input class="form-check-input Department" type="checkbox" id="primary<?php echo $secdata['InstructorID'];?>" <?php if ($secdata['is_Primary'] == 1 ) echo "checked"; ?> name="primary" value="M">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input Department" type="checkbox" id="primary<?php echo $secdata['InstructorID'];?>" <?php if ($secdata['is_Primary'] == 1 ) echo "checked"; ?> name="primary" value="M">
 
-                                                    <label class="form-check-label" for="Monday">Primary</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input Department" type="checkbox" id="primary<?php echo $secdata['InstructorID'];?>" <?php if ($secdata['is_JuniorHighSchool'] == 1 ) echo "checked"; ?> name="juniorhighschool" value ="T">
+                                                        <label class="form-check-label" for="Monday">Primary</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input Department" type="checkbox" id="primary<?php echo $secdata['InstructorID'];?>" <?php if ($secdata['is_JuniorHighSchool'] == 1 ) echo "checked"; ?> name="juniorhighschool" value ="T">
 
-                                                    <label class="form-check-label" for="Monday">Junior High School</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input Department" type="checkbox" id="primary<?php echo $secdata['InstructorID'];?>" <?php if ($secdata['is_SeniorHighSchool'] == 1 ) echo "checked"; ?> name="seniorhighschool" value="W">
+                                                        <label class="form-check-label" for="Monday">Junior High School</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input Department" type="checkbox" id="primary<?php echo $secdata['InstructorID'];?>" <?php if ($secdata['is_SeniorHighSchool'] == 1 ) echo "checked"; ?> name="seniorhighschool" value="W">
 
-                                                    <label class="form-check-label" for="Monday">Senior High School</label>
-                                                </div>
+                                                        <label class="form-check-label" for="Monday">Senior High School</label>
+                                                    </div>
                                                </div>
    
                                                 <div class="d-flex justify-content-end">
@@ -473,75 +473,92 @@ include('session_out.php');
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
  
+ <script>
+    $(document).ready(function(){
+    $('#updateButton').click(function(e){
+        e.preventDefault();
+        var form = $('.needs-validation')[0];
+        var checkboxes = document.querySelectorAll(".Department");
+        var isChecked = false; // Flag to track if any checkbox is checked
 
-     <!-- Update Data -->
-    <script>
-        $(document).ready(function(){
-            $('#updateButton').click(function(e){
-                e.preventDefault();
-                var form = $('.needs-validation')[0];
-                
-                if (form.checkValidity()) {
-                    var formData = new FormData(form);
-                    var loading = Swal.fire({
-                        title: 'Please wait',
-                        html: 'Updating your data...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false, 
-                        onBeforeOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
+        checkboxes.forEach(function(checkbox) {
+            if (checkbox.checked) {
+                isChecked = true; // Set flag to true if a checkbox is checked
+            }
+        });
 
-                    $.ajax({
-                        type: 'POST',
-                        url: '../DataUpdate/update_instructor.php',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(response){
-                            response = JSON.parse(response);
-                            loading.close(); // Close loading animation
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Success',
-                                    text: response.success,
-                                }).then(function() {
-				    var subid ="<?php echo $_GET['subid']?>";
-                                    window.location.href = 'edit_instructor.php?subid=' + subid;
-                                });
-                            } else if (response.error) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Warning',
-                                    text: response.error,
-                                });
-                            }
-                        },
-                        error: function() {
-                            loading.close(); // Close loading animation
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while submitting data.',
-                            });
-                        }
-                    });
-                } else {
+        // If no checkbox is checked, show SweetAlert message and prevent form submission
+        if (!isChecked) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please check at least one department.',
+            });
+            return false; // Prevent form submission
+        }
+
+        if (form.checkValidity()) {
+            var formData = new FormData(form);
+            var loading = Swal.fire({
+                title: 'Please wait',
+                html: 'Updating your data...',
+                allowOutsideClick: false,
+                showConfirmButton: false, 
+                onBeforeOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: '../DataUpdate/update_instructor.php',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response){
+                    response = JSON.parse(response);
+                    loading.close(); // Close loading animation
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: response.success,
+                        }).then(function() {
+                            var subid ="<?php echo $_GET['subid']?>";
+                            window.location.href = 'edit_instructor.php?subid=' + subid;
+                        });
+                    } else if (response.error) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Warning',
+                            text: response.error,
+                        });
+                    }
+                },
+                error: function() {
+                    loading.close(); // Close loading animation
                     Swal.fire({
-                        icon: 'warning',
-                        title: 'Warning',
-                        text: 'Please fill in all required fields.'
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while submitting data.',
                     });
                 }
-                form.classList.add('was-validated');
             });
-        });
-    </script>
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Please fill in all required fields.'
+            });
+        }
+        form.classList.add('was-validated');
+    });
+});
+
+ </script>
 
 
-    
+
 
 </body>
 

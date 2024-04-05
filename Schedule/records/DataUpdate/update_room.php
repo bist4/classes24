@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['RoomID'])) { // Check if data is posted and not empty
     require('../../config/db_connection.php');
 
     $successCount = 0; 
@@ -14,8 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $roomNumber = $_POST['RoomNumber'][$key];
         $capacity = $_POST['Capacity'][$key];
         $roomTypeName = $_POST['RoomTypeName'][$key];
-
-
 
         $fetchOriginalValuesQuery = $conn->prepare("SELECT RoomNumber, Capacity, RoomTypeName FROM rooms WHERE RoomID = ?");
         $fetchOriginalValuesQuery->bind_param("i", $RoomID);
@@ -32,17 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($resultValidation->num_rows > 0) {
                 $errors[] = "Room already exist.";
-            }else{
-
+            } else {
                 if (
                     $originalRoomData['RoomNumber'] !== $roomNumber ||
                     $originalRoomData['Capacity'] !== $capacity ||
                     $originalRoomData['RoomTypeName'] !== $roomTypeName 
-                ){
+                ) {
                     $hasChanges = true;
 
                     $activity = 'Update Room: ' . $roomNumber . ' (';
-    
+
                     if ($originalRoomData['RoomNumber'] !== $roomNumber) {
                         $activity .= 'Room Number: ' . $originalRoomData['RoomNumber'] . ' -> ' . $roomNumber . ', ';
                     }
@@ -56,42 +53,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Log the activity
                     if (isset($_SESSION['Username'])) {
                         $loggedInUsername = $_SESSION['Username'];
-                    
+
                         $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
                         $stmtUserCheck = $conn->prepare($sqlUserCheck);
                         $stmtUserCheck->bind_param("s", $loggedInUsername);
                         $stmtUserCheck->execute();
                         $resultUserCheck = $stmtUserCheck->get_result();
-                    
+
                         if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
                             $row = $resultUserCheck->fetch_assoc();
                             $userInfoID = $row['UserInfoID'];
-                    
+
                             $currentDateTime = date('Y-m-d H:i:s');
                             $active = 1;
-                    
+
                             $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
                             $stmtLog = $conn->prepare($sqlLog);
                             $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
                             $resultLog = $stmtLog->execute();
                         }
                     }
-                   
-    
-                    
 
                     $stmt = $conn->prepare("UPDATE rooms SET RoomNumber=?, Capacity=?, RoomTypeName=? WHERE RoomID=?");
                     $stmt->bind_param("iisi", $roomNumber, $capacity, $roomTypeName, $RoomID);
                     $stmt->execute();
-    
-                     // Check if the update was successful for this iteration
-                     if ($stmt->affected_rows > 0) {
+
+                    // Check if the update was successful for this iteration
+                    if ($stmt->affected_rows > 0) {
                         $successCount++;
                         $hasChanges = true;
                     }
-
                 }
-
             }
             $stmtValidation->close();   
         }
@@ -109,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
     } else {
-          // No updates were successful or validation errors occurred
+        // No updates were successful or validation errors occurred
         if (!empty($errors)) {
             echo json_encode(["error" => $errors]);
             exit();
@@ -118,7 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
     }
-
-    
+} else {
+    // No data posted or empty, do nothing or return appropriate response
+    echo json_encode(["error" => "No data posted or empty"]);
+    exit();
 }
 ?>

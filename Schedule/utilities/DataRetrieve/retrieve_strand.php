@@ -1,116 +1,99 @@
 <?php
-require('../../config/db_connection.php');
+require '../../config/db_connection.php';
 
 session_start();
+
+// Initialize response array
+$response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['StrandID'])) {
         $strandID = $_POST['StrandID'];
 
         // Check if the Strand with the given ID exists and if it's active
-        $stmtCheckStrand = $conn->prepare("SELECT StrandName, Active FROM strands WHERE StrandID = ?");
+        $stmtCheckStrand = $conn->prepare("SELECT StrandCode, Active FROM strands WHERE StrandID = ?");
         $stmtCheckStrand->bind_param("i", $strandID);
         $stmtCheckStrand->execute();
         $resultCheckStrand = $stmtCheckStrand->get_result();
 
         if ($resultCheckStrand->num_rows === 1) {
             $row = $resultCheckStrand->fetch_assoc();
-            $strandName = $row['StrandName'];
+            $strandName = $row['StrandCode'];
             $isActive = $row['Active'];
 
             if ($isActive == 1) {
-                echo json_encode(["error" => "The data already exists and is active"]); 
+                $response['error'] = "The data already exists and is active";
             } else {
-
+                // Data doesn't exist in filemantanance, proceed with restoration
                 $sqlUpdateActive = "UPDATE strands SET Active = 1 WHERE StrandID = ?";
                 $stmtUpdateActive = $conn->prepare($sqlUpdateActive);
                 $stmtUpdateActive->bind_param("i", $strandID);
 
                 if ($stmtUpdateActive->execute()) {
+                    $departmentTypeNameID = 1;
+                    $yearLevels = [11, 11, 12, 12];
+                    $semesters = [1, 2, 1, 2];
+
                     $insertDepartmentSql = "INSERT INTO departments (DepartmentTypeNameID, GradeLevel, Semester, StrandID) VALUES (?, ?, ?, ?)";
                     $stmtInsertDepartment = $conn->prepare($insertDepartmentSql);
 
-                    // Bind parameters and execute for GradeLevel 11 and Semester 1
-                    $departmentTypeNameID = 1; // Assuming a default value for DepartmentTypeNameID
-                    $gradeLevel = 11;
-                    $semester = 1;
-                    $stmtInsertDepartment->bind_param("iiii", $departmentTypeNameID, $gradeLevel, $semester, $strandID);
-                    $stmtInsertDepartment->execute();
+                    for ($i = 0; $i < count($yearLevels); $i++) {
+                        $stmtInsertDepartment->bind_param(
+                            "iiii",
+                            $departmentTypeNameID,
+                            $yearLevels[$i],
+                            $semesters[$i],
+                            $strandID
+                        );
+                        if ($stmtInsertDepartment->execute()) {
+                            // Log activity
+                            if (isset($_SESSION['Username'])) {
+                                $loggedInUsername = $_SESSION['Username'];
 
-                    // Check if insertion for GradeLevel 11 and Semester 1 failed
-                    if ($stmtInsertDepartment->errno) {
-                        echo json_encode(["error" => "Failed to restore strand: " . $stmtInsertDepartment->error]);
-                        exit; // Exit to prevent further execution
-                    }
+                                $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                                $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                                $stmtUserCheck->bind_param("s", $loggedInUsername);
+                                $stmtUserCheck->execute();
+                                $resultUserCheck = $stmtUserCheck->get_result();
 
-                    // Bind parameters and execute for GradeLevel 11 and Semester 2
-                    $semester = 2;
-                    $stmtInsertDepartment->bind_param("iiii", $departmentTypeNameID, $gradeLevel, $semester, $strandID);
-                    $stmtInsertDepartment->execute();
+                                if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                                    $row = $resultUserCheck->fetch_assoc();
+                                    $userInfoID = $row['UserInfoID'];
 
-                    // Bind parameters and execute for GradeLevel 12 and Semester 1
-                    $gradeLevel = 12;
-                    $semester = 1;
-                    $stmtInsertDepartment->bind_param("iiii", $departmentTypeNameID, $gradeLevel, $semester, $strandID);
-                    $stmtInsertDepartment->execute();
+                                    $activity = 'Restored strand name ' . $strandName;
+                                    $currentDateTime = date('Y-m-d H:i:s');
+                                    $active = 1;
 
-                    // Bind parameters and execute for GradeLevel 12 and Semester 2
-                    $semester = 2;
-                    $stmtInsertDepartment->bind_param("iiii", $departmentTypeNameID, $gradeLevel, $semester, $strandID);
-                    $stmtInsertDepartment->execute();
-
-                    // Check if all inserts were successful
-                    if ($stmtInsertDepartment->affected_rows == 4) {
-                        // Insertion was successful
-                        echo json_encode(["success" => "Strand restored successfully"]);
-
-                        // Add logs activity
-                        if (isset($_SESSION['Username'])) {
-                            $loggedInUsername = $_SESSION['Username'];
-
-                            $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
-                            $stmtUserCheck = $conn->prepare($sqlUserCheck);
-                            $stmtUserCheck->bind_param("s", $loggedInUsername);
-                            $stmtUserCheck->execute();
-                            $resultUserCheck = $stmtUserCheck->get_result();
-
-                            if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
-                                $row = $resultUserCheck->fetch_assoc();
-                                $userInfoID = $row['UserInfoID'];
-
-                                $activity = 'Restored strand name ' . $strandName;
-                                $currentDateTime = date('Y-m-d H:i:s');
-                                $active = 1;
-
-                                $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
-                                $stmtLog = $conn->prepare($sqlLog);
-                                $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
-                                $resultLog = $stmtLog->execute();
+                                    $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                                    $stmtLog = $conn->prepare($sqlLog);
+                                    $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
+                                    $resultLog = $stmtLog->execute();
+                                }
                             }
+                        } else {
+                            $response['error'] = "Failed to restore strand";
+                            break; // Break the loop if an error occurs
                         }
-
-                    } else {
-                        // Insertion failed
-                        echo json_encode(["error" => "Failed to restore strand"]);
                     }
+                    $response['success'] = "Strand restored successfully";
                     $stmtInsertDepartment->close();
-
                 } else {
-                    // Update failed
-                    echo json_encode(["error" => "Failed to update strand status"]);
+                    $response['error'] = "Failed to update strand status";
                 }
-                
             }
         } else {
-            echo json_encode(["error" => "Strand not found or invalid ID"]);
+            $response['error'] = "Strand not found or invalid ID";
         }
 
-        // Close the prepared statement
+        // Close the prepared statements
         $stmtCheckStrand->close();
     } else {
-        echo json_encode(["error" => "Invalid input"]);
+        $response['error'] = "Invalid input";
     }
 } else {
-    echo json_encode(["error" => "Invalid request"]);
+    $response['error'] = "Invalid request";
 }
+
+// Send JSON response
+echo json_encode($response);
 ?>

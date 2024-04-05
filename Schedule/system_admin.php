@@ -6,7 +6,7 @@ include('security.php');// Start the session
 if (isset($_SESSION['Username'])) {
     $loggedInName = $_SESSION['Username'];
 
-    $query = "SELECT is_Lock_Account, UserTypeID FROM userinfo WHERE Username = '$loggedInName' AND UserTypeID = 2";
+    $query = "SELECT is_Lock_Account, UserTypeID, Fname, Lname FROM userinfo WHERE Username = '$loggedInName' AND UserTypeID = 2";
     // Execute the query
     $result = $conn->query($query);
     
@@ -251,10 +251,11 @@ include('session_out.php');
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Welcome, Admin!</h1>
-                        <!-- <a href="generate_report.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-                        </a> -->
+                    <h1 id="instructor" class="h3 mb-0 text-gray-800">Welcome                             
+                        <?php
+                            echo $row['Fname'] . " " . $row['Lname'];
+                        ?>!
+                    </h1>
                     </div>
                     <!-- <button id="sendButton">Send</button> -->
                     <!-- Content Row -->

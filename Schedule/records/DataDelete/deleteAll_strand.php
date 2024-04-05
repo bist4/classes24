@@ -13,17 +13,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt) {
             // Bind parameters
-            foreach ($strandIDs as $key => $strandID) {
-                $stmt->bind_param('i', $strandIDs[$key]);
-            }
-            
+            $types = str_repeat('i', count($strandIDs));
+            $stmt->bind_param($types, ...$strandIDs);
+
             // Execute the statement
             $stmt->execute();
-            
+
             // Fetch the result
             $result = $stmt->get_result();
             $row = $result->fetch_assoc();
-            
+
             // Check if any class schedules exist for the strand
             if ($row['count'] > 0) {
                 // Check if there are corresponding class schedules in the classschedules table
@@ -32,9 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if ($classStmt) {
                     // Bind parameters
-                    foreach ($strandIDs as $key => $strandID) {
-                        $classStmt->bind_param('i', $strandIDs[$key]);
-                    }
+                    $classStmt->bind_param($types, ...$strandIDs);
 
                     // Execute the statement
                     $classStmt->execute();
@@ -54,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit;
                 }
             }
-            
+
             // Proceed with deactivating the strand
             $updatesql = "UPDATE strands SET Active = 0 WHERE StrandID = ?";
             $stmt = $conn->prepare($updatesql);
@@ -71,15 +68,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
+                if (isset($_SESSION['Username'])) {
+                    $loggedInUsername = $_SESSION['Username'];
+
+                    $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                    $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                    $stmtUserCheck->bind_param("s", $loggedInUsername);
+                    $stmtUserCheck->execute();
+                    $resultUserCheck = $stmtUserCheck->get_result();
+
+                    if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                        $row = $resultUserCheck->fetch_assoc();
+                        $userInfoID = $row['UserInfoID'];
+
+                        foreach ($strandIDs as $strandID) {
+                            $sqlStrandInfo = "SELECT * FROM strands WHERE StrandID=?";
+                            $stmtStrandInfo = $conn->prepare($sqlStrandInfo);
+                            $stmtStrandInfo->bind_param("i", $strandID);
+                            $stmtStrandInfo->execute();
+                            $resultStrandInfo = $stmtStrandInfo->get_result();
+
+                            if ($resultStrandInfo && $resultStrandInfo->num_rows > 0) {
+                                $strandRow = $resultStrandInfo->fetch_assoc();
+                                $StrandCode = $strandRow['StrandCode'];
+                                $StrandName = $strandRow['StrandName'];
+
+                                $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (NOW(), ?, ?, ?, NOW())";
+                                $stmtLog = $conn->prepare($sqlLog);
+                                $activity = 'Delete Strand ' . $StrandCode . ' ' . $StrandName;
+                                $active = 1;
+                                $stmtLog->bind_param("sii", $activity, $userInfoID, $active);
+                                $resultLog = $stmtLog->execute();
+                                if (!$resultLog) {
+                                    $response = array('success' => false, 'message' => 'Failed to insert deletion log.');
+                                    echo json_encode($response);
+                                    exit;
+                                }
+                            } else {
+                                $response = array('success' => false, 'message' => 'Failed to fetch strand information for log insertion.');
+                                echo json_encode($response);
+                                exit;
+                            }
+                        }
+                    } else {
+                        $response = array('success' => false, 'message' => 'Failed to get user information for log insertion.');
+                        echo json_encode($response);
+                        exit;
+                    }
+                } else {
+                    $response = array('success' => false, 'message' => 'User not logged in.');
+                    echo json_encode($response);
+                    exit;
+                }
+
                 // Delete records from departments table based on strandIDs
                 $deletesql = "DELETE FROM departments WHERE StrandID IN (" . implode(',', array_fill(0, count($strandIDs), '?')) . ")";
                 $stmt = $conn->prepare($deletesql);
 
                 if ($stmt) {
-                    foreach ($strandIDs as $key => $strandID) {
-                        $stmt->bind_param('i', $strandIDs[$key]);
-                        $stmt->execute();
-                    }
+                    $stmt->bind_param($types, ...$strandIDs);
+                    $stmt->execute();
                 } else {
                     $response = array('success' => false, 'message' => 'Error in preparing SQL statement for department deletion: ' . $conn->error);
                     echo json_encode($response);

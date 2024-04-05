@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $TrackTypeName = $strand['TrackTypeName'];
         $Specialization = $strand['Specialization'];
 
-        $sqlCheck = "SELECT StrandCode, Active FROM strands WHERE StrandCode = ? AND Active =1";
+        $sqlCheck = "SELECT StrandCode, Active FROM strands WHERE StrandCode = ? AND Active = 1";
         $stmtCheck = $conn->prepare($sqlCheck);
         $stmtCheck->bind_param("s", $StrandCode);
         $stmtCheck->execute();
@@ -53,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $yearLevels[$i],
                     $semesters[$i],
                     $StrandID
-                    
                 );
                 $resultInsertDepartment = $stmtInsertDepartment->execute();
 
@@ -66,31 +65,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($success) {
-        if (isset($_SESSION['UserID'])) {
-           
-            $loggedInUserID = $_SESSION['UserID'];
+        if (isset($_SESSION['Username'])) {
+            $loggedInUsername = $_SESSION['Username'];
 
-            $sqlUserCheck = "SELECT UserInfoID FROM userinfo WHERE UserInfoID = ?";
+            $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
             $stmtUserCheck = $conn->prepare($sqlUserCheck);
-            $stmtUserCheck->bind_param("i", $loggedInUserID);
+            $stmtUserCheck->bind_param("s", $loggedInUsername);
             $stmtUserCheck->execute();
             $resultUserCheck = $stmtUserCheck->get_result();
 
-            if ($resultUserCheck->num_rows > 0) {
-                foreach ($Strands as $strand){
+            if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                $row = $resultUserCheck->fetch_assoc();
+                $userInfoID = $row['UserInfoID'];
+
+                foreach ($Strands as $strand) {
                     $StrandCode = $strand['StrandCode'];
                     $StrandName = $strand['StrandName'];
-                    $TrackTypeName = $strand['TrackTypeName'];
-                    $Specialization = $strand['Specialization'];         
-        
 
-                    $activity = 'Add Strand: ' . $StrandCode . ' (' . $StrandName . ', Track Type: ' . $TrackTypeName . '<br>Specialization:  ' .$Specialization.')';
+                    $activity = 'Add Strand ' . $StrandCode . ' ' . $StrandName;
                     $currentDateTime = date('Y-m-d H:i:s');
                     $active = 1;
 
-                    $sqlLog = "INSERT INTO logs (DateTime, Activity, UserID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
+                    $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (?, ?, ?, ?, NOW())";
                     $stmtLog = $conn->prepare($sqlLog);
-                    $stmtLog->bind_param("ssii", $currentDateTime, $activity, $loggedInUserID, $active);
+                    $stmtLog->bind_param("ssii", $currentDateTime, $activity, $userInfoID, $active);
                     $resultLog = $stmtLog->execute();
                 }
             }

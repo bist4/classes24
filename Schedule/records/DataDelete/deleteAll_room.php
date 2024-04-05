@@ -47,6 +47,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
 
+                if (isset($_SESSION['Username'])) {
+                    $loggedInUsername = $_SESSION['Username'];
+
+                    $sqlUserCheck = "SELECT * FROM userinfo WHERE Username=?";
+                    $stmtUserCheck = $conn->prepare($sqlUserCheck);
+                    $stmtUserCheck->bind_param("s", $loggedInUsername);
+                    $stmtUserCheck->execute();
+                    $resultUserCheck = $stmtUserCheck->get_result();
+
+                    if ($resultUserCheck && $resultUserCheck->num_rows > 0) {
+                        $row = $resultUserCheck->fetch_assoc();
+                        $userInfoID = $row['UserInfoID'];
+
+                        foreach ($roomIDs as $roomID) {
+                            $sqlStrandInfo = "SELECT * FROM rooms WHERE RoomID=?";
+                            $stmtStrandInfo = $conn->prepare($sqlStrandInfo);
+                            $stmtStrandInfo->bind_param("i", $roomID);
+                            $stmtStrandInfo->execute();
+                            $resultStrandInfo = $stmtStrandInfo->get_result();
+
+                            if ($resultStrandInfo && $resultStrandInfo->num_rows > 0) {
+                                $strandRow = $resultStrandInfo->fetch_assoc();
+                                $StrandCode = $strandRow['RoomNumber'];
+                                
+
+                                $sqlLog = "INSERT INTO logs (DateTime, Activity, UserInfoID, Active, CreatedAt) VALUES (NOW(), ?, ?, ?, NOW())";
+                                $stmtLog = $conn->prepare($sqlLog);
+                                $activity = 'Delete Room Number ' . $StrandCode;
+                                $active = 1;
+                                $stmtLog->bind_param("sii", $activity, $userInfoID, $active);
+                                $resultLog = $stmtLog->execute();
+                                if (!$resultLog) {
+                                    $response = array('success' => false, 'message' => 'Failed to insert deletion log.');
+                                    echo json_encode($response);
+                                    exit;
+                                }
+                            } else {
+                                $response = array('success' => false, 'message' => 'Failed to fetch room information for log insertion.');
+                                echo json_encode($response);
+                                exit;
+                            }
+                        }
+                    } else {
+                        $response = array('success' => false, 'message' => 'Failed to get user information for log insertion.');
+                        echo json_encode($response);
+                        exit;
+                    }
+                } else {
+                    $response = array('success' => false, 'message' => 'User not logged in.');
+                    echo json_encode($response);
+                    exit;
+                }
+                
+
                 $response = array('success' => true, 'message' => 'Room(s) Deleted Successfully');
                 echo json_encode($response);
                 exit();

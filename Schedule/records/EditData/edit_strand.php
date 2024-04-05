@@ -344,16 +344,16 @@ include('session_out.php');
                                         <?php foreach ($allSectionData as $secdata) { ?>
                                             <tr>
                                                 <td class="col-md-2">
-                                                    <input type="text" class="form-control" id="StrandCode_<?php echo $secdata['StrandID']; ?>" value="<?php echo $secdata['StrandCode']; ?>" name="StrandCode[]" placeholder="Enter Strand Code" title="Input Strand Code">
+                                                    <input type="text" class="form-control" id="StrandCode" value="<?php echo $secdata['StrandCode']; ?>" name="StrandCode[]" placeholder="Enter Strand Code" title="Input Strand Code">
                                                 </td>
                                                 <td class="col-md-4">
-                                                    <input type="text" class="form-control" id="StrandName_<?php echo $secdata['StrandID']; ?>" value="<?php echo $secdata['StrandName']; ?>" name="StrandName[]" placeholder="Enter Strand Name" title="Input Strand Name">
+                                                    <input type="text" class="form-control" id="StrandName" value="<?php echo $secdata['StrandName']; ?>" name="StrandName[]" placeholder="Enter Strand Name" title="Input Strand Name">
                                                 </td>
                                                 <td class="col-md-2">
-                                                    <input type="text" class="form-control" id="TrackType_<?php echo $secdata['StrandID']; ?>" value="<?php echo $secdata['TrackTypeName']; ?>" name="TrackTypeName[]" placeholder="Enter Track Type Name" title="Input Track Type Name">
+                                                    <input type="text" class="form-control" id="TrackType" value="<?php echo $secdata['TrackTypeName']; ?>" name="TrackTypeName[]" placeholder="Enter Track Type Name" title="Input Track Type Name">
                                                 </td>
                                                 <td class="col-md-4">
-                                                    <input type="text" class="form-control" id="Specialization_<?php echo $secdata['StrandID']; ?>" value="<?php echo $secdata['Specialization']; ?>" name="Specialization[]" placeholder="Enter Specialization" title="Input Specialization">
+                                                    <input type="text" class="form-control" id="Specialization" value="<?php echo $secdata['Specialization']; ?>" name="Specialization[]" placeholder="Enter Specialization" title="Input Specialization">
                                                     <input type="hidden" name="StrandID[]" value="<?php echo $secdata['StrandID']; ?>">
                                                 </td>
                                             </tr>
@@ -580,9 +580,9 @@ include('session_out.php');
             var fields = document.querySelectorAll("input");
             fields.forEach(function(field) {
                 var trimmedValue = field.value.trim();
-                if ((field.id === "StrandName<?php echo $secdata['StrandID']; ?>" || field.id === "TrackType<?php echo $secdata['StrandID']; ?>"  || field.id === "Specialization<?php echo $secdata['StrandID']; ?>") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                if ((field.id === "StrandName" || field.id === "TrackType"  || field.id === "Specialization") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
-                } else if (field.id === "StrandCode<?php echo $secdata['StrandID']; ?>") {
+                } else if (field.id === "StrandCode") {
                     if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                         showValidationMessage(field, 'Only letters are allowed.');
                     } else if (/^\s/.test(field.value)) {
@@ -590,7 +590,7 @@ include('session_out.php');
                     } else {
                         hideValidationMessage(field);
                     }
-                } else if (field.id !== "StrandCode<?php echo $secdata['StrandID']; ?>" && /^\s/.test(field.value)) {
+                } else if (field.id !== "StrandCode" && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before letters are not allowed.');
                 }  else {
                     hideValidationMessage(field);

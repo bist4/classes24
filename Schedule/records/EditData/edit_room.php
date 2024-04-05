@@ -309,10 +309,10 @@ include('session_out.php');
                                         <?php foreach ($allSectionData as $secdata) { ?>
                                         <tr>
                                             <td class="col-md-2">
-                                                <input type="text" class="form-control" id="sectionNo<?php echo $secdata['RoomID']; ?>" name="RoomNumber[]" value="<?php echo $secdata['RoomNumber']; ?>" pattern="[0-9]+" title="Please enter numbers only">
+                                                <input type="text" class="form-control" id="sectionNo" name="RoomNumber[]" value="<?php echo $secdata['RoomNumber']; ?>" pattern="[0-9]+" title="Please enter numbers only">
                                             </td>
                                             <td class="col-md-5">
-                                                <input type="text" class="form-control" id="sectionName<?php echo $secdata['RoomID']; ?>" name="Capacity[]" placeholder="Enter Capacity" value="<?php echo $secdata['Capacity']; ?>" pattern="[0-9]+" title="Please enter numbers only" required>
+                                                <input type="text" class="form-control" id="sectionName" name="Capacity[]" placeholder="Enter Capacity" value="<?php echo $secdata['Capacity']; ?>" pattern="[0-9]+" title="Please enter numbers only" required>
                                             </td>
 
                                             <td class="col-md-5">
@@ -514,7 +514,7 @@ include('session_out.php');
                 var trimmedValue = field.value.trim();
                 if ((field.id === "SubjectName" || field.id === "subDesc" ) && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
-                } else if ((field.id === "sectionNo<?php echo $secdata['RoomID']; ?>" || field.id === "sectionName<?php echo $secdata['RoomID']; ?>") && !trimmedValue) {
+                } else if ((field.id === "sectionNo" || field.id === "sectionName") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');
                 } else if (field.id === "SubjectCode") {
                     if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
@@ -524,9 +524,9 @@ include('session_out.php');
                     } else {
                         hideValidationMessage(field);
                     }
-                } else if (field.id !== "sectionNo<?php echo $secdata['RoomID']; ?>" || field.id !== "sectionName<?php echo $secdata['RoomID']; ?>" && /^\s/.test(field.value)) {
+                } else if (field.id !== "sectionNo" || field.id !== "sectionName" && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before letters are not allowed.');
-                } else if (field.id === "sectionNo<?php echo $secdata['RoomID']; ?>" field.id !== "sectionName<?php echo $secdata['RoomID']; ?>" && !/^\d*$/.test(field.value)) {
+                } else if (field.id === "sectionNo" field.id !== "sectionName" && !/^\d*$/.test(field.value)) {
                     showValidationMessage(field, 'It must contain only numbers.');
                 } else {
                     hideValidationMessage(field);

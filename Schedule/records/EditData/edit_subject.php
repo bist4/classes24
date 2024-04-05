@@ -359,13 +359,13 @@ include('session_out.php');
                                         <?php foreach ($allSectionData as $secdata) { ?>
                                             <tr>
                                                 <td class="col-md-3">
-                                                    <input type="text" class="form-control" id="SubjectCode_<?php echo $secdata['SubjectID']; ?>" value="<?php echo $secdata['SubjectCode']; ?>" name="SubjectCode[]" placeholder="Enter Strand Code" title="Input Strand Code">
+                                                    <input type="text" class="form-control" id="SubjectCode" value="<?php echo $secdata['SubjectCode']; ?>" name="SubjectCode[]" placeholder="Enter Strand Code" title="Input Strand Code">
                                                 </td>
                                                 <td class="col-md-3">
-                                                    <input type="text" class="form-control" id="SubjectName_<?php echo $secdata['SubjectID']; ?>" value="<?php echo $secdata['SubjectName']; ?>" name="SubjectName[]" placeholder="Enter Strand Name" title="Input Strand Name">
+                                                    <input type="text" class="form-control" id="SubjectName" value="<?php echo $secdata['SubjectName']; ?>" name="SubjectName[]" placeholder="Enter Strand Name" title="Input Strand Name">
                                                 </td>
                                                 <!-- <td class="col-md-2">
-                                                    <input type="text" class="form-control" id="classSub_<?php echo $secdata['SubjectID']; ?>" value="<?php echo $secdata['Classification']; ?>" name="Classification[]"  placeholder="Enter Classification" title="Input Subject Classification" required oninput="validateNoSpace(this)">
+                                                    <input type="text" class="form-control" id="classSub" value="<?php echo $secdata['Classification']; ?>" name="Classification[]"  placeholder="Enter Classification" title="Input Subject Classification" required oninput="validateNoSpace(this)">
                                                 </td> -->
                                                 <td class="col-md-2">
                                                     <select class="form-control" id="subType<?php echo $secdata['SubjectID']; ?>"" name="Type[]" required>

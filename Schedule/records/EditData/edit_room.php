@@ -526,7 +526,7 @@ include('session_out.php');
                     }
                 } else if (field.id !== "sectionNo" || field.id !== "sectionName" && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before letters are not allowed.');
-                } else if (field.id === "sectionNo" field.id !== "sectionName" && !/^\d*$/.test(field.value)) {
+                } else if (field.id === "sectionNo" || field.id !== "sectionName" && !/^\d*$/.test(field.value)) {
                     showValidationMessage(field, 'It must contain only numbers.');
                 } else {
                     hideValidationMessage(field);
@@ -540,7 +540,7 @@ include('session_out.php');
             validateFormFields();
         });
 
-        
+
        
 
         

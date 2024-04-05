@@ -592,7 +592,11 @@ include('session_out.php');
                 } else if (field.id !== "StrandCode" && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before letters are not allowed.');
                     hasErrors = true; // Set flag to true if there is an error
-                } else {
+                } else if ((field.id === "StrandCode" || field.id === "StrandName" || field.id === "TrackType"|| field.id === "Specialization" ) && !trimmedValue) {
+                    showValidationMessage(field, 'This field cannot be empty.');
+                    hasErrors = true;
+                }
+                else {
                     hideValidationMessage(field);
                 }
             });

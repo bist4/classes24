@@ -327,7 +327,7 @@ include('session_out.php');
                         <div class="card mb-3">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="fname">First Name</label>
+                                    <label for="fname">Full Name</label>
                                     <input type="text" class="form-control" id="Fname<?php echo $secdata['UserInfoID']; ?>" value="<?php echo $secdata['Fname']; ?> <?php echo $secdata['Mname']; ?> <?php echo $secdata['Lname']; ?>" name="fname" readonly>
                                 </div>
 

@@ -509,23 +509,31 @@ include('session_out.php');
 
         function validateFormFields() {
             var fields = document.querySelectorAll("input");
+            var hasErrors = false; // Flag to track if there are any validation errors
             fields.forEach(function(field) {
                 var trimmedValue = field.value.trim();
                 if ((field.id === "sectionNo" || field.id === "sectionName") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');
+                    hasErrors = true; // Set flag to true if there is an error
                 } else if ((field.id === "sectionNo" || field.id === "sectionName") && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before numbers are not allowed.');
                     $('#updateBtn').prop('disabled', true);
+                    hasErrors = true; // Set flag to true if there is an error
                 } else if ((field.id === "sectionNo" || field.id === "sectionName") && !/^\d*$/.test(field.value)) {
                     showValidationMessage(field, 'It must contain only numbers.');
                     $('#updateBtn').prop('disabled', true);
+                    hasErrors = true; // Set flag to true if there is an error
                 } else {
                     hideValidationMessage(field);
-                    $('#updateBtn').prop('disabled', false);
-
                 }
             });
+
+            // If no errors were found, enable the update button
+            if (!hasErrors) {
+                $('#updateBtn').prop('disabled', false);
+            }
         }
+
 
 
 

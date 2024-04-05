@@ -359,7 +359,7 @@ include('session_out.php');
                                     <input type="hidden" name="InstructorSpecializationsID[]" value="<?php echo $secdata['InstructorSpecializationsID']; ?>">
                             
                                     <div class="form-group d-flex align-items-center">
-                                        <input type="text" class="form-control" id="Specialization<?php echo $secdata['InstructorSpecializationsID'];?> " name="specializations[]" value="<?php echo $secdata['SpecializationName'];?>" required> 
+                                        <input type="text" class="form-control" id="specialization" name="specializations[]" value="<?php echo $secdata['SpecializationName'];?>" required> 
                                         <div>
                                             <!-- <a href="#" class="trash-btn">
                                                 <i class="fas fa-trash"></i>
@@ -682,32 +682,43 @@ $(document).ready(function() {
     }
 
     
-    // Function to validate form fields
     function validateFormFields() {
         var fields = document.querySelectorAll("input");
+        var hasErrors = false; // Flag to track if there are any validation errors
         fields.forEach(function(field) {
             var trimmedValue = field.value.trim();
             if ((field.id === "fname" || field.id === "lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                 showValidationMessage(field, 'Only letters are allowed.');
+                hasErrors = true;
             } else if ((field.id === "specialization" || field.id === "lname") && !trimmedValue) {
                 showValidationMessage(field, 'This field cannot be empty.');
-            } else if (field.id === "mname") {
-                if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
-                    showValidationMessage(field, 'Only letters are allowed.');
-                } else if (/^\s/.test(field.value)) {
-                    showValidationMessage(field, 'Spaces before letters are not allowed.');
-                } else {
-                    hideValidationMessage(field);
-                }
+                hasErrors = true;
+            } else if (field.id === "mname" && trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                showValidationMessage(field, 'Only letters are allowed.');
+                hasErrors = true;
+            } else if (field.id === "mname" && /^\s/.test(field.value)) {
+                showValidationMessage(field, 'Spaces before letters are not allowed.');
+                hasErrors = true;
             } else if (field.id !== "mname" && /^\s/.test(field.value)) {
                 showValidationMessage(field, 'Spaces before letters are not allowed.');
+                hasErrors = true;
             } else if (field.id === "contact" && !/^\d*$/.test(field.value)) {
                 showValidationMessage(field, 'Contact number must contain only numbers.');
+                hasErrors = true;
             } else {
                 hideValidationMessage(field);
             }
         });
+
+        // Lock the button if there are errors, else unlock it
+        var updateButton = document.getElementById('updateButton');
+        if (hasErrors) {
+            updateButton.disabled = true;
+        } else {
+            updateButton.disabled = false;
+        }
     }
+
 
     // Event listener for input fields to validate while typing
     $("input").on("input", function() {

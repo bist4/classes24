@@ -533,7 +533,7 @@ include('session_out.php');
                 var trimmedValue = field.value.trim();
                 if ((field.id === "fname" || field.id === "lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
-                } else if ((field.id === "Specialization") && !trimmedValue) {
+                } else if ((field.id === "Specialization" || field.id === "specialization") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');
                 } else if (field.id === "specialization") {
                     if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
@@ -552,6 +552,7 @@ include('session_out.php');
                 }
             });
         }
+
 
         // Event listener for input fields to validate while typing
         $("input").on("input", function() {

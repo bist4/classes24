@@ -335,7 +335,7 @@ include('session_out.php');
 
                                 <div class="form-group" id="specializationFields">
                                     <input type="hidden" name="InstructorID" id="InstructorID" value="<?php echo $secdata['InstructorID']; ?>">
-                                    <label for="specializations">Specializations:</label>
+                                    <label for="specializations">Specialization:</label>
                                     <input type="text" class="form-control specialization" id="specialization" name="specializations[]" required>
                                 </div>
                             </div>
@@ -348,7 +348,7 @@ include('session_out.php');
 
 
                     <div class="container mt-4">
-                        <h6 class="d-inline-block active" id="viewInstructor">Edit Instructor</h6>
+                        <h6 class="d-inline-block active" id="viewInstructor">Edit Specialization</h6>
                         <div id="addContainer">
                         <form method="POST"  class="needs-validation" novalidate>
                             <?php foreach ($allSectionData  as $secdata) { ?>
@@ -359,7 +359,7 @@ include('session_out.php');
                                     <input type="hidden" name="InstructorSpecializationsID[]" value="<?php echo $secdata['InstructorSpecializationsID']; ?>">
                             
                                     <div class="form-group d-flex align-items-center">
-                                        <input type="text" class="form-control" id="specialization" name="specializations[]" value="<?php echo $secdata['SpecializationName'];?>" required> 
+                                        <input type="text" class="form-control" id="Specialization" name="specializations[]" value="<?php echo $secdata['SpecializationName'];?>" required> 
                                         <div>
                                             <!-- <a href="#" class="trash-btn">
                                                 <i class="fas fa-trash"></i>
@@ -533,9 +533,9 @@ include('session_out.php');
                 var trimmedValue = field.value.trim();
                 if ((field.id === "fname" || field.id === "lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
-                } else if ((field.id === "specialization" || field.id === "lname") && !trimmedValue) {
+                } else if ((field.id === "Specialization") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');
-                } else if (field.id === "mname") {
+                } else if (field.id === "specialization") {
                     if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                         showValidationMessage(field, 'Only letters are allowed.');
                     } else if (/^\s/.test(field.value)) {

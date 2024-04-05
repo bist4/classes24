@@ -517,16 +517,9 @@ include('session_out.php');
                     $('#updateBtn').prop('disabled', true);
                 } else if ((field.id === "sectionNo" || field.id === "sectionName") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');
-                } else if (field.id === "SubjectCode") {
-                    if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
-                        showValidationMessage(field, 'Only letters are allowed.');
-                    } else if (/^\s/.test(field.value)) {
-                        showValidationMessage(field, 'Spaces before letters are not allowed.');
-                    } else {
-                        hideValidationMessage(field);
-                    }
+                
                 } else if (field.id !== "sectionNo" || field.id !== "sectionName" && /^\s/.test(field.value)) {
-                    showValidationMessage(field, 'Spaces before letters are not allowed.');
+                    showValidationMessage(field, 'Spaces before numbers are not allowed.');
                     $('#updateBtn').prop('disabled', true);
                     
                 } else if (field.id === "sectionNo" || field.id !== "sectionName" && !/^\d*$/.test(field.value)) {

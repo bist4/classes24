@@ -594,37 +594,34 @@ include('session_out.php');
         }
 
         function validateFormFields() {
-    var fields = document.querySelectorAll("input");
-    var hasErrors = false; // Flag to track if there are any validation errors
-    fields.forEach(function(field) {
-        var trimmedValue = field.value.trim();
-        if (field.id === "SectionNo" && !/^\d*$/.test(trimmedValue)) {
-            showValidationMessage(field, 'Section Number must contain only numbers.');
-            hasErrors = true; // Set flag to true if there is an error
-        } else if ((field.id === "SectionName" || field.id === "subDesc") && !trimmedValue) {
-            showValidationMessage(field, 'This field cannot be empty.');
-            hasErrors = true; // Set flag to true if there is an error
-        } else if ((field.id === "subDesc" || field.id === "SubjectCode") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
-            showValidationMessage(field, 'Only letters are allowed.');
-            hasErrors = true; // Set flag to true if there is an error
-        } else if (field.id === "SubjectCode" && /^\s/.test(field.value)) {
-            showValidationMessage(field, 'Spaces before letters are not allowed.');
-            hasErrors = true; // Set flag to true if there is an error
-        } else if (field.id !== "SectionNo" && /^\s/.test(field.value)) {
-            showValidationMessage(field, 'Spaces before letters are not allowed.');
-            hasErrors = true; // Set flag to true if there is an error
-        } else {
-            hideValidationMessage(field);
-        }
-    });
+            var fields = document.querySelectorAll("input");
+            var hasErrors = false; // Flag to track if there are any validation errors
+            fields.forEach(function(field) {
+                var trimmedValue = field.value.trim();
+                if (field.id === "SectionNo" && !/^\d*$/.test(trimmedValue)) {
+                    showValidationMessage(field, 'Section Number must contain only numbers.');
+                    hasErrors = true; // Set flag to true if there is an error
+                } else if ((field.id === "SectionName" || field.id === "subDesc") && !trimmedValue) {
+                    showValidationMessage(field, 'This field cannot be empty.');
+                    hasErrors = true; // Set flag to true if there is an error
+                } else if (field.id === "SectionNo" && /^\s/.test(field.value)) {
+                    showValidationMessage(field, 'Spaces before numbers are not allowed.');
+                    hasErrors = true; // Set flag to true if there is an error
+                } else if (field.id !== "SectionNo" && /^\s/.test(field.value)) {
+                    showValidationMessage(field, 'Spaces before numbers are not allowed.');
+                    hasErrors = true; // Set flag to true if there is an error
+                } else {
+                    hideValidationMessage(field);
+                }
+            });
 
-    // If errors were found, disable the update button
-    if (hasErrors) {
-        $('#updateBtn').prop('disabled', true);
-    } else {
-        $('#updateBtn').prop('disabled', false);
-    }
-}
+            // If errors were found, disable the update button
+            if (hasErrors) {
+                $('#updateBtn').prop('disabled', true);
+            } else {
+                $('#updateBtn').prop('disabled', false);
+            }
+        }
 
 
 

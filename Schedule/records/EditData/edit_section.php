@@ -598,7 +598,7 @@ include('session_out.php');
             var fields = document.querySelectorAll("input");
             fields.forEach(function(field) {
                 var trimmedValue = field.value.trim();
-                if ((field.id === "SectionName" || field.id === "subDesc" ) && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                if ((field.id === "subDesc" ) && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
                 } else if ((field.id === "SectionName" || field.id === "subDesc") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');

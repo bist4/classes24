@@ -353,10 +353,10 @@ include('session_out.php');
                                         <?php foreach ($allSectionData as $secdata) { ?>
                                             <tr>
                                                 <td class="col-md-2">
-                                                    <input type="text" pattern="\d{2}"  maxlength="2" class="form-control" id="SectionNo_<?php echo $secdata['SectionID']; ?>" value="<?php echo $secdata['SectionNo']; ?>" name="SectionNo[]" placeholder="Enter Section Number" title="Input Section Number" oninput="this.value.replace(/[^0-9]/g, '').slice(0, 2)">
+                                                    <input type="text" pattern="\d{2}"  maxlength="2" class="form-control" id="SectionNo" value="<?php echo $secdata['SectionNo']; ?>" name="SectionNo[]" placeholder="Enter Section Number" title="Input Section Number" oninput="this.value.replace(/[^0-9]/g, '').slice(0, 2)">
                                                 </td>
                                                 <td class="col-md-4">
-                                                    <input type="text" class="form-control" id="SectionName_<?php echo $secdata['SectionID']; ?>" value="<?php echo $secdata['SectionName']; ?>" name="SectionName[]" placeholder="Enter Section Name" title="Input Section Name">
+                                                    <input type="text" class="form-control" id="SectionName" value="<?php echo $secdata['SectionName']; ?>" name="SectionName[]" placeholder="Enter Section Name" title="Input Section Name">
                                                     <input type="hidden" name="SectionID[]" value="<?php echo $secdata['SectionID']; ?>">
 
                                                 </td>
@@ -565,7 +565,72 @@ include('session_out.php');
 
 </script>
 
-    
+<script>
+    $(document).ready(function () {
+        // Function to create and show validation message
+        function showValidationMessage(inputField, message) {
+            // Check if validation message element exists, if not, create it
+            var validationMessageId = inputField.id + "_validation_message";
+            var validationMessageElement = document.getElementById(validationMessageId);
+            if (!validationMessageElement) {
+                validationMessageElement = document.createElement("div");
+                validationMessageElement.id = validationMessageId;
+                validationMessageElement.classList.add("invalid-feedback");
+                inputField.parentNode.appendChild(validationMessageElement);
+            }
+            // Update validation message text and display it
+            validationMessageElement.innerText = message;
+            inputField.classList.add("is-invalid");
+        }
+
+        // Function to hide validation message
+        function hideValidationMessage(inputField) {
+            var validationMessageId = inputField.id + "_validation_message";
+            var validationMessageElement = document.getElementById(validationMessageId);
+            if (validationMessageElement) {
+                validationMessageElement.innerText = "";
+                inputField.classList.remove("is-invalid");
+            }
+        }
+
+        // Function to validate form fields
+        function validateFormFields() {
+            var fields = document.querySelectorAll("input");
+            fields.forEach(function(field) {
+                var trimmedValue = field.value.trim();
+                if ((field.id === "SectionName" || field.id === "subDesc" ) && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                    showValidationMessage(field, 'Only letters are allowed.');
+                } else if ((field.id === "SectionName" || field.id === "subDesc") && !trimmedValue) {
+                    showValidationMessage(field, 'This field cannot be empty.');
+                } else if (field.id === "SubjectCode") {
+                    if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                        showValidationMessage(field, 'Only letters are allowed.');
+                    } else if (/^\s/.test(field.value)) {
+                        showValidationMessage(field, 'Spaces before letters are not allowed.');
+                    } else {
+                        hideValidationMessage(field);
+                    }
+                } else if (field.id !== "SectionNo" && /^\s/.test(field.value)) {
+                    showValidationMessage(field, 'Spaces before letters are not allowed.');
+                } else if (field.id === "SectionNo" && !/^\d*$/.test(field.value)) {
+                    showValidationMessage(field, 'Minutes Per Week number must contain only numbers.');
+                } else {
+                    hideValidationMessage(field);
+                }
+            });
+        }
+
+
+        // Event listener for input fields to validate while typing
+        $("input").on("input", function() {
+            validateFormFields();
+        });
+
+       
+
+        
+    });
+</script>
 
  
     

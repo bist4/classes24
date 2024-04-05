@@ -580,9 +580,9 @@ include('session_out.php');
             var fields = document.querySelectorAll("input");
             fields.forEach(function(field) {
                 var trimmedValue = field.value.trim();
-                if ((field.id === "StrandName" || field.id === "TrackType"  || field.id === "Specialization") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                if ((field.id === "StrandName<?php echo $secdata['StrandID']; ?>" || field.id === "TrackType<?php echo $secdata['StrandID']; ?>"  || field.id === "Specialization<?php echo $secdata['StrandID']; ?>") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
-                } else if (field.id === "StrandCode") {
+                } else if (field.id === "StrandCode<?php echo $secdata['StrandID']; ?>") {
                     if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                         showValidationMessage(field, 'Only letters are allowed.');
                     } else if (/^\s/.test(field.value)) {
@@ -590,7 +590,7 @@ include('session_out.php');
                     } else {
                         hideValidationMessage(field);
                     }
-                } else if (field.id !== "StrandCode" && /^\s/.test(field.value)) {
+                } else if (field.id !== "StrandCode<?php echo $secdata['StrandID']; ?>" && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before letters are not allowed.');
                 }  else {
                     hideValidationMessage(field);

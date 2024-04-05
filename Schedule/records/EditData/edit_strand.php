@@ -575,28 +575,37 @@ include('session_out.php');
             }
         }
 
-        // Function to validate form fields
         function validateFormFields() {
             var fields = document.querySelectorAll("input");
+            var hasErrors = false; // Flag to track if there are any validation errors
             fields.forEach(function(field) {
                 var trimmedValue = field.value.trim();
-                if ((field.id === "StrandName" || field.id === "TrackType"  || field.id === "Specialization") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                if ((field.id === "StrandName" || field.id === "TrackType" || field.id === "Specialization") && !/^[a-zA-Z\s]*$/.test(trimmedValue)) {
+                    showValidationMessage(field, 'Only letters and spaces are allowed.');
+                    hasErrors = true; // Set flag to true if there is an error
+                } else if (field.id === "StrandCode" && trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
-                } else if (field.id === "StrandCode") {
-                    if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
-                        showValidationMessage(field, 'Only letters are allowed.');
-                    } else if (/^\s/.test(field.value)) {
-                        showValidationMessage(field, 'Spaces before letters are not allowed.');
-                    } else {
-                        hideValidationMessage(field);
-                    }
+                    hasErrors = true; // Set flag to true if there is an error
+                } else if (field.id === "StrandCode" && /^\s/.test(field.value)) {
+                    showValidationMessage(field, 'Spaces before letters are not allowed.');
+                    hasErrors = true; // Set flag to true if there is an error
                 } else if (field.id !== "StrandCode" && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before letters are not allowed.');
-                }  else {
+                    hasErrors = true; // Set flag to true if there is an error
+                } else {
                     hideValidationMessage(field);
                 }
             });
+
+            // Lock the button if there are errors, else unlock it
+            var updateBtn = document.getElementById('updateBtn');
+            if (hasErrors) {
+                updateBtn.disabled = true;
+            } else {
+                updateBtn.disabled = false;
+            }
         }
+
 
         // Event listener for input fields to validate while typing
         $("input[type='text']").on("input", function() {

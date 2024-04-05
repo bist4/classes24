@@ -521,6 +521,8 @@ include('session_out.php');
                     $('#updateBtn').prop('disabled', true);
                 } else {
                     hideValidationMessage(field);
+                    $('#updateBtn').prop('disabled', false);
+
                 }
             });
         }

@@ -507,27 +507,24 @@ include('session_out.php');
             }
         }
 
-        // Function to validate form fields
         function validateFormFields() {
             var fields = document.querySelectorAll("input");
             fields.forEach(function(field) {
                 var trimmedValue = field.value.trim();
                 if ((field.id === "sectionNo" || field.id === "sectionName") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');
-                
-                } else if (field.id !== "sectionNo" || field.id !== "sectionName" && /^\s/.test(field.value)) {
+                } else if ((field.id === "sectionNo" || field.id === "sectionName") && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before numbers are not allowed.');
                     $('#updateBtn').prop('disabled', true);
-                    
-                } else if (field.id === "sectionNo" || field.id !== "sectionName" && !/^\d*$/.test(field.value)) {
+                } else if ((field.id === "sectionNo" || field.id === "sectionName") && !/^\d*$/.test(field.value)) {
                     showValidationMessage(field, 'It must contain only numbers.');
                     $('#updateBtn').prop('disabled', true);
-
                 } else {
                     hideValidationMessage(field);
                 }
             });
         }
+
 
 
         // Event listener for input fields to validate while typing

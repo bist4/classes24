@@ -849,7 +849,7 @@ include('../session_out.php');
 
 
     
-<script>
+<!-- <script>
     $(document).ready(function () {
         // Function to create and show validation message
         function showValidationMessage(inputField, message) {
@@ -896,7 +896,7 @@ include('../session_out.php');
                     }
                 } else if (field.id !== "Mname" && /^\s/.test(field.value)) {
                     showValidationMessage(field, 'Spaces before letters are not allowed.');
-                } else if (field.id === "ContactNumber" && !/^\d*$/.test(field.value)) {
+                } else if (field.id === "mobile" && !/^\d*$/.test(field.value)) {
                     showValidationMessage(field, 'Contact number must contain only numbers.');
                 } else {
                     hideValidationMessage(field);
@@ -914,9 +914,88 @@ include('../session_out.php');
 
         
     });
+</script> -->
+
+<script>
+    $(document).ready(function () {
+    // Function to create and show validation message
+    function showValidationMessage(inputField, message) {
+        // Check if validation message element exists, if not, create it
+        var validationMessageId = inputField.id + "_validation_message";
+        var validationMessageElement = document.getElementById(validationMessageId);
+        if (!validationMessageElement) {
+            validationMessageElement = document.createElement("div");
+            validationMessageElement.id = validationMessageId;
+            validationMessageElement.classList.add("invalid-feedback");
+            inputField.parentNode.appendChild(validationMessageElement);
+        }
+        // Update validation message text and display it
+        validationMessageElement.innerText = message;
+        inputField.classList.add("is-invalid");
+    }
+
+    // Function to hide validation message
+    function hideValidationMessage(inputField) {
+        var validationMessageId = inputField.id + "_validation_message";
+        var validationMessageElement = document.getElementById(validationMessageId);
+        if (validationMessageElement) {
+            validationMessageElement.innerText = "";
+            inputField.classList.remove("is-invalid");
+        }
+    }
+
+    // Function to validate form fields
+    function validateFormFields() {
+        var fields = document.querySelectorAll("input");
+        var hasErrors = false; // Flag to track if there are validation errors
+        fields.forEach(function(field) {
+            var trimmedValue = field.value.trim();
+            if ((field.id === "Fname" || field.id === "Lname") && !/^[a-zA-ZÑñ]*$/.test(trimmedValue)) {
+                showValidationMessage(field, 'Only letters are allowed.');
+                hasErrors = true;
+            } else if ((field.id === "Fname" || field.id === "Lname") && !trimmedValue) {
+                showValidationMessage(field, 'This field cannot be empty.');
+                hasErrors = true;
+            } else if (field.id === "Mname") {
+                if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                    showValidationMessage(field, 'Only letters are allowed.');
+                    hasErrors = true;
+                } else if (/^\s/.test(field.value)) {
+                    showValidationMessage(field, 'Spaces before letters are not allowed.');
+                    hasErrors = true;
+                } else {
+                    hideValidationMessage(field);
+                }
+            } else if (field.id !== "Mname" && /^\s/.test(field.value)) {
+                showValidationMessage(field, 'Spaces before letters are not allowed.');
+                hasErrors = true;
+            } else if (field.id === "mobile" && !/^\d*$/.test(field.value)) {
+                showValidationMessage(field, 'Contact number must contain only numbers.');
+                hasErrors = true;
+            } else {
+                hideValidationMessage(field);
+            }
+        });
+
+        // If there are validation errors, disable the button; otherwise, enable it
+        var updateBtn = document.getElementById("updateBtn");
+        if (hasErrors) {
+            updateBtn.disabled = true;
+        } else {
+            updateBtn.disabled = false;
+        }
+    }
+
+    // Event listener for input fields to validate while typing
+    $("input").on("input", function() {
+        validateFormFields();
+    });
+
+    // Initial validation on page load
+    validateFormFields();
+});
+
 </script>
-
-
 <script>
     // Function to handle the beforeunload event
 function handleBeforeUnload(event) {

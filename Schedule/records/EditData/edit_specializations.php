@@ -219,7 +219,7 @@ include('session_out.php');
                     </a>
                     <div id="collapseView" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="view_strand.php">Strand</a>
+                            <a class="collapse-item" href="../view_strand.php">Strand</a>
                             <a class="collapse-item" href="../view_subject.php">Subject</a>
                             <a class="collapse-item active" href="../view_instructor.php">Instructor</a>
                             <a class="collapse-item" href="../view_section.php">Class Section</a>

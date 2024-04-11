@@ -355,7 +355,7 @@ include('../session_out.php');
                                         <label for="title" style="font-size:1.5em;">Personal Information</label>
                                         <div class="form-group">
                                             <label for="firstName">First Name</label>
-                                            <input type="text" class="form-control" id="Fname_<?php echo $secdata['UserInfoID']; ?>" name="Fname" value="<?php echo $secdata['Fname']; ?>" required autofocus>
+                                            <input type="text" class="form-control" id="Fname" name="Fname" value="<?php echo $secdata['Fname']; ?>" required autofocus>
                                         </div>
                                         <div class="form-group">
                                             <label for="middleName">Middle Name<span class="small">(optional)</span></label>
@@ -363,11 +363,11 @@ include('../session_out.php');
                                         </div>
                                         <div class="form-group">
                                             <label for="lastName">Last Name</label>
-                                            <input type="text" class="form-control" id="Lname_<?php echo $secdata['UserInfoID']; ?>" name="Lname" value="<?php echo $secdata['Lname']; ?>" required autofocus>
+                                            <input type="text" class="form-control" id="Lname" name="Lname" value="<?php echo $secdata['Lname']; ?>" required autofocus>
                                         </div>
                                         <div class="form-group">
                                             <label for="birthDate">Date of Birth</label>
-                                            <input type="date" class="form-control" id="Bday_<?php echo $secdata['UserInfoID']; ?>" name="Bday" value="<?php echo $secdata['Birthday']; ?>" required autofocus>
+                                            <input type="date" class="form-control" id="Bday" name="Bday" value="<?php echo $secdata['Birthday']; ?>" required autofocus>
                                         </div>
                                         <div class="form-group">
                                             <label for="gender">Gender</label>
@@ -385,21 +385,21 @@ include('../session_out.php');
                                         <label for="contact"  style="font-size:1.5em;">Contact Information</label>
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="Email_<?php echo $secdata['UserInfoID']; ?>" name="Email" value="<?php echo $secdata['Email']; ?>" required autofocus>
+                                            <input type="email" class="form-control" id="Email" name="Email" value="<?php echo $secdata['Email']; ?>" required autofocus>
                                             <div class="invalid-feedback">
                                                 Please enter a valid email <br>
                                             </div> 
                                         </div>
                                         <div class="form-group">
                                             <label for="mobileNumber">Mobile Number</label>
-                                            <input type="tel" class="form-control" id="mobile_<?php echo $secdata['UserInfoID']; ?>" value="<?php echo $secdata['ContactNumber']; ?>" name="Cnumber" pattern="[0-9]{11}" placeholder="Enter a valid 11-digit mobile number" required autofocus>
+                                            <input type="tel" class="form-control" id="mobile" value="<?php echo $secdata['ContactNumber']; ?>" name="Cnumber" pattern="[0-9]{11}" placeholder="Enter a valid 11-digit mobile number" required autofocus>
                                             <div class="invalid-feedback">
                                                 Please enter a valid 11-digit contact number <br> Example: 09123456789
                                             </div> 
                                         </div>
                                         <div class="form-group">
                                             <label for="address">Address</label>
-                                            <input type="tel" class="form-control" id="address_<?php echo $secdata['UserInfoID']; ?>" name="address" value="<?php echo $secdata['Address']; ?>"placeholder="Enter address" required autofocus>
+                                            <input type="tel" class="form-control" id="address" name="address" value="<?php echo $secdata['Address']; ?>"placeholder="Enter address" required autofocus>
                                             <input type="hidden" name="UserInfoID" value="<?php echo $secdata['UserInfoID']; ?>">
                                         </div>
                                     </div>
@@ -660,6 +660,65 @@ include('../session_out.php');
     var updateSuccess = false;
    
     $(document).ready(function(){
+        function showValidationMessage(inputField, message) {
+            // Check if validation message element exists, if not, create it
+            var validationMessageId = inputField.id + "_validation_message";
+            var validationMessageElement = document.getElementById(validationMessageId);
+            if (!validationMessageElement) {
+                validationMessageElement = document.createElement("div");
+                validationMessageElement.id = validationMessageId;
+                validationMessageElement.classList.add("invalid-feedback");
+                inputField.parentNode.appendChild(validationMessageElement);
+            }
+            // Update validation message text and display it
+            validationMessageElement.innerText = message;
+            inputField.classList.add("is-invalid");
+        }
+
+        // Function to hide validation message
+        function hideValidationMessage(inputField) {
+            var validationMessageId = inputField.id + "_validation_message";
+            var validationMessageElement = document.getElementById(validationMessageId);
+            if (validationMessageElement) {
+                validationMessageElement.innerText = "";
+                inputField.classList.remove("is-invalid");
+            }
+        }
+
+          // Function to validate form fields
+          function validateFormFields() {
+            var fields = document.querySelectorAll("input");
+            fields.forEach(function(field) {
+                var trimmedValue = field.value.trim();
+                if ((field.id === "Fname" || field.id === "Lname") && !/^[a-zA-ZÑñ]*$/.test(trimmedValue)) {
+                    showValidationMessage(field, 'Only letters are allowed.');
+                } else if ((field.id === "Fname" || field.id === "Lname") && !trimmedValue) {
+                    showValidationMessage(field, 'This field cannot be empty.');
+                } else if (field.id === "Mname") {
+                    if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                        showValidationMessage(field, 'Only letters are allowed.');
+                    } else if (/^\s/.test(field.value)) {
+                        showValidationMessage(field, 'Spaces before letters are not allowed.');
+                    } else {
+                        hideValidationMessage(field);
+                    }
+                } else if (field.id !== "Mname" && /^\s/.test(field.value)) {
+                    showValidationMessage(field, 'Spaces before letters are not allowed.');
+                } else if (field.id === "mobile" && !/^\d*$/.test(field.value)) {
+                    showValidationMessage(field, 'Contact number must contain only numbers.');
+                } else {
+                    hideValidationMessage(field);
+                }
+            });
+        }
+
+
+        // Event listener for input fields to validate while typing
+        $("input").on("input", function() {
+            validateFormFields();
+        });
+
+
         function setChangesMade() {
             changesMade = true;
         }

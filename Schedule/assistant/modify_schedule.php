@@ -720,7 +720,13 @@ $("#editSchedule").on("click", function(e) {
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Submit',
-                    Christopher1234
+                    preConfirm: () => {
+                        const inputValue = Swal.getPopup().querySelector('textarea').value;
+                        const containsLetter = /[a-zA-Z]/.test(inputValue);
+                        if (!inputValue.trim() || !containsLetter) {
+                            Swal.showValidationMessage('Please enter a reason with at least one letter');
+                        }
+                    }
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // Handle the submission of additional information

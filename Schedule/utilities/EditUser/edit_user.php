@@ -699,7 +699,7 @@ include('../session_out.php');
 
             // Show confirmation message before proceeding with the update
             Swal.fire({
-                title: 'Are you sure?',
+                title: 'Confirmation',
                 text: 'Do you want to update the user data?',
                 icon: 'question',
                 showCancelButton: true,

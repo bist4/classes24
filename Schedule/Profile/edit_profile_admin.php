@@ -100,18 +100,19 @@ include('session_out.php');
 
             <!-- Nav Item - File Maimntenance Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>File Maintenance</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="../filemaintenance/file_strand.php">Strand</a>
-                        <a class="collapse-item" href="../filemaintenance/file_subject.php">Subject</a>
-                        <a class="collapse-item" href="../filemaintenance/file_section.php">Section</a>
-                        <a class="collapse-item" href="../filemaintenance/file_instructor.php">Instructor</a>
-                        <a class="collapse-item" href="../filemaintenance/file_room.php">Room</a>
+                        <a class="collapse-item" href="filemaintenance/file_strand.php">Strand</a>
+                        <a class="collapse-item" href="filemaintenance/file_subject.php">Subject</a>
+                        <!-- <a class="collapse-item" href="filemaintenance/file_instructor.php">Instructor</a> -->
+                        <a class="collapse-item" href="filemaintenance/file_section.php">Class Section</a>
+                        <a class="collapse-item" href="filemaintenance/file_room.php">Room</a>
+                        <a class="collapse-item" href="filemaintenance/timeAvail.php">Instructor Availability</a>
                     </div>
                 </div>
             </li>
@@ -121,18 +122,21 @@ include('session_out.php');
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseView"
                     aria-expanded="true" aria-controls="collapseView">
                     <i class="fas fa-fw fa-eye"></i>
-                    <span>View Schedule</span>
+                    <span>View Records</span>
                 </a>
                 <div id="collapseView" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">Class</a>
-                        <a class="collapse-item" href="">Instructor</a>
-                        <a class="collapse-item" href="">Room</a>
+                        <a class="collapse-item" href="records/view_strand.php">Strand</a>
+                        <a class="collapse-item" href="records/view_subject.php">Subject</a>
+                        <a class="collapse-item" href="records/view_instructor.php">Instructor</a>
+                        <a class="collapse-item" href="records/view_section.php">Class Section</a>
+                        <a class="collapse-item" href="records/view_room.php">Room</a>
+                        <a class="collapse-item" href="records/view_timeAvail.php">Instructor Availability</a>
                     </div>
                 </div>
             </li>
 
-
+           
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
@@ -143,17 +147,16 @@ include('session_out.php');
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        
-                        <a class="collapse-item" href="../utilities/accounts.php">Account Management</a>
-                        <a class="collapse-item" href="../utilities/archive.php">Archive</a>
-                        <a class="collapse-item" href="../utilities/backup.php">Back Up</a>
-                        <a class="collapse-item" href="../utilities/logs.php">Activity History</a>
+                         
+                        <a class="collapse-item" href="utilities/accounts.php">Account Management</a>
+                        <a class="collapse-item" href="utilities/archive.php">Archive</a>
+                        <!-- <a class="collapse-item" href="utilities/backup.php">Back Up</a> -->
+                        <a class="collapse-item" href="utilities/logs.php">Activity History</a>
+                        <a class="collapse-item" href="utilities/trash.php">Trash</a>
 
-                        <a class="collapse-item" href="../utilities/trash.php">Trash</a>
                     </div>
                 </div>
             </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
 

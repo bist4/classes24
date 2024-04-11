@@ -656,7 +656,7 @@ $(document).ready(function () {
             var fields = document.querySelectorAll("input");
             fields.forEach(function(field) {
                 var trimmedValue = field.value.trim();
-                if ((field.id === "Fname" || field.id === "Lname") && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+                if ((field.id === "Fname" || field.id === "Lname") && !/^[a-zA-ZÑñ]*$/.test(trimmedValue)) {
                     showValidationMessage(field, 'Only letters are allowed.');
                 } else if ((field.id === "Fname" || field.id === "Lname") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');

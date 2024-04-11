@@ -1,10 +1,9 @@
-<link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-<script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<script src="../../vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
 <!-- Page level custom scripts -->
-<script src="../assets/js/demo/datatables-demo.js"></script>
-
+<script src="../../assets/js/demo/datatables-demo.js"></script>
 
 <?php
 require "../../config/db_connection.php";
@@ -31,86 +30,106 @@ if (isset($_POST['instructorID'])) {
             <th scope='col'>#</th>
             <th scope='col'>Days</th>
             <th scope='col'>Time</th>
- 
             <th scope='col'>Action</th>
               </tr></thead>";
         echo "<tbody id='timeTable'>";
 
-        
-
         $mergedRows = [];
 
-while ($row = $result->fetch_assoc()) {
-    $key = $row['Time_Start'] . $row['Time_End']; // Ipinabago ko ito mula sa orihinal na $row['Days'] . $row['Time_Start'] . $row['Time_End'];
+        while ($row = $result->fetch_assoc()) {
+            $key = $row['Time_Start'] . $row['Time_End'];
 
-    if (!isset($mergedRows[$key])) {
-        $mergedRows[$key] = [];
-    }
-
-    $mergedRows[$key][] = $row;
-}
-
-$count = 1;
-foreach ($mergedRows as $mergedRow) {
-    // Convert time from 24-hour format to 12-hour format for the first row
-    $startTime = date("g:ia", strtotime($mergedRow[0]['Time_Start']));
-    $endTime = date("g:ia", strtotime($mergedRow[0]['Time_End']));
-
-    $days = [];
-    foreach ($mergedRow as $row) {
-        // Check each day column and include it if its value is 1
-        foreach (['is_Monday', 'is_Tuesday', 'is_Wednesday', 'is_Thursday', 'is_Friday'] as $day) {
-            if ($row[$day] == 1) {
-                $days[] = substr($day, 3);
+            if (!isset($mergedRows[$key])) {
+                $mergedRows[$key] = [];
             }
+
+            $mergedRows[$key][] = $row;
         }
-    }
-    $uniqueDays = implode(", ", array_unique($days));
 
-    echo "<tr>";
-    echo "<td rowspan='" . count($mergedRow) . "'><div class='form-check form-check-inline'>
-        <input class='form-check-input checkSingle' type='checkbox' name='selectedSection[]' id='check_" . $mergedRow[0]['InstructorTimeAvailabilitiesID'] . "' data-id='" . $mergedRow[0]['InstructorTimeAvailabilitiesID'] . "' value='" . $mergedRow[0]['InstructorTimeAvailabilitiesID'] . "'>
-    </div></td>";
-    echo "<td rowspan='" . count($mergedRow) . "'>" . $uniqueDays . "</td>";
-    echo "<td rowspan='" . count($mergedRow) . "'>" . $startTime . " - " . $endTime . "</td>";
+        $count = 1;
+        foreach ($mergedRows as $mergedRow) {
+            $startTime = date("g:ia", strtotime($mergedRow[0]['Time_Start']));
+            $endTime = date("g:ia", strtotime($mergedRow[0]['Time_End']));
 
-    foreach ($mergedRow as $key => $row) {
-        if ($key !== 0) {
+            $days = [];
+            foreach ($mergedRow as $row) {
+                foreach (['is_Monday', 'is_Tuesday', 'is_Wednesday', 'is_Thursday', 'is_Friday'] as $day) {
+                    if ($row[$day] == 1) {
+                        $days[] = substr($day, 3);
+                    }
+                }
+            }
+            $uniqueDays = implode(", ", array_unique($days));
+
             echo "<tr>";
-        }
+            echo "<td rowspan='" . count($mergedRow) . "'><div class='form-check form-check-inline'>
+                <input class='form-check-input checkSingle' type='checkbox' name='selectedSection[]' id='check_" . $mergedRow[0]['InstructorTimeAvailabilitiesID'] . "' data-id='" . $mergedRow[0]['InstructorTimeAvailabilitiesID'] . "' value='" . $mergedRow[0]['InstructorTimeAvailabilitiesID'] . "'>
+            </div></td>";
 
-        echo "<td>";
-        echo "<div class='d-flex justify-content-center'>";
-        echo "<a href='EditData/edit_time.php?subid=" . $row['InstructorTimeAvailabilitiesID'] . "'>
-            <button class='btn btn-primary mr-3' title='Edit Availability'><i class='fa fa-edit'></i></button>
-        </a>";
-        echo "<a href='DeleteData/delete_time.php?delid=" . $row['InstructorTimeAvailabilitiesID'] . "'>
-            <button class='btn btn-danger' title='Delete Availability'><i class='fa fa-trash'></i></button>
-        </a>";
-        echo "</div>";
-        echo "</td>";
+            // Start modification: Separate days and time for the first row
+            echo "<td rowspan='" . count($mergedRow) . "'>" . implode(", ", array_unique($days)) . "</td>";
+            echo "<td rowspan='" . count($mergedRow) . "'>" . $startTime . " - " . $endTime . "</td>";
 
-        if ($key !== 0) {
+            foreach ($mergedRow as $key => $row) {
+                if ($key !== 0) {
+                    echo "<tr>";
+                }
+
+                // Start modification: Ensure buttons are only displayed in the first row
+                if ($key === 0) {
+                    echo "<td rowspan='" . count($mergedRow) . "'>";
+                    echo "<div class='d-flex justify-content-center'>";
+                    // echo "<a href='EditData/edit_time.php?subid=" . $row['InstructorTimeAvailabilitiesID'] . "'>
+                    //     <button class='btn btn-primary mr-3' title='Edit Availability'><i class='fa fa-edit'></i></button>
+                    // </a>";
+                    // echo "<a href='DeleteData/delete_time.php?delid=" . $row['InstructorTimeAvailabilitiesID'] . "'>
+                    //     <button class='btn btn-danger' title='Delete Availability'><i class='fa fa-trash'></i></button>
+                    // </a>";
+                    if (count($mergedRow) > 1) {
+                        // If there are multiple IDs, create a URL with all IDs concatenated
+                        $editIDs = "";
+                        $deleteIDs = "";
+                        foreach ($mergedRow as $row) {
+                            $editIDs .= $row['InstructorTimeAvailabilitiesID'] . ",";
+                            $deleteIDs .= $row['InstructorTimeAvailabilitiesID'] . ",";
+                        }
+                        $editIDs = rtrim($editIDs, ",");
+                        $deleteIDs = rtrim($deleteIDs, ",");
+                        echo "<a href='EditData/edit_time.php?subid=" . $editIDs . "'>
+                            <button class='btn btn-primary mr-3' title='Edit Availability'><i class='fa fa-edit'></i></button>
+                        </a>";
+                        echo "<a href='DeleteData/delete_time.php?delid=" . $deleteIDs . "'>
+                            <button class='btn btn-danger' title='Delete Availability'><i class='fa fa-trash'></i></button>
+                        </a>";
+                    } else {
+                        // If there's only one ID, display single edit and delete buttons
+                        echo "<a href='EditData/edit_time.php?subid=" . $mergedRow[0]['InstructorTimeAvailabilitiesID'] . "'>
+                            <button class='btn btn-primary mr-3' title='Edit Availability'><i class='fa fa-edit'></i></button>
+                        </a>";
+                        echo "<a href='DeleteData/delete_time.php?delid=" . $mergedRow[0]['InstructorTimeAvailabilitiesID'] . "'>
+                            <button class='btn btn-danger' title='Delete Availability'><i class='fa fa-trash'></i></button>
+                        </a>";
+                    }
+                    echo "</div>";
+                    echo "</td>";
+                }
+                // End modification
+
+                
+
+                if ($key !== 0) {
+                    echo "</tr>";
+                }
+            }
             echo "</tr>";
+            $count++;
         }
-    }
-    echo "</tr>";
-    $count++;
-}
-
-
-        
-
-
-        // Your code for handling no data found...
-
-
-        echo "</tbody></table></div>";
 
         // End capturing the content within the table-responsive div
-        $tableContent = ob_get_clean();
+        echo "</tbody></table></div>";
 
         // Send the captured HTML content as a response
+        $tableContent = ob_get_clean();
         echo $tableContent;
     } else {
         // If no data is found in the table

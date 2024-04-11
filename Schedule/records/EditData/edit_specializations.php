@@ -348,7 +348,7 @@ include('session_out.php');
 
 
                     <div class="container mt-4">
-                        <h6 class="d-inline-block active" id="viewInstructor">Edit Specialization</h6>
+                        <h6 class="d-inline-block active" id="viewInstructor">Edit Instructor Specialization</h6>
                         <div id="addContainer">
                         <form method="POST"  class="needs-validation" novalidate>
                             <?php foreach ($allSectionData  as $secdata) { ?>

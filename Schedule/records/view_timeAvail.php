@@ -301,11 +301,11 @@ if ($row['is_Lock_Account'] == 1) {
                                             <!-- Table headers -->
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">Days</th>
-                                                    <th scope="col">Time Start</th>
-                                                    <th scope="col">Time End</th>
-                                                    <th scope="col">Action</th>
+                                                    <th >#</th>
+                                                    <th >Days</th>
+                                                    <th >Time Start</th>
+                                                    <th >Time End</th>
+                                                    <th >Action</th>
                                                 </tr>
                                             </thead>
                                             <!-- Table body -->

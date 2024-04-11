@@ -127,12 +127,12 @@ include('session_out.php');
                 </a>
                 <div id="collapseView" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="../../view_strand.php">Strand</a>
-                        <a class="collapse-item" href="../../view_subject.php">Subject</a>
-                        <a class="collapse-item" href="../../view_instructor.php">Instructor</a>
-                        <a class="collapse-item" href="../../view_section.php">Class Section</a>
-                        <a class="collapse-item" href="../../view_room.php">Room</a>
-                        <a class="collapse-item" href="../../view_timeAvail.php">Instructor Availability</a>
+                        <a class="collapse-item" href="../records/view_strand.php">Strand</a>
+                        <a class="collapse-item" href="../records/view_subject.php">Subject</a>
+                        <a class="collapse-item" href="../records/view_instructor.php">Instructor</a>
+                        <a class="collapse-item" href="../records/view_section.php">Class Section</a>
+                        <a class="collapse-item" href="../records/view_room.php">Room</a>
+                        <a class="collapse-item" href="../records/view_timeAvail.php">Instructor Availability</a>
                     </div>
                 </div>
             </li>

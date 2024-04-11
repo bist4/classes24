@@ -656,7 +656,24 @@ include('../session_out.php');
     });
 </script> -->
 <script>
+    var changesMade = false;
+    var updateSuccess = false;
+   
     $(document).ready(function(){
+        function setChangesMade() {
+            changesMade = true;
+        }
+        // Bind change event to form elements
+        $(".form-control").change(setChangesMade);
+
+        // Bind beforeunload event to show confirmation message
+        window.addEventListener('beforeunload', function(e) {
+            if (changesMade && !updateSuccess) {
+                var confirmationMessage = "Changes you made may not be saved. Are you sure you want to leave?";
+                (e || window.event).returnValue = confirmationMessage;
+                return confirmationMessage;
+            }
+        });
         $('#updateBtn').click(function(event){
 
             event.preventDefault()

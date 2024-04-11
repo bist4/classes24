@@ -529,7 +529,7 @@ if ($row['is_Lock_Account'] == 1) {
     <!-- Insert data -->
     <script>
          var changesMade = false;
-    var updateSuccess = false;
+        var updateSuccess = false;
         $(document).ready(function() {
             function setChangesMade() {
             changesMade = true;

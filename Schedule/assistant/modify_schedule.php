@@ -649,14 +649,8 @@ $("#editSchedule").on("click", function(e) {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes',
-            preConfirm: () => {
-                        const inputValue = Swal.getPopup().querySelector('textarea').value;
-                        const containsLetter = /[a-zA-Z]/.test(inputValue);
-                        if (!inputValue.trim() || !containsLetter) {
-                            Swal.showValidationMessage('Please enter a reason with at least one letter');
-                        }
-                    }
+            confirmButtonText: 'Yes'
+           
         }).then((result) => {
             if (result.isConfirmed) {
                 // Show a second Swal dialog with a textarea for additional input
@@ -670,7 +664,14 @@ $("#editSchedule").on("click", function(e) {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Submit'
+                    confirmButtonText: 'Submit',
+                    preConfirm: () => {
+                        const inputValue = Swal.getPopup().querySelector('textarea').value;
+                        const containsLetter = /[a-zA-Z]/.test(inputValue);
+                        if (!inputValue.trim() || !containsLetter) {
+                            Swal.showValidationMessage('Please enter a reason with at least one letter');
+                        }
+                    }
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // Handle the submission of additional information
@@ -707,14 +708,7 @@ $("#editSchedule").on("click", function(e) {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes',
-            preConfirm: () => {
-                        const inputValue = Swal.getPopup().querySelector('textarea').value;
-                        const containsLetter = /[a-zA-Z]/.test(inputValue);
-                        if (!inputValue.trim() || !containsLetter) {
-                            Swal.showValidationMessage('Please enter a reason with at least one letter');
-                        }
-                    }
+            confirmButtonText: 'Yes'
         }).then((result) => {
             if (result.isConfirmed) {
                 // Show a second Swal dialog with a textarea for additional input
@@ -725,7 +719,8 @@ $("#editSchedule").on("click", function(e) {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Submit'
+                    confirmButtonText: 'Submit',
+                    Christopher1234
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // Handle the submission of additional information

@@ -254,8 +254,8 @@ include('session_out.php');
                                                     <i class="fas fa-cog"></i> <!-- Assuming you're using Font Awesome for icons -->
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="edit_profile_assistant.php">Edit Profile</a>
-                                                    <a class="dropdown-item" href="change_password_assistant.php">Change Password</a>
+                                                    <a class="dropdown-item" href="edit_profile_admin.php">Edit Profile</a>
+                                                    <a class="dropdown-item" href="change_password_admin.php">Change Password</a>
                                                 </div>
                                             </div>
                                         </div>

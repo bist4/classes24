@@ -309,18 +309,7 @@ include('session_out.php');
                                                     echo "<td>" . ($user['Status'] == 1 ? 'Full Time' : 'Part Time') . "</td>";
                                                     echo "<td>";
                                                     echo  "<div class='d-flex justify-content-center'>";
-                                                    echo "<button class='btn btn-info mr-3 view-btn' data-toggle='modal' data-target='#exampleModal' title='View'
-                                                            data-fname='" . $user['Fname'] . "'
-                                                            data-mname='" . $user['Mname'] . "'
-                                                            data-lname='" . $user['Lname'] . "'
-                                                            data-birthdate='" . $user['Birthday'] . "'
-                                                            data-cnumber='" . $user['ContactNumber'] . "'
-                                                            data-address='" . $user['Address'] . "'
-                                                            data-gender='" . $user['Gender'] . "'
-                                                            data-status='" . $user['Status'] . "'
-                                                            data-email=''>
-                                                            <i class='fas fa-eye'></i>
-                                                        </button>";
+                                                    
                                                 
                                                     echo "<button class='btn btn-success retrieve-btn' title='Retrieve'
                                                                 data-user-id='" . $user['InstructorID'] . "'>

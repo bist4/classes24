@@ -433,10 +433,7 @@ include('../../session_out.php');
     <!-- For filtering of instructor details -->
 	<script src="../../assets/js/filteringStrand.js"></script>
 
-     
-
  
-
 
 
  
@@ -551,15 +548,34 @@ $(document).ready(function() {
                     type: 'POST',
                     url: '../DataAdd/add_spec.php',
                     data: data,
+                    dataType: 'json', // Expect JSON response
                     success: function(response) {
-                        Swal.fire('Success', response, 'success'); // Display success message
-                        $('form')[0].reset(); // Reset the form
-                        location.reload();
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Success',
+                                text: response.success,
+                                icon: 'success',
+                                confirmButtonText: 'OK',
+                                onClose: function() {
+                                    $('form')[0].reset(); // Reset the form
+                                    location.reload();
+                                }
+                            });
+                        }
+                        if (response.warning) {
+                            Swal.fire({
+                                title: 'Warning',
+                                text: response.warning,
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            });
+                        }
                     },
                     error: function() {
                         Swal.fire('Error', 'Failed to add specialization', 'error'); // Display error message
                     }
                 });
+
             }
         });
     });
@@ -617,6 +633,9 @@ $(document).ready(function() {
             // Update validation message text and display it
             validationMessageElement.innerText = message;
             inputField.classList.add("is-invalid");
+
+            // Lock the updateButton
+            $("#updateButton").prop("disabled", true);
         }
 
         // Function to hide validation message
@@ -627,15 +646,46 @@ $(document).ready(function() {
                 validationMessageElement.innerText = "";
                 inputField.classList.remove("is-invalid");
             }
+
+            // Check if there are any other validation errors, if not, unlock the updateButton
+            if ($(".is-invalid").length === 0) {
+                $("#updateButton").prop("disabled", false);
+            }
         }
 
+        // Function to validate form fields
+        // function validateFormFields() {
+        //     var fields = document.querySelectorAll("input");
+        //     fields.forEach(function(field) {
+        //         var trimmedValue = field.value.trim();
+        //         if ((field.id === "specialization" || field.id === "subDesc" ) && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+        //             showValidationMessage(field, 'Only letters are allowed.');
+        //         } else if ((field.id === "specialization" || field.id === "subDesc") && !trimmedValue) {
+        //             showValidationMessage(field, 'This field cannot be empty.');
+        //         } else if (field.id === "SubjectCode") {
+        //             if (trimmedValue !== "" && !/^[a-zA-Z]*$/.test(trimmedValue)) {
+        //                 showValidationMessage(field, 'Only letters are allowed.');
+        //             } else if (/^\s/.test(field.value)) {
+        //                 showValidationMessage(field, 'Spaces before letters are not allowed.');
+        //             } else {
+        //                 hideValidationMessage(field);
+        //             }
+        //         } else if (field.id !== "MinutesPerWeek" && /^\s/.test(field.value)) {
+        //             showValidationMessage(field, 'Spaces before letters are not allowed.');
+        //         } else if (field.id === "MinutesPerWeek" && !/^\d*$/.test(field.value)) {
+        //             showValidationMessage(field, 'Minutes Per Week number must contain only numbers.');
+        //         } else {
+        //             hideValidationMessage(field);
+        //         }
+        //     });
+        // }
         // Function to validate form fields
         function validateFormFields() {
             var fields = document.querySelectorAll("input");
             fields.forEach(function(field) {
                 var trimmedValue = field.value.trim();
-                if ((field.id === "specialization" || field.id === "subDesc" ) && !/^[a-zA-Z]*$/.test(trimmedValue)) {
-                    showValidationMessage(field, 'Only letters are allowed.');
+                if (field.id === "specialization" && !/^[a-zA-Z\s]*$/.test(trimmedValue)) {
+                    showValidationMessage(field, 'Only letters and spaces are allowed.');
                 } else if ((field.id === "specialization" || field.id === "subDesc") && !trimmedValue) {
                     showValidationMessage(field, 'This field cannot be empty.');
                 } else if (field.id === "SubjectCode") {
@@ -661,12 +711,9 @@ $(document).ready(function() {
         $("input").on("input", function() {
             validateFormFields();
         });
-
-       
-
-        
     });
 </script>
+
 </body>
 
 </html>

@@ -2,7 +2,7 @@
 
 $servername= "localhost";
 $username= "root";
-$password = "ccbc-2025";
+$password = "";
 // $dbname = "classschedule";
 // $dbname = "onlineclassschedule";
 $dbname = "saasi";

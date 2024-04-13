@@ -700,39 +700,34 @@ if ($row['is_Lock_Account'] == 1) {
  
     
     
-    <!-- Lock Account -->
+     <!-- Lock Account -->
     <script>
         $(document).ready(function() {
-        let userID, lockAccountValue;
+            $(document).on('click', '.btn-toggle', function() {
+                let userID = $(this).data('user-id');
+                let lockAccountValue = $(this).hasClass('btn-danger') ? 1 : 0;
 
-        $('.btn-toggle').on('click', function() {
-            userID = $(this).data('user-id');
-            lockAccountValue = $(this).hasClass('btn-danger') ? 1 : 0;
-
-            // Show confirmation modal before locking account
-            Swal.fire({
-                title: 'Confirmation',
-                text: 'Are you sure you want to lock this account?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    lockAccount(); // Call the function to lock the account
-                }
+                Swal.fire({
+                    title: 'Confirmation',
+                    text: 'Are you sure you want to lock this account?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        lockAccount(userID); // Call the function to lock the account
+                    }
+                });
             });
-        });
 
-        function lockAccount() {
-            // Set up AJAX call to send the user ID to the PHP script
+            function lockAccount(userID) {
                 $.ajax({
                     type: 'POST',
-                    url: 'process/lock_account.php', // Replace with your PHP endpoint
+                    url: 'process/lock_account.php',
                     data: { userId: userID },
                     success: function(response) {
-                        // Handle the response (e.g., show a success message)
                         Swal.fire({
                             icon: 'success',
                             title: 'Account Locked',
@@ -742,7 +737,6 @@ if ($row['is_Lock_Account'] == 1) {
                         });
                     },
                     error: function(err) {
-                        // Handle errors, if any
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -752,14 +746,12 @@ if ($row['is_Lock_Account'] == 1) {
                 });
             }
         });
-
     </script>
 
-
-    <!--Account unLocked  -->
-    <script>
+         <!-- Lock Account -->
+         <script>
         $(document).ready(function() {
-            $('.btn-toggle').click(function() {
+            $(document).on('click', '.btn-toggle', function() {
                 var icon = $(this).find('i');
                 var lockAccountValue = <?php echo $lockAccountValue; ?>; // Set the initial lock status here
 
@@ -809,8 +801,7 @@ if ($row['is_Lock_Account'] == 1) {
             });
         });
     </script>
-
-
+    
     <script src="chosen.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" integrity="sha512-rMGGF4wg1R73ehtnxXBt5mbUfN9JUJwbk21KMlnLZDJh7BkPmeovBuddZCENJddHYYMkCh9hPFnPmS9sspki8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
@@ -863,10 +854,9 @@ if ($row['is_Lock_Account'] == 1) {
   
     <!-- View Info -->
     <script>
-        $(document).ready(function() {
-            $('.btn-info').click(function() {
-                // Get data attributes from the clicked button
-                // var userId = $(this).data('user-id');
+       $(document).ready(function() {
+            // Use event delegation to handle click events for the view button
+            $(document).on('click', '.btn-info', function() {
                 var fname = $(this).data('fname');
                 var mname = $(this).data('mname');
                 var lname = $(this).data('lname');
@@ -881,7 +871,7 @@ if ($row['is_Lock_Account'] == 1) {
                     $(this).data('sda'),
                     $(this).data('sd')
                 ]
-                
+
                 var pos = '';
 
                 if (position[0] === 1) {
@@ -895,33 +885,23 @@ if ($row['is_Lock_Account'] == 1) {
                     if (pos !== '') pos += ', ';
                     pos += 'School Director';
                 }
-               
 
-                // var department = $(this).data('department')
-                
+                var content = '<label style="font-size:1.5em;">' + 'Personal Information' + '</label>' +
+                    '<p>First Name: ' + fname + '</p>' +
+                    '<p>Middle Name: ' + mname + '</p>' +
+                    '<p>Last Name: ' + lname + '</p>' +
+                    '<p>Birthday: ' + birthdate + '</p>' +
+                    '<p>Gender: ' + gender + '</p>' +
+                    '<label style="font-size:1.5em;">' + 'Contact Information' + '</label>' +
+                    '<p>Contact Number: ' + cnumber + '</p>' +
+                    '<p>Address: ' + address + '</p>' +
+                    '<p>Role: ' + role + '</p>' +
+                    '<p>Position: ' + pos + '</p>';
 
-                // Construct HTML with the information
-                var content = '<label style="font-size:1.5em;">'+ 'Personal Information' + '</label>' +
-                            '<p>First Name: ' + fname + '</p>' +
-                            '<p>Middle Name: ' + mname + '</p>' +
-                            '<p>Last Name: ' + lname + '</p>' +
-                            '<p>Birthday: ' + birthdate + '</p>' +
-                            '<p>Gender: ' + gender + '</p>' +
-                            '<label style="font-size:1.5em;">'+ 'Contact Information' + '</label>' +
-                            '<p>Contact Number: ' + cnumber + '</p>' +
-                            '<p>Address: ' + address + '</p>' +
-                            //   '<label style="font-size:1.5em;">'+ 'Other Information' + '</label>' +
-                            //   '<p>Department: ' + department + '</p>';
-
-                            '<p>Role: ' + role + '</p>' +
-                            '<p>Position: ' + pos + '</p>' ;
-                    
-                            
-
-                // Insert the HTML into the modal body
                 $('#modalBody').html(content);
             });
         });
+
     </script>
  
  

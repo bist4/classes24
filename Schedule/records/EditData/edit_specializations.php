@@ -753,29 +753,13 @@ $(document).ready(function() {
                     type: 'POST',
                     url: '../DataAdd/add_spec.php',
                     data: data,
-                    dataType: 'json', // Expect JSON response
                     success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                title: 'Success',
-                                text: response.success,
-                                icon: 'success',
-                                confirmButtonText: 'OK',
-                                onClose: function() {
-                                    $('form')[0].reset(); // Reset the form
-                                    location.reload();
-                                }
-                            });
-                        }
-                        if (response.warning) {
-                            Swal.fire({
-                                title: 'Warning',
-                                text: response.warning,
-                                icon: 'warning',
-                                confirmButtonText: 'OK'
-                            });
-                        }
+                        changesMade = false;
+                        Swal.fire('Success', response, 'success'); // Display success message
+                        $('form')[0].reset(); // Reset the form
+                        location.reload();
                     },
+                    
                     error: function() {
                         Swal.fire('Error', 'Failed to add specialization', 'error'); // Display error message
                     }

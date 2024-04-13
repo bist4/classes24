@@ -9,21 +9,19 @@ if(isset($_POST['instructorID'])) {
     // Sanitize input to prevent SQL injection
     $instructorID = $_POST['instructorID'];
 
-    
-
-    // Update the Active status of the instructor to 1
-    $sql = "UPDATE instructorspecializations SET Active = 0 WHERE InstructorSpecializationsID = ?";
+    // Delete the instructor specialization
+    $sql = "DELETE FROM instructorspecializations WHERE InstructorSpecializationsID = ?";
 
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
         $stmt->bind_param('i', $instructorID);
         if ($stmt->execute()) {
-            // If update is successful, return success response
+            // If deletion is successful, return success response
             $response = array('success' => true);
             echo json_encode($response);
         } else {
-            // If update fails, return error response
+            // If deletion fails, return error response
             $response = array('success' => false, 'message' => 'Failed to delete specialization: ' . $conn->error);
             echo json_encode($response);
         }

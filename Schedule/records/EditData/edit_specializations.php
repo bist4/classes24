@@ -748,7 +748,7 @@ $(document).ready(function() {
                 };
                 console.log(data);
                 
-                // Perform AJAX request
+                // Perform AJAX requests
                 $.ajax({
                     type: 'POST',
                     url: '../DataAdd/add_spec.php',
